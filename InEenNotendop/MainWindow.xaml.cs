@@ -21,17 +21,8 @@ namespace InEenNotendop
         {
 
             InitializeComponent();
-            if (CheckLightMode() == 1) //VV zorgt dat systeem settings goed word gedaan
-            {
-                lightmode = 0;
-            }
-            else
-            {
-                lightmode = 1;
-            }                       //^^ 
+            CheckLightMode();   
             CheckDarkOrLight();
-
-
 
         }
 
@@ -63,11 +54,11 @@ namespace InEenNotendop
 
         private void CheckDarkOrLight() // veranderd light mode naar dark mode en dark mode naar light mode
         {
-            if (lightmode == 0)
+            if (lightmode == 1)
             {
                 SetLightMode();
             }
-            else if (lightmode == 1)
+            else if (lightmode == 0)
             {
                 SetDarkMode();
             }
@@ -81,7 +72,7 @@ namespace InEenNotendop
 
             MainTextBlock.Foreground = Brushes.Black;
 
-            lightmode = 1;
+            lightmode = 0;
         }
 
         public void SetDarkMode()
@@ -91,7 +82,7 @@ namespace InEenNotendop
 
             MainTextBlock.Foreground = Brushes.White;
 
-            lightmode = 0;
+            lightmode = 1;
         }
     }
 }
