@@ -21,18 +21,21 @@ namespace InEenNotendop
         {
 
             InitializeComponent();
-            if (CheckLightMode() == 1)
+            if (CheckLightMode() == 1) //VV zorgt dat systeem settings goed word gedaan
             {
                 lightmode = 0;
             }
             else
             {
                 lightmode = 1;
-            }
+            }                       //^^ 
             CheckDarkOrLight();
+
+
+
         }
 
-        public int CheckLightMode()
+        public int CheckLightMode() // checkt systeem instellingen
         {
             return lightmode = (int)Microsoft.Win32.Registry.GetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", "AppsUseLightTheme", 1);
         }
@@ -58,7 +61,7 @@ namespace InEenNotendop
             CheckDarkOrLight();
         }
 
-        private void CheckDarkOrLight()
+        private void CheckDarkOrLight() // veranderd light mode naar dark mode en dark mode naar light mode
         {
             if (lightmode == 0)
             {
@@ -71,7 +74,7 @@ namespace InEenNotendop
         }
 
 
-        public void SetLightMode()
+        public void SetLightMode() // zet hier alle dingen die veranderen van kleur
         {
             MainGrid.Background = Brushes.White;
             DarkOrLightMode.Content = "Light mode";
