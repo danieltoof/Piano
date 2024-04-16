@@ -16,21 +16,25 @@ namespace InEenNotendop
     /// </summary>
     public partial class MainWindow : Window
     {
+        private int lightmode;
         public MainWindow()
         {
+
             InitializeComponent();
-            
+            if (CheckLightMode() == 1)
+            {
+                lightmode = 0;
+            }
+            else
+            {
+                lightmode = 1;
+            }
+            CheckDarkOrLight();
         }
 
-        public bool UseLightMode()
+        public int CheckLightMode()
         {
-            int lightModeValue = (int)Microsoft.Win32.Registry.GetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", "AppsUseLightTheme", 1);
-
-            return lightModeValue switch
-            {
-                1 => true, // this means it uses light mode
-                0 => false, // this means it uses dark mode
-            };
+            return lightmode = (int)Microsoft.Win32.Registry.GetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", "AppsUseLightTheme", 1);
         }
 
 
@@ -42,6 +46,49 @@ namespace InEenNotendop
         private void ExitButton_OnClick(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void SettingsButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void DarkOrLightMode_OnClick(object sender, RoutedEventArgs e)
+        {
+            CheckDarkOrLight();
+        }
+
+        private void CheckDarkOrLight()
+        {
+            if (lightmode == 0)
+            {
+                SetLightMode();
+            }
+            else if (lightmode == 1)
+            {
+                SetDarkMode();
+            }
+        }
+
+
+        public void SetLightMode()
+        {
+            MainGrid.Background = Brushes.White;
+            DarkOrLightMode.Content = "Light mode";
+
+            MainTextBlock.Foreground = Brushes.Black;
+
+            lightmode = 1;
+        }
+
+        public void SetDarkMode()
+        {
+            MainGrid.Background = new SolidColorBrush(Color.FromRgb(25, 44 ,49));
+            DarkOrLightMode.Content = "Dark mode";
+
+            MainTextBlock.Foreground = Brushes.White;
+
+            lightmode = 0;
         }
     }
 }

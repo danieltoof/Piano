@@ -6,9 +6,11 @@
         xmlns:local="clr-namespace:InEenNotendop"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <TextBlock Text="In Een Notendop" Margin="141,81,141,217" FontFamily="Arial Black" FontSize="48" TextAlignment="Center"></TextBlock>
-        <Button Name="StartButton" Content="Start" Click="StartButton_OnClick"  Margin="215,194,215,169" FontSize="24"></Button>
+    <Grid Name="MainGrid">
+        <TextBlock Name="MainTextBlock" Text="In Een Notendop" Margin="141,81,141,217" FontFamily="Arial Black" FontSize="48" TextAlignment="Center"/>
+        <Button Name="StartButton" Content="Start" Click="StartButton_OnClick"  Margin="215,199,215,164" FontSize="24" Foreground="Black"></Button>
         <Button Name="ExitButton" Content="Exit" Click="ExitButton_OnClick" Margin="215,300,215,63" FontSize="24"></Button>
+        <Button Name="SettingsButton" Content="Settings" Click="SettingsButton_OnClick" Margin="678,10,10,374" FontSize="16"></Button>
+        <Button Name="DarkOrLightMode" Content="" Click="DarkOrLightMode_OnClick" Margin="678,49,10,335" FontSize="16"></Button>
     </Grid>
 </Window>
