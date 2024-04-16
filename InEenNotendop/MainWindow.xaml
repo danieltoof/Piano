@@ -7,6 +7,8 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-
+        <TextBlock Text="In Een Notendop" Margin="141,81,141,217" FontFamily="Arial Black" FontSize="48" TextAlignment="Center"></TextBlock>
+        <Button Name="StartButton" Content="Start" Click="StartButton_OnClick"  Margin="215,194,215,169" FontSize="24"></Button>
+        <Button Name="ExitButton" Content="Exit" Click="ExitButton_OnClick" Margin="215,300,215,63" FontSize="24"></Button>
     </Grid>
 </Window>

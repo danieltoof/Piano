@@ -19,6 +19,7 @@ namespace InEenNotendop
         public MainWindow()
         {
             InitializeComponent();
+            
         }
 
         public bool UseLightMode()
@@ -30,6 +31,17 @@ namespace InEenNotendop
                 1 => true, // this means it uses light mode
                 0 => false, // this means it uses dark mode
             };
+        }
+
+
+        private void StartButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void ExitButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }
