@@ -20,5 +20,16 @@ namespace InEenNotendop
         {
             InitializeComponent();
         }
+
+        public bool UseLightMode()
+        {
+            int lightModeValue = (int)Microsoft.Win32.Registry.GetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", "AppsUseLightTheme", 1);
+
+            return lightModeValue switch
+            {
+                1 => true, // this means it uses light mode
+                0 => false, // this means it uses dark mode
+            };
+        }
     }
 }
