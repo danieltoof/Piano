@@ -34,6 +34,7 @@ namespace InEenNotendop
         public int CheckLightMode() // checkt systeem instellingen
         {
             return lightmode = (int)Microsoft.Win32.Registry.GetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", "AppsUseLightTheme", 1);
+
         }
 
 
