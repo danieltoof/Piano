@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.ComponentModel;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -8,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using InEenNotendop.UI;
 
 namespace InEenNotendop
 {
@@ -16,28 +18,23 @@ namespace InEenNotendop
     /// </summary>
     public partial class MainWindow : Window
     {
-        private int lightmode;
+        internal int lightmode;
+        private SettingsWindow settingsWindow;
+        
+
         public MainWindow()
         {
-
+            settingsWindow = new SettingsWindow(this);
+            settingsWindow.Owner = this;
             InitializeComponent();
-            if (CheckLightMode() == 1) //VV zorgt dat systeem settings goed word gedaan
-            {
-                lightmode = 0;
-            }
-            else
-            {
-                lightmode = 1;
-            }                       //^^ 
+            CheckLightMode();
             CheckDarkOrLight();
-
-
-
         }
 
         public int CheckLightMode() // checkt systeem instellingen
         {
             return lightmode = (int)Microsoft.Win32.Registry.GetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", "AppsUseLightTheme", 1);
+
         }
 
 
@@ -48,50 +45,30 @@ namespace InEenNotendop
 
         private void ExitButton_OnClick(object sender, RoutedEventArgs e)
         {
-            Close();
+            Environment.Exit(0);
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            Environment.Exit(0);
         }
 
         private void SettingsButton_OnClick(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
-        }
-
-        private void DarkOrLightMode_OnClick(object sender, RoutedEventArgs e)
-        {
-            CheckDarkOrLight();
+            
+            settingsWindow.ShowDialog();
         }
 
         private void CheckDarkOrLight() // veranderd light mode naar dark mode en dark mode naar light mode
         {
-            if (lightmode == 0)
+            if (lightmode == 1)
             {
-                SetLightMode();
+                settingsWindow.SetLightMode();
             }
-            else if (lightmode == 1)
+            else if (lightmode == 0)
             {
-                SetDarkMode();
+                settingsWindow.SetDarkMode();
             }
-        }
-
-
-        public void SetLightMode() // zet hier alle dingen die veranderen van kleur
-        {
-            MainGrid.Background = Brushes.White;
-            DarkOrLightMode.Content = "Light mode";
-
-            MainTextBlock.Foreground = Brushes.Black;
-
-            lightmode = 1;
-        }
-
-        public void SetDarkMode()
-        {
-            MainGrid.Background = new SolidColorBrush(Color.FromRgb(25, 44 ,49));
-            DarkOrLightMode.Content = "Dark mode";
-
-            MainTextBlock.Foreground = Brushes.White;
-
-            lightmode = 0;
         }
     }
 }
