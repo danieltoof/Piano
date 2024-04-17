@@ -55,7 +55,9 @@ namespace InEenNotendop
 
         private void SettingsButton_OnClick(object sender, RoutedEventArgs e)
         {
-            
+            settingsWindow.Height = 350;
+            settingsWindow.Width = 700;
+            settingsWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             settingsWindow.ShowDialog();
         }
 
