@@ -9,10 +9,10 @@
         WindowStartupLocation="CenterScreen"
         WindowState="Maximized">
     <Grid Name="MainGrid">
-        <TextBlock x:Name="MainTextBlock" Margin="0,235,0,0" FontFamily="Arial Black" FontSize="72" TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" Height="159" Width="816"><Run Language="nl-nl" Text="PianoHero"/><LineBreak/><Run Language="nl-nl"/></TextBlock>
-        <Image Name="Logo" ></Image>
+        <Image Margin="499,117,499,677" Source="/Resources/LogoLarge.png" Stretch="Fill"/>
         <Button Name="StartButton" Content="Start" Click="StartButton_OnClick"  Margin="0,532,0,0" FontSize="24" Foreground="Black" HorizontalAlignment="Center" Width="1146" Height="142" VerticalAlignment="Top"/>
         <Button Name="ExitButton" Content="Exit" Click="ExitButton_OnClick" Margin="0,705,0,0" FontSize="24" HorizontalAlignment="Center" Width="1146" Height="142" VerticalAlignment="Top"/>
         <Button Name="SettingsButton" Content="Settings" Click="SettingsButton_OnClick" Margin="0,0,10,916" FontSize="16" HorizontalAlignment="Right" Width="350" Height="63" VerticalAlignment="Bottom"/>
+        
     </Grid>
 </Window>

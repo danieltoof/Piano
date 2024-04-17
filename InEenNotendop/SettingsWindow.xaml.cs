@@ -53,7 +53,7 @@ namespace InEenNotendop.UI
             mainWindow.MainGrid.Background = Brushes.White;
             DarkOrLightMode.Content = "Light mode";
 
-            mainWindow.MainTextBlock.Foreground = Brushes.Black;
+
 
 
             //Alles van main settings menu
@@ -71,7 +71,7 @@ namespace InEenNotendop.UI
             mainWindow.MainGrid.Background = new SolidColorBrush(Color.FromRgb(25, 44, 49));
             DarkOrLightMode.Content = "Dark mode";
 
-            mainWindow.MainTextBlock.Foreground = Brushes.White;
+           
 
 
             //Alles van main settings menu

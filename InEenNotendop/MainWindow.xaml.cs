@@ -24,7 +24,6 @@ namespace InEenNotendop
 
         public MainWindow()
         {
-            Logo.Source = new BitmapImage(https://imgur.com/pnT7OC9);
             settingsWindow = new SettingsWindow(this);
             settingsWindow.Owner = this;
             InitializeComponent();

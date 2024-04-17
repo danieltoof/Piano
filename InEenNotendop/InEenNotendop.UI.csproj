@@ -8,4 +8,12 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Resources\LogoLarge.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\LogoLarge.png" />
+  </ItemGroup>
+
 </Project>
