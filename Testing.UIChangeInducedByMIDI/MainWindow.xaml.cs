@@ -1,4 +1,6 @@
 ﻿using System.Collections;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -27,21 +29,25 @@ namespace Testing.UIChangeInducedByMIDI
     /// </summary>
     public partial class MainWindow : Window
     {
+
+
         public MainWindow()
         {
+            this.DataContext = new MyViewModel();
             InitializeComponent();
             ArrayList midiInDevices = new ArrayList();
             ArrayList midiOutDevices = new ArrayList();
 
             MidiDevice.ConfigMidiDevices(midiInDevices, midiOutDevices);
 
-            Console.WriteLine("MIDI 'IN' devices:");
+            StringBuilder midiDevices = new StringBuilder("Midi devices:");
+
             foreach (MidiInDevice dev in midiInDevices)
             {
-                Console.WriteLine(dev.deviceName);
-                if (dev.deviceName == Constants.ROLAND_DEVICE)
+                midiDevices.AppendLine(dev.deviceName);
+
+                if (dev.deviceName == Constants.DEFAULT)
                 {
-                    Console.WriteLine("Opening 'IN' device " + dev.deviceName + "...");
                     dev.Open();
                     Thread.Sleep(5000); // pause for 5 sec.
                     Console.WriteLine("Closing 'IN' device " + dev.deviceName + "...");
@@ -53,7 +59,7 @@ namespace Testing.UIChangeInducedByMIDI
             foreach (MidiOutDevice dev in midiOutDevices)
             {
                 Console.WriteLine(dev.deviceName);
-                if (dev.deviceName == Constants.ROLAND_DEVICE)
+                if (dev.deviceName == Constants.DEFAULT)
                 {
                     dev.Open();
 
@@ -71,6 +77,8 @@ namespace Testing.UIChangeInducedByMIDI
                 }
             }
         }
+
+
 
     }
 }
