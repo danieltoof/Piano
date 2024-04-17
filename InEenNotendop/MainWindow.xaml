@@ -5,14 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InEenNotendop"
         mc:Ignorable="d"
-        Title="PianoHero" Height="1080" Width="1920"
+        Title="PianoHero"
+        Width="{x:Static SystemParameters.PrimaryScreenWidth}"  
+        Height="{x:Static SystemParameters.PrimaryScreenHeight}" 
         WindowStartupLocation="CenterScreen"
         WindowState="Maximized">
     <Grid Name="MainGrid">
         <Image Margin="499,117,499,677" Source="/Resources/LogoLarge.png" Stretch="Fill"/>
-        <Button Name="StartButton" Content="Start" Click="StartButton_OnClick"  Margin="387,532,387,390" FontSize="24" Foreground="Black" Width="1146" Height="142"/>
-        <Button Name="ExitButton" Content="Exit" Click="ExitButton_OnClick" Margin="387,725,387,197" FontSize="24" Width="1146" Height="142"/>
-        <Button Name="SettingsButton" Content="Settings" Click="SettingsButton_OnClick" Margin="0,0,10,963" FontSize="16" HorizontalAlignment="Right" Width="350" Height="63" VerticalAlignment="Bottom"/>
-        
+        <Button Name="StartButton" Content="Start" Click="StartButton_OnClick"  Margin="0,0,387,390" FontSize="24" Foreground="Black" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="1086" Height="142"/>
+        <Button Name="ExitButton" Content="Exit" Click="ExitButton_OnClick" Margin="0,0,387,174" FontSize="24" Height="142" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="1086"/>
+        <Button Name="SettingsButton" Content="Settings" Click="SettingsButton_OnClick" Margin="0,0,10,922" FontSize="16" HorizontalAlignment="Right" Width="350" Height="63" VerticalAlignment="Bottom"/>
+
     </Grid>
 </Window>
