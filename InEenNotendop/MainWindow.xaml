@@ -5,12 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InEenNotendop"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="PianoHero" Height="1080" Width="1920"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized">
     <Grid Name="MainGrid">
-        <TextBlock Name="MainTextBlock" Text="In Een Notendop" Margin="141,81,141,217" FontFamily="Arial Black" FontSize="48" TextAlignment="Center"/>
-        <Button Name="StartButton" Content="Start" Click="StartButton_OnClick"  Margin="215,199,215,164" FontSize="24" Foreground="Black"></Button>
-        <Button Name="ExitButton" Content="Exit" Click="ExitButton_OnClick" Margin="215,300,215,63" FontSize="24"></Button>
-        <Button Name="SettingsButton" Content="Settings" Click="SettingsButton_OnClick" Margin="678,10,10,374" FontSize="16"></Button>
-        <Button Name="DarkOrLightMode" Content="" Click="DarkOrLightMode_OnClick" Margin="678,49,10,335" FontSize="16"></Button>
+        <TextBlock x:Name="MainTextBlock" Margin="0,235,0,0" FontFamily="Arial Black" FontSize="72" TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" Height="159" Width="816"><Run Language="nl-nl" Text="PianoHero"/><LineBreak/><Run Language="nl-nl"/></TextBlock>
+        <Image Name="Logo" ></Image>
+        <Button Name="StartButton" Content="Start" Click="StartButton_OnClick"  Margin="0,532,0,0" FontSize="24" Foreground="Black" HorizontalAlignment="Center" Width="1146" Height="142" VerticalAlignment="Top"/>
+        <Button Name="ExitButton" Content="Exit" Click="ExitButton_OnClick" Margin="0,705,0,0" FontSize="24" HorizontalAlignment="Center" Width="1146" Height="142" VerticalAlignment="Top"/>
+        <Button Name="SettingsButton" Content="Settings" Click="SettingsButton_OnClick" Margin="0,0,10,916" FontSize="16" HorizontalAlignment="Right" Width="350" Height="63" VerticalAlignment="Bottom"/>
     </Grid>
 </Window>
