@@ -9,6 +9,7 @@
     <Grid>
         <Rectangle HorizontalAlignment="Left" Height="100" Margin="337,0,0,0" Stroke="Black" VerticalAlignment="Center" Width="100"/>
         <Label Content="Rectangle should become red on MIDI input:" HorizontalAlignment="Left" Margin="264,120,0,0" VerticalAlignment="Top"/>
+        <TextBlock Name="MidiTextBlock" Margin="66,294,0,0" TextWrapping="Wrap" Text="{Binding MyLabelText}" VerticalAlignment="Top" Height="65" Width="262"/>
 
     </Grid>
 </Window>
