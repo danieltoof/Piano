@@ -11,14 +11,11 @@
         WindowStartupLocation="CenterScreen"
         WindowState="Maximized">
     <Grid Name="MainGrid">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="991*"/>
-            <ColumnDefinition Width="929*"/>
-        </Grid.ColumnDefinitions>
-        <Image Margin="499,117,499,677" Source="/Resources/LogoLarge.png" Stretch="Fill" Grid.ColumnSpan="2"/>
-        <Button Name="StartButton" Content="Start" Click="StartButton_OnClick"  Margin="447,532,387,390" FontSize="24" Foreground="Black" Grid.ColumnSpan="2"/>
-        <Button Name="ExitButton" Content="Exit" Click="ExitButton_OnClick" Margin="447,748,387,174" FontSize="24" Grid.ColumnSpan="2"/>
-        <Button Name="SettingsButton" Content="Settings" Click="SettingsButton_OnClick" Margin="569,79,10,884" FontSize="16" Grid.Column="1"/>
+
+        <Image Source="/Resources/LogoLarge.png" Stretch="Fill" HorizontalAlignment="Left" VerticalAlignment="Top" Height="306" Width="998" Margin="491,150,0,0" />
+        <Button Name="StartButton" Content="Start" Click="StartButton_OnClick" FontSize="24" Foreground="Black" HorizontalAlignment="Left" VerticalAlignment="Top" Height="137" Width="1086" Margin="447,563,0,0"/>
+        <Button Name="ExitButton" Content="Exit" Click="ExitButton_OnClick" FontSize="24" HorizontalAlignment="Left" VerticalAlignment="Top" Height="137" Width="1086" Margin="447,765,0,0" />
+        <Button Name="SettingsButton" Content="Settings" Click="SettingsButton_OnClick" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Top" Height="75" Width="332" Margin="1578,71,0,0" />
 
     </Grid>
 </Window>
