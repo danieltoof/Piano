@@ -48,7 +48,7 @@ class Program
                                 Artiest VARCHAR(255),
                                 Lengte INT,
                                 Bpm INT,
-                                Moelijkheid INT,
+                                Moeilijkheid INT,
                                 ID INT IDENTITY(1,1) PRIMARY KEY
                             );
 
