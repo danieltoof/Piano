@@ -82,15 +82,18 @@ namespace InEenNotendop.UI
 
         public void ChangeSettingsOwner(object sender)
         {
+            Owner.Closing -= Owner_Closing;
             switch (sender)
             {
                 case MainWindow:
                     mainWindow = (MainWindow)sender;
                     Owner = mainWindow;
+                    Owner.Closing += Owner_Closing;
                     break;
                 case SongsWindow:
                     songWindow = (SongsWindow)sender;
                     Owner = songWindow;
+                    Owner.Closing += Owner_Closing;
                     break;
             }
 
@@ -178,9 +181,10 @@ namespace InEenNotendop.UI
 
         private void MainMenuButton_OnClick(object sender, RoutedEventArgs e)
         {
-            Owner.Close();
+            Window previousOwner = Owner;
             MainWindow mainWindow = new MainWindow(this);
             mainWindow.Show();
+            previousOwner.Close();
             Visibility = Visibility.Hidden;
         }
     }
