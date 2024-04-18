@@ -8,6 +8,7 @@
         Title="PianoHero"
         Width="{x:Static SystemParameters.PrimaryScreenWidth}"  
         Height="{x:Static SystemParameters.PrimaryScreenHeight}" 
+        Icon="Resources/icon.png"
         WindowStartupLocation="CenterScreen"
         WindowState="Maximized">
     <Grid Name="MainGrid">
@@ -34,6 +35,6 @@
         <Button Grid.Column="1" Name="ExitButton" Content="Exit" Click="ExitButton_OnClick" FontSize="24" Grid.Row="2" Margin="10,10,10,10" HorizontalAlignment="Center" VerticalAlignment="Center" Width="800" Height="100"/>
 
         <!-- Settings Button -->
-        <Button Grid.Column="1" Name="SettingsButton" Content="Settings" Click="SettingsButton_OnClick" FontSize="20" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,10,0" Height="75" Width="200"/>
+        <Button Grid.Column="1" Name="SettingsButton" Content="Settings" Click="SettingsButton_OnClick" FontSize="20" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,10,0" Height="55" Width="200"/>
     </Grid>
 </Window>
