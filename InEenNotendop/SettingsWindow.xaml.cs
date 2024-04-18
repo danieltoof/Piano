@@ -42,7 +42,12 @@ namespace InEenNotendop.UI
                     break;
             }
 
+            Owner.Closing += Owner_Closing;
+        }
 
+        private void Owner_Closing(object? sender, CancelEventArgs e)
+        {
+            Environment.Exit(0);
         }
 
         public void OpenSettings()
