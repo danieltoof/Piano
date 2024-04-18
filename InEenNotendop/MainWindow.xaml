@@ -8,6 +8,7 @@
         Title="PianoHero"
         Width="{x:Static SystemParameters.PrimaryScreenWidth}"  
         Height="{x:Static SystemParameters.PrimaryScreenHeight}" 
+        Icon="Resources/icon.png"
         WindowStartupLocation="CenterScreen"
         WindowState="Maximized">
     <Grid Name="MainGrid">
