@@ -42,13 +42,21 @@ namespace InEenNotendop.UI
                     break;
             }
 
-            Owner.Closed += (s, e) => Close();
+
         }
 
-        protected override void OnClosed(EventArgs e)
+        public void OpenSettings()
         {
-            
+            if (Owner is MainWindow)
+            {
+                MainMenuButton.Visibility = Visibility.Hidden;
+            } else if (Owner is not MainWindow)
+            {
+                MainMenuButton.Visibility = Visibility.Visible;
+            }
+            ShowDialog();
         }
+
 
         public void ChangeSettingsOwner(object sender)
         {
@@ -73,11 +81,11 @@ namespace InEenNotendop.UI
 
         private void CheckDarkOrLight(object sender) // veranderd light mode naar dark mode en dark mode naar light mode
         {
-            if (lightmode == 1)
+            if (lightmode == 0)
             {
                 SetLightMode(sender);
             }
-            else if (lightmode == 0)
+            else if (lightmode == 1)
             {
                 SetDarkMode(sender);
             }
@@ -108,7 +116,7 @@ namespace InEenNotendop.UI
 
 
             //Setten van lightmode
-            lightmode = 0;
+            lightmode = 1;
         }
 
         public void SetDarkMode(object sender)
@@ -133,7 +141,7 @@ namespace InEenNotendop.UI
             SettingsText.Foreground = Brushes.White;
 
             //Setten van lightmode 
-            lightmode = 1;
+            lightmode = 0;
         }
 
 
@@ -144,6 +152,19 @@ namespace InEenNotendop.UI
         {
             this.Visibility = Visibility.Hidden;
             e.Cancel = true;
+        }
+
+        private void ExitButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            Environment.Exit(0);
+        }
+
+        private void MainMenuButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            Owner.Close();
+            MainWindow mainWindow = new MainWindow(this);
+            mainWindow.Show();
+            Visibility = Visibility.Hidden;
         }
     }
 }

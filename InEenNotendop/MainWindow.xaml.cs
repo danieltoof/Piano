@@ -24,7 +24,6 @@ namespace InEenNotendop
 
         public MainWindow()
         {
-            
             InitializeComponent();
             settingsWindow = new SettingsWindow(this);
 
@@ -32,6 +31,14 @@ namespace InEenNotendop
             CheckDarkOrLight();
         }
 
+        public MainWindow(SettingsWindow settingsWindow)
+        {
+            InitializeComponent();
+            this.settingsWindow = settingsWindow;
+            settingsWindow.ChangeSettingsOwner(this);
+            CheckDarkOrLight();
+            this.settingsWindow.MainMenuButton.Visibility = Visibility.Hidden;
+        }
 
 
 
@@ -56,7 +63,7 @@ namespace InEenNotendop
 
         private void SettingsButton_OnClick(object sender, RoutedEventArgs e)
         {
-            settingsWindow.ShowDialog();
+            settingsWindow.OpenSettings();
         }
 
         private void CheckDarkOrLight() // veranderd light mode naar dark mode en dark mode naar light mode

@@ -30,22 +30,21 @@ namespace InEenNotendop.UI
 
             CheckDarkOrLight();
 
-            
         }
 
-        
+
         private void SettingsButton_OnClick(object sender, RoutedEventArgs e)
         {
-            settingsWindow.ShowDialog();
+            settingsWindow.OpenSettings();
         }
 
         private void CheckDarkOrLight() // veranderd light mode naar dark mode en dark mode naar light mode
         {
-            if (settingsWindow.lightmode == 0)
+            if (settingsWindow.lightmode == 1)
             {
                 settingsWindow.SetLightMode(this);
             }
-            else if (settingsWindow.lightmode == 1)
+            else if (settingsWindow.lightmode == 0)
             {
                 settingsWindow.SetDarkMode(this);
             }
