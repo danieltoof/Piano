@@ -5,10 +5,41 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InEenNotendop.UI"
         mc:Ignorable="d"
-        Title="ImportWindow" Height="350" Width="700"
+        Title="ImportWindow" Height="450" Width="700"
         WindowStartupLocation="CenterScreen">
 
     <Grid>
-        <TextBlock Grid.Column="1" Grid.Row="0"  Name="SettingsText" Margin="0,32,0,0" FontFamily="Arial Black" FontSize="24" TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Width="322"><Run Language="nl-nl" Text="Settings"/></TextBlock>
+        <TextBlock Grid.Row="0"  x:Name="SettingsText" Margin="0,10,0,0" FontFamily="Arial Black" FontSize="24" TextAlignment="Center" VerticalAlignment="Top"><Run Language="nl-nl" Text="Uploaden"/></TextBlock>
+
+
+        <Button Name="PLayButton" Content="upload" Click="button1_Click" FontSize="24" Margin="570,361,23,25">
+            <Button.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="TextBlock.Cursor" Value="Hand"/>
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+        <TextBlock Grid.Row="0"  x:Name="SettingsText_Copy" Margin="20,61,530,0" FontFamily="Arial Black" FontSize="24" TextAlignment="Center" VerticalAlignment="Top" Height="23"><Run Language="nl-nl" Text="Naam :"/></TextBlock>
+        <RichTextBox Margin="173,61,306,329">
+            <FlowDocument>
+                <Paragraph>
+                    <Run Text="Vul hier de naam van uw liedje in"/>
+                </Paragraph>
+            </FlowDocument>
+        </RichTextBox>
+        <TextBlock Grid.Row="0"  x:Name="SettingsText_Copy1" Margin="20,105,361,0" FontFamily="Arial Black" FontSize="24" TextAlignment="Center" VerticalAlignment="Top" Height="29"><Run Language="nl-nl" Text="Moeilijkheidsgraat"/><Run Text=" :"/></TextBlock>
+        <CheckBox Content="Easy" HorizontalAlignment="Left" Margin="339,104,0,0" VerticalAlignment="Top" Checked="CheckBox_Checked"/>
+        <CheckBox Content="Medium" HorizontalAlignment="Left" Margin="339,124,0,0" VerticalAlignment="Top"/>
+        <CheckBox Content="Hard" HorizontalAlignment="Left" Margin="339,144,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="PLayButton_Copy" Content="Selecteer bestand" Click="button1_Click" FontSize="24" Margin="250,193,250,138">
+            <Button.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="Cursor" Value="Hand"/>
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+
     </Grid>
 </Window>
