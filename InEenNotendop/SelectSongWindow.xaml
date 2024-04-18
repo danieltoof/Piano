@@ -1,0 +1,20 @@
+﻿<Window x:Class="InEenNotendop.UI.SelectSongWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:InEenNotendop.UI"
+        mc:Ignorable="d"
+        
+        Title="SelectSongWindow"
+        Width="{x:Static SystemParameters.PrimaryScreenWidth}"  
+        Height="{x:Static SystemParameters.PrimaryScreenHeight}" 
+        Icon="Resources/icon.png"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized">
+    <Grid>
+        <Label Grid.ColumnSpan="2">succes mees</Label>
+
+        <Button Grid.Column="1" Name="ImportButton" Content="Import" Click="ImportButton_OnClick" FontSize="24" Margin="609,899,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="800" Height="100"/>
+    </Grid>
+</Window>

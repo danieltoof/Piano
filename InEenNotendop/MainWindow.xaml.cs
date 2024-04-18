@@ -37,10 +37,24 @@ namespace InEenNotendop
 
         }
 
-
-        private void StartButton_OnClick(object sender, RoutedEventArgs e)
+        private void CheckDarkOrLight() // veranderd light mode naar dark mode en dark mode naar light mode
         {
-            throw new NotImplementedException();
+            if (lightmode == 1)
+            {
+                settingsWindow.SetLightMode();
+            }
+            else if (lightmode == 0)
+            {
+                settingsWindow.SetDarkMode();
+            }
+        }
+
+
+        private void PlayButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            SelectSongWindow songWindow = new SelectSongWindow();
+            songWindow.Show();
+            this.Hide();
         }
 
         private void ExitButton_OnClick(object sender, RoutedEventArgs e)
@@ -59,18 +73,6 @@ namespace InEenNotendop
             settingsWindow.Width = 700;
             settingsWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             settingsWindow.ShowDialog();
-        }
-
-        private void CheckDarkOrLight() // veranderd light mode naar dark mode en dark mode naar light mode
-        {
-            if (lightmode == 1)
-            {
-                settingsWindow.SetLightMode();
-            }
-            else if (lightmode == 0)
-            {
-                settingsWindow.SetDarkMode();
-            }
         }
     }
 }
