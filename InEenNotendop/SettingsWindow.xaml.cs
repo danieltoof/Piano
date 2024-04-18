@@ -25,7 +25,7 @@ namespace InEenNotendop.UI
         public Window Owner { get; set; }
         private MainWindow mainWindow;
         private SongsWindow songWindow;
-
+        private int isOkToClose = 0;
         
         public SettingsWindow(object sender)
         {
@@ -47,7 +47,24 @@ namespace InEenNotendop.UI
 
         private void Owner_Closing(object? sender, CancelEventArgs e)
         {
-            Environment.Exit(0);
+            if (sender.Equals(Owner))
+            {
+                isOkToClose = 1;
+                Close();
+            }
+
+        }
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            if (isOkToClose != 1)
+            {
+                this.Visibility = Visibility.Hidden;
+                e.Cancel = true;
+            }
+            else
+            {
+                e.Cancel = false;
+            }
         }
 
         public void OpenSettings()
@@ -153,11 +170,6 @@ namespace InEenNotendop.UI
 
 
 
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            this.Visibility = Visibility.Hidden;
-            e.Cancel = true;
-        }
 
         private void ExitButton_OnClick(object sender, RoutedEventArgs e)
         {
