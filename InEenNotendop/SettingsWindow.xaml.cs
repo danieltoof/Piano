@@ -25,7 +25,7 @@ namespace InEenNotendop.UI
         public Window Owner { get; set; }
         private MainWindow mainWindow;
         private SongsWindow songWindow;
-
+        private int isOkToClose = 0;
         
         public SettingsWindow(object sender)
         {
@@ -42,7 +42,29 @@ namespace InEenNotendop.UI
                     break;
             }
 
+            Owner.Closing += Owner_Closing;
+        }
 
+        private void Owner_Closing(object? sender, CancelEventArgs e)
+        {
+            if (sender.Equals(Owner))
+            {
+                isOkToClose = 1;
+                Close();
+            }
+
+        }
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            if (isOkToClose != 1)
+            {
+                this.Visibility = Visibility.Hidden;
+                e.Cancel = true;
+            }
+            else
+            {
+                e.Cancel = false;
+            }
         }
 
         public void OpenSettings()
@@ -60,15 +82,18 @@ namespace InEenNotendop.UI
 
         public void ChangeSettingsOwner(object sender)
         {
+            Owner.Closing -= Owner_Closing;
             switch (sender)
             {
                 case MainWindow:
                     mainWindow = (MainWindow)sender;
                     Owner = mainWindow;
+                    Owner.Closing += Owner_Closing;
                     break;
                 case SongsWindow:
                     songWindow = (SongsWindow)sender;
                     Owner = songWindow;
+                    Owner.Closing += Owner_Closing;
                     break;
             }
 
@@ -148,11 +173,6 @@ namespace InEenNotendop.UI
 
 
 
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            this.Visibility = Visibility.Hidden;
-            e.Cancel = true;
-        }
 
         private void ExitButton_OnClick(object sender, RoutedEventArgs e)
         {
@@ -161,9 +181,10 @@ namespace InEenNotendop.UI
 
         private void MainMenuButton_OnClick(object sender, RoutedEventArgs e)
         {
-            Owner.Close();
+            Window previousOwner = Owner;
             MainWindow mainWindow = new MainWindow(this);
             mainWindow.Show();
+            previousOwner.Close();
             Visibility = Visibility.Hidden;
         }
     }
