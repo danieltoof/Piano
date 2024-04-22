@@ -18,9 +18,9 @@ namespace InEenNotendop
     /// </summary>
     public partial class MainWindow : Window
     {
-        
+
         private SettingsWindow settingsWindow;
-        
+
 
         public MainWindow()
         {
@@ -48,30 +48,12 @@ namespace InEenNotendop
 
         }
 
-        private void CheckDarkOrLight() // veranderd light mode naar dark mode en dark mode naar light mode
-        {
-            if (lightmode == 1)
-            {
-                settingsWindow.SetLightMode();
-            }
-            else if (lightmode == 0)
-            {
-                settingsWindow.SetDarkMode();
-            }
-        }
-
 
         private void PlayButton_OnClick(object sender, RoutedEventArgs e)
         {
-<<<<<<< HEAD
-            SelectSongWindow songWindow = new SelectSongWindow();
-            songWindow.Show();
-            this.Hide();
-=======
             SongsWindow songsWindow = new SongsWindow(settingsWindow);
             songsWindow.Show();
             Close();
->>>>>>> demo
         }
 
         private void ExitButton_OnClick(object sender, RoutedEventArgs e)
@@ -83,8 +65,6 @@ namespace InEenNotendop
         {
             settingsWindow.OpenSettings();
         }
-<<<<<<< HEAD
-=======
 
         private void CheckDarkOrLight() // veranderd light mode naar dark mode en dark mode naar light mode
         {
@@ -97,6 +77,5 @@ namespace InEenNotendop
                 settingsWindow.SetDarkMode(this);
             }
         }
->>>>>>> demo
     }
 }
