@@ -10,9 +10,7 @@ namespace InEenNotendop.Data
     {
         static void Main(string[] args)
         {
-            DataProgram dataProgram = new DataProgram();
-            dataProgram.StartDataBase();
-            dataProgram.getNummersAmount();
+           
         }
     }
 }

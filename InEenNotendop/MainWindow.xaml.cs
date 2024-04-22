@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using InEenNotendop.Data;
 using InEenNotendop.UI;
 
 namespace InEenNotendop
@@ -20,13 +21,11 @@ namespace InEenNotendop
     {
         
         private SettingsWindow settingsWindow;
-        
 
         public MainWindow()
         {
             InitializeComponent();
             settingsWindow = new SettingsWindow(this);
-
             CheckLightMode();
             CheckDarkOrLight();
         }

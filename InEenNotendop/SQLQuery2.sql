@@ -1,4 +1,5 @@
-﻿SELECT COUNT(ID) FROM dbo.Nummers;
+﻿use newPianoHeroDB;
+SELECT COUNT(ID) FROM dbo.Nummers;
 INSERT INTO Nummers (Title, Artiest, Lengte, Bpm, Moeilijkheid) VALUES
 ('Song 1', 'Artist 1', 180, 120, 3),
 ('Song 2', 'Artist 2', 200, 130, 4),
