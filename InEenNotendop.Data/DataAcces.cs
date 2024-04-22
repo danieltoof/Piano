@@ -1,11 +1,8 @@
-﻿using System;
-using Microsoft.Data.SqlClient;
-using System.Text;
-using System.Reflection.PortableExecutable;
+﻿using Microsoft.Data.SqlClient;
 
 namespace InEenNotendop.Data
 {
-    class DataProgram
+    public class DataProgram
     {
         public void StartDataBase()
         {
@@ -51,7 +48,7 @@ namespace InEenNotendop.Data
                                 Lengte INT,
                                 Bpm INT,
                                 Moelijkheid INT NOT NULL,
-                                ID INT IDENTITY(1,1) PRIMARY KEY,
+                                ID INT AUTO_INCREMENT PRIMARY KEY,
                                 CONSTRAINT CHK_Moeilijkheidsgraad CHECK (Moeilijkheid >= 1 AND Moeilijkheid <= 3)
                             );
 
