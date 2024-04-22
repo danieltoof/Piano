@@ -5,14 +5,16 @@ using System.Reflection.PortableExecutable;
 
 namespace InEenNotendop.Data
 {
-    class DataProgram
+    public class DataProgram
     {
+        public string ConnectionString { get; private set; }
+
         public void StartDataBase()
         {
             try
             {
-                string user = System.Net.Dns.GetHostName() + "\\" + Environment.UserName;
                 string DBname = "PianoHeroDB";
+                string user = System.Net.Dns.GetHostName() + "\\" + Environment.UserName;
 
                 SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
                 builder.DataSource = "(localdb)\\MSSQLLocalDB";
@@ -45,20 +47,20 @@ namespace InEenNotendop.Data
 
                             // Create tables
                             string createTablesQuery = @"
-                            CREATE TABLE Nummers (
-                                Title VARCHAR(255),
-                                Artiest VARCHAR(255),
-                                Lengte INT,
-                                Bpm INT,
-                                Moelijkheid INT,
-                                ID INT IDENTITY(1,1) PRIMARY KEY
-                            );
+                        CREATE TABLE Nummers (
+                            Title VARCHAR(255),
+                            Artiest VARCHAR(255),
+                            Lengte INT,
+                            Bpm INT,
+                            Moelijkheid INT,
+                            ID INT IDENTITY(1,1) PRIMARY KEY
+                        );
 
-                            CREATE TABLE Scores (
-                                Score INT,
-                                NummerID INT,
-                                FOREIGN KEY (NummerID) REFERENCES Nummers(ID)
-                            );";
+                        CREATE TABLE Scores (
+                            Score INT,
+                            NummerID INT,
+                            FOREIGN KEY (NummerID) REFERENCES Nummers(ID)
+                        );";
                             using (SqlCommand createTablesCommand = new SqlCommand(createTablesQuery, connection))
                             {
                                 createTablesCommand.ExecuteNonQuery();
@@ -72,12 +74,36 @@ namespace InEenNotendop.Data
                         }
                     }
                 }
+
+                // Set the connection string property
+                ConnectionString = builder.ConnectionString;
             }
-            catch (SqlException e)
+            catch (Exception ex)
             {
-                Console.WriteLine(e.ToString());
+                // Handle exceptions as needed
+                Console.WriteLine(ex.Message);
             }
-            Console.ReadLine();
+        }
+
+        public int getNummersAmount()
+        {
+            if (!string.IsNullOrEmpty(ConnectionString))
+            {
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+                    connection.Open();
+                    string sql = "SELECT COUNT(ID) FROM dbo.Nummers";
+                    using (SqlCommand command = new SqlCommand(sql,connection))
+                    {
+                        return (int)command.ExecuteScalar();
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("Connection string is not set.");
+                return -1;
+            }
         }
     }
 }
