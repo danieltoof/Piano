@@ -18,22 +18,33 @@ namespace InEenNotendop
     /// </summary>
     public partial class MainWindow : Window
     {
-        internal int lightmode;
+        
         private SettingsWindow settingsWindow;
         
 
         public MainWindow()
         {
-            settingsWindow = new SettingsWindow(this);
-            settingsWindow.Owner = this;
             InitializeComponent();
+            settingsWindow = new SettingsWindow(this);
+
             CheckLightMode();
             CheckDarkOrLight();
         }
 
+        public MainWindow(SettingsWindow settingsWindow)
+        {
+            InitializeComponent();
+            this.settingsWindow = settingsWindow;
+            settingsWindow.ChangeSettingsOwner(this);
+            CheckDarkOrLight();
+            this.settingsWindow.MainMenuButton.Visibility = Visibility.Hidden;
+        }
+
+
+
         public int CheckLightMode() // checkt systeem instellingen
         {
-            return lightmode = (int)Microsoft.Win32.Registry.GetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", "AppsUseLightTheme", 1);
+            return settingsWindow.lightmode = (int)Microsoft.Win32.Registry.GetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", "AppsUseLightTheme", 1);
 
         }
 
@@ -52,9 +63,15 @@ namespace InEenNotendop
 
         private void PlayButton_OnClick(object sender, RoutedEventArgs e)
         {
+<<<<<<< HEAD
             SelectSongWindow songWindow = new SelectSongWindow();
             songWindow.Show();
             this.Hide();
+=======
+            SongsWindow songsWindow = new SongsWindow(settingsWindow);
+            songsWindow.Show();
+            Close();
+>>>>>>> demo
         }
 
         private void ExitButton_OnClick(object sender, RoutedEventArgs e)
@@ -62,17 +79,24 @@ namespace InEenNotendop
             Environment.Exit(0);
         }
 
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            Environment.Exit(0);
-        }
-
         private void SettingsButton_OnClick(object sender, RoutedEventArgs e)
         {
-            settingsWindow.Height = 350;
-            settingsWindow.Width = 700;
-            settingsWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            settingsWindow.ShowDialog();
+            settingsWindow.OpenSettings();
         }
+<<<<<<< HEAD
+=======
+
+        private void CheckDarkOrLight() // veranderd light mode naar dark mode en dark mode naar light mode
+        {
+            if (settingsWindow.lightmode == 1)
+            {
+                settingsWindow.SetLightMode(this);
+            }
+            else if (settingsWindow.lightmode == 0)
+            {
+                settingsWindow.SetDarkMode(this);
+            }
+        }
+>>>>>>> demo
     }
 }

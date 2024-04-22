@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -20,72 +21,171 @@ namespace InEenNotendop.UI
     /// </summary>
     public partial class SettingsWindow : Window
     {
-        public System.Windows.Window Owner { get; set; }
+        internal int lightmode;
+        public Window Owner { get; set; }
         private MainWindow mainWindow;
-        public SettingsWindow(MainWindow mainWindowGive)
+        private SongsWindow songWindow;
+        private int isOkToClose = 0;
+        
+        public SettingsWindow(object sender)
         {
-            mainWindow = mainWindowGive;
             InitializeComponent();
-    
+            switch (sender)
+            {
+                case MainWindow:
+                    mainWindow = (MainWindow)sender;
+                    Owner = mainWindow;
+                    break;
+                case SongsWindow:
+                    songWindow = (SongsWindow)sender;
+                    Owner = songWindow;
+                    break;
+            }
+
+            Owner.Closing += Owner_Closing;
+        }
+
+        private void Owner_Closing(object? sender, CancelEventArgs e)
+        {
+            if (sender.Equals(Owner))
+            {
+                isOkToClose = 1;
+                Close();
+            }
+
+        }
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            if (isOkToClose != 1)
+            {
+                this.Visibility = Visibility.Hidden;
+                e.Cancel = true;
+            }
+            else
+            {
+                e.Cancel = false;
+            }
+        }
+
+        public void OpenSettings()
+        {
+            if (Owner is MainWindow)
+            {
+                MainMenuButton.Visibility = Visibility.Hidden;
+            } else if (Owner is not MainWindow)
+            {
+                MainMenuButton.Visibility = Visibility.Visible;
+            }
+            ShowDialog();
+        }
+
+
+        public void ChangeSettingsOwner(object sender)
+        {
+            Owner.Closing -= Owner_Closing;
+            switch (sender)
+            {
+                case MainWindow:
+                    mainWindow = (MainWindow)sender;
+                    Owner = mainWindow;
+                    Owner.Closing += Owner_Closing;
+                    break;
+                case SongsWindow:
+                    songWindow = (SongsWindow)sender;
+                    Owner = songWindow;
+                    Owner.Closing += Owner_Closing;
+                    break;
+            }
+
         }
 
         private void DarkOrLightMode_OnClick(object sender, RoutedEventArgs e)
         {
-            CheckDarkOrLight();
+            CheckDarkOrLight(Owner);
         }
 
-        private void CheckDarkOrLight() // veranderd light mode naar dark mode en dark mode naar light mode
+        private void CheckDarkOrLight(object sender) // veranderd light mode naar dark mode en dark mode naar light mode
         {
-            if (mainWindow.lightmode == 1)
+            if (lightmode == 0)
             {
-                SetLightMode();
+                SetLightMode(sender);
             }
-            else if (mainWindow.lightmode == 0)
+            else if (lightmode == 1)
             {
-                SetDarkMode();
+                SetDarkMode(sender);
             }
         }
 
 
-        public void SetLightMode() // zet hier alle dingen die veranderen van kleur
+        public void SetLightMode(object sender) // zet hier alle dingen die veranderen van kleur
         {
-            //Alles van Start menu
-            mainWindow.MainGrid.Background = Brushes.White;
-            DarkOrLightMode.Content = "Light mode";
 
+            if (sender is MainWindow)
+            {
+                //Alles van Start menu
+                mainWindow.MainGrid.Background = Brushes.White;
+                
+            }
 
+            if (sender is SongsWindow)
+            {
+                //Alles van de songs menu
+                songWindow.SongsGrid.Background = Brushes.White;
+            }
 
 
             //Alles van main settings menu
+            DarkOrLightMode.Content = "Light mode";
             SettingsGrid.Background = Brushes.White;
             SettingsText.Foreground = Brushes.Black;
 
 
             //Setten van lightmode
-            mainWindow.lightmode = 0;
+            lightmode = 1;
         }
 
-        public void SetDarkMode()
+        public void SetDarkMode(object sender)
         {
 
-            mainWindow.MainGrid.Background = new SolidColorBrush(Color.FromRgb(25, 44, 49));
-            DarkOrLightMode.Content = "Dark mode";
+            if (sender is MainWindow)
+            {
+                mainWindow.MainGrid.Background = new SolidColorBrush(Color.FromRgb(25, 44, 49));
+                
+            }
 
-           
+            if (sender is SongsWindow)
+            {
+                songWindow.SongsGrid.Background = new SolidColorBrush(Color.FromRgb(25, 44, 49));
+            }
+
 
 
             //Alles van main settings menu
+            DarkOrLightMode.Content = "Dark mode";
             SettingsGrid.Background = new SolidColorBrush(Color.FromRgb(25, 44, 49));
             SettingsText.Foreground = Brushes.White;
 
             //Setten van lightmode 
-            mainWindow.lightmode = 1;
+            lightmode = 0;
         }
 
-        protected override void OnClosing(CancelEventArgs e)
+
+
+
+
+
+        private void ExitButton_OnClick(object sender, RoutedEventArgs e)
         {
-            this.Visibility = Visibility.Hidden;
-            e.Cancel = true;
+            Environment.Exit(0);
+        }
+
+        private void MainMenuButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            Window previousOwner = Owner;
+            MainWindow mainWindow = new MainWindow(this);
+            mainWindow.Show();
+            previousOwner.Close();
+            Visibility = Visibility.Hidden;
         }
     }
 }
