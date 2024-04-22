@@ -50,8 +50,9 @@ namespace InEenNotendop.Data
                                 Artiest VARCHAR(255),
                                 Lengte INT,
                                 Bpm INT,
-                                Moelijkheid INT,
-                                ID INT IDENTITY(1,1) PRIMARY KEY
+                                Moelijkheid INT NOT NULL,
+                                ID INT IDENTITY(1,1) PRIMARY KEY,
+                                CONSTRAINT CHK_Moeilijkheidsgraad CHECK (Moeilijkheid >= 1 AND Moeilijkheid <= 3)
                             );
 
                             CREATE TABLE Scores (
