@@ -1,7 +1,4 @@
-﻿using System;
-using Microsoft.Data.SqlClient;
-using System.Text;
-using System.Reflection.PortableExecutable;
+﻿using Microsoft.Data.SqlClient;
 
 namespace InEenNotendop.Data
 {
