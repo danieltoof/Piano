@@ -16,7 +16,7 @@ static void GetLength(string MidiFileName)
     try
     {
         // inladen midi
-        var midi = MidiFile.Read(@"..\..\..\midis\" + MidiFileName);
+        var midi = MidiFile.Read(MidiFileName);
 
         // lees lengte van midi
         TimeSpan MidiFileDuration = midi.GetDuration<MetricTimeSpan>();
@@ -51,18 +51,36 @@ static void GetLength(string MidiFileName)
     
 }
 
-string a = Console.ReadLine();
-GetLength(a);
+//string a = Console.ReadLine();
+//GetLength(a);
 
-var midi = MidiFile.Read(@"..\..\..\midis\Darude_-_Sandstorm__Izzet_Selanik__Arne_Mulder_20061031124814.mid");
+//var midi = MidiFile.Read(@"..\..\..\midis\Darude_-_Sandstorm__Izzet_Selanik__Arne_Mulder_20061031124814.mid");
 //var midi = MidiFile.Read(@"..\..\..\midis\AUD_HTX0525.mid");
 
-using (var output = OutputDevice.GetByName("Microsoft GS Wavetable Synth"))
-using (var playback = midi.GetPlayback(output))
+while (true)
 {
-    playback.Speed = 1.0;
-    //playback.Play();
-    midi.Play(output);
-    Console.WriteLine("playing midi");
-    System.Threading.Thread.Sleep(2000);
+    var rand = new Random();
+    var files = Directory.GetFiles(@"..\..\..\midis\");
+    string randomsong = files[rand.Next(files.Length)];
+
+
+    string randomshort = randomsong.Remove(randomsong.Length - 4, 4).Remove(0, 15);
+    Console.WriteLine(randomshort);
+    //Console.WriteLine(randomsong);
+
+    var midi = MidiFile.Read(randomsong);
+    GetLength(randomsong);
+
+
+
+    using (var output = OutputDevice.GetByName("Microsoft GS Wavetable Synth"))
+    using (var playback = midi.GetPlayback(output))
+    {
+        playback.Speed = 1.0;
+        //playback.Play();
+        midi.Play(output);
+        //Console.WriteLine("playing midi");
+        System.Threading.Thread.Sleep(2000);
+        Console.WriteLine();
+    }
 }
