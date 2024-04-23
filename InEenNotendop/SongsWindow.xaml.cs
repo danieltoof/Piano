@@ -46,7 +46,16 @@ namespace InEenNotendop.UI
 
         private void OnNumberClicked(object sender, MouseButtonEventArgs e)
         {
-            MessageBox.Show("Tijd om een nieuw scherm toe te voegen");
+            if (sender is FrameworkElement clickedElement)
+            {
+                var nummer = clickedElement.DataContext as Nummer;
+                if (nummer != null)
+                {
+                    int nummerId = nummer.Id;
+                    MessageBox.Show($"Clicked on Nummer with ID: {nummerId}");
+                }
+
+            }
         }
 
 
