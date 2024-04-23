@@ -16,7 +16,6 @@ static void GetLength(string MidiFileName)
     try
     {
         // inladen midi
-
         var midi = MidiFile.Read(@"..\..\..\midis\" + MidiFileName);
 
         // lees lengte van midi
@@ -43,7 +42,9 @@ static void GetLength(string MidiFileName)
 
         // print final waarde
         Console.WriteLine(midiLengte);
-    } catch (FileNotFoundException)
+
+    } 
+    catch (FileNotFoundException)
     {
         Console.WriteLine("ERROR: MIDI file niet gevonden.");
     }
