@@ -9,37 +9,99 @@
         WindowStartupLocation="CenterScreen">
 
     <Grid>
-        <TextBlock Grid.Row="0"  x:Name="SettingsText" Margin="0,10,0,0" FontFamily="Arial Black" FontSize="24" TextAlignment="Center" VerticalAlignment="Top"><Run Language="nl-nl" Text="Uploaden"/></TextBlock>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="49*"/>
+            <RowDefinition Height="310*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- First Row-->
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="0"  x:Name="SettingsText" Margin="0,0,0,0" FontFamily="Arial Black" FontSize="24" TextAlignment="Center" VerticalAlignment="Top"><Run Language="nl-nl" Text="Uploaden"/></TextBlock>
+        </Grid>
+
+        <!-- Second Row-->
+        <Grid Height="auto" Margin="0,10,0,5" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="13*"/>
+                <ColumnDefinition Width="212*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Col 0 -->
+            <!-- Naam -->
+            <TextBlock Grid.Row="0" x:Name="ImportnameLabel" Margin="50,34,50,0" FontFamily="Arial Black" FontSize="24" TextAlignment="Center" VerticalAlignment="Top" Height="23"><Run Language="nl-nl" Text="Naam :"/></TextBlock>
+            <!-- Artiest -->
+            <TextBlock Grid.Row="0" x:Name="ImportArtistLabel" Margin="0,94,0,0" FontFamily="Arial Black" FontSize="24" TextAlignment="Center" VerticalAlignment="Top" Height="23"><Run Language="nl-nl" Text="Artiest :"/></TextBlock>
+            <!-- Moeilijkheid -->
+            <TextBlock Grid.Row="0" x:Name="ImportDiffecultyLabel" Margin="0,191,0,0"  FontFamily="Arial Black" FontSize="24" TextAlignment="Center" VerticalAlignment="Top" Height="29"><Run Language="nl-nl" Text="Moeilijkheidsgraad"/><Run Text=" :"/></TextBlock>
 
 
-        <Button Name="PLayButton" Content="upload" Click="button1_Click" FontSize="24" Margin="570,361,23,25">
-            <Button.Resources>
-                <Style TargetType="{x:Type Border}">
-                    <Setter Property="TextBlock.Cursor" Value="Hand"/>
-                    <Setter Property="CornerRadius" Value="5"/>
-                </Style>
-            </Button.Resources>
-        </Button>
-        <TextBlock Grid.Row="0"  x:Name="SettingsText_Copy" Margin="20,61,530,0" FontFamily="Arial Black" FontSize="24" TextAlignment="Center" VerticalAlignment="Top" Height="23"><Run Language="nl-nl" Text="Naam :"/></TextBlock>
-        <RichTextBox Margin="173,61,306,329">
-            <FlowDocument>
-                <Paragraph>
-                    <Run Text="Vul hier de naam van uw liedje in"/>
-                </Paragraph>
-            </FlowDocument>
-        </RichTextBox>
-        <TextBlock Grid.Row="0"  x:Name="SettingsText_Copy1" Margin="20,105,361,0" FontFamily="Arial Black" FontSize="24" TextAlignment="Center" VerticalAlignment="Top" Height="29"><Run Language="nl-nl" Text="Moeilijkheidsgraat"/><Run Text=" :"/></TextBlock>
-        <CheckBox Content="Easy" HorizontalAlignment="Left" Margin="339,104,0,0" VerticalAlignment="Top" Checked="CheckBox_Checked"/>
-        <CheckBox Content="Medium" HorizontalAlignment="Left" Margin="339,124,0,0" VerticalAlignment="Top"/>
-        <CheckBox Content="Hard" HorizontalAlignment="Left" Margin="339,144,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="PLayButton_Copy" Content="Selecteer bestand" Click="button1_Click" FontSize="24" Margin="250,193,250,138">
-            <Button.Resources>
-                <Style TargetType="{x:Type Border}">
-                    <Setter Property="Cursor" Value="Hand"/>
-                    <Setter Property="CornerRadius" Value="5"/>
-                </Style>
-            </Button.Resources>
-        </Button>
+            <!-- Col 1 -->
+            <!-- Naam -->
+            <TextBox  Width="250"  VerticalAlignment="Top" HorizontalAlignment="Left" x:Name="ImportName" Margin="0,44,0,0" Grid.Column="2"/>
+            <TextBlock IsHitTestVisible="False" Text="Vul hier je naam in" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,46,0,0" Foreground="DarkGray" Grid.Column="2">
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Text, ElementName=ImportName}" Value="">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
 
+            <!-- Artiest -->
+            <TextBox  Width="250"  VerticalAlignment="Top" HorizontalAlignment="Left" x:Name="ImportArtist" Margin="0,98,0,0" Grid.Column="2"/>
+            <TextBlock IsHitTestVisible="False" Text="Vul hier je de naam van de artiest in" VerticalAlignment="Top" HorizontalAlignment="Left" Foreground="DarkGray" Grid.Column="2" Margin="0,99,0,0">
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Text, ElementName=ImportArtist}" Value="">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+
+            <!-- Moeilijkheid -->
+            <StackPanel Margin="14,181,0,0" Grid.Column="2" x:Name="ImportDiffeculty">
+                <RadioButton GroupName="Diffeculty" IsChecked="True"  Content="Easy"   HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <RadioButton GroupName="Diffeculty" IsChecked="False" Content="Medium" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <RadioButton GroupName="Diffeculty" IsChecked="False" Content="Hard"/>
+            </StackPanel>
+
+            <!-- Upload Knop -->
+            <Button x:Name="uploadButton" Content="Selecteer bestand" Click="uploadButton_Click" FontSize="24" Grid.Column="2" Margin="154,150,47,37">
+                <Button.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="Cursor" Value="Hand"/>
+                        <Setter Property="CornerRadius" Value="5"/>
+                    </Style>
+                </Button.Resources>
+            </Button>
+        </Grid>
+        <!-- Second Row-->
+        <Grid Grid.Row="2" Margin="0,54,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Name="SaveButton" Content="upload" Click="saveButton_Click" FontSize="24" Margin="531,-28,23,10">
+                <Button.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="TextBlock.Cursor" Value="Hand"/>
+                        <Setter Property="CornerRadius" Value="5"/>
+                    </Style>
+                </Button.Resources>
+            </Button>
+        </Grid>
     </Grid>
 </Window>
