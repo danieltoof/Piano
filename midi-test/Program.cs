@@ -21,6 +21,19 @@ int seconds = (Convert.ToInt32(midiFileDuration.TotalSeconds)%60);
 
 Console.WriteLine(minutes+ ":" + seconds); //print lengte todo: zorg voor nullen onder 10 en niet hoger dan 59
 
+string secondsString;
+
+if (seconds < 10)
+{
+    secondsString = "0" + seconds;
+} else
+{
+    secondsString = seconds.ToString();
+}
+
+Console.WriteLine(secondsString);
+String midiLengte = minutes.ToString() + ":" + secondsString;
+Console.WriteLine(midiLengte);
 
 using (var output = OutputDevice.GetByName("Microsoft GS Wavetable Synth"))
 using (var playback = midi.GetPlayback(output))
