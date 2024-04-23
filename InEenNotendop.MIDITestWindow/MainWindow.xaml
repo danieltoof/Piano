@@ -13,21 +13,35 @@
             x:Name="midiButton"
             Width="150"
             Height="50"
-            Margin="92,192,558,192"
-            Content="BANAAN" />
+            Margin="299,98,351,286"
+            Content="MIDI Detected" />
         <Button
-            x:Name="midiButton2"
-            Width="150"
-            Height="50"
-            Margin="325,192,325,192"
-            Content="BANAAN" />
+            x:Name="C1Button"
+            Margin="0,266,751,0"
+            Content="C1" Click="midiButton2_Click" />
         <Button
-            x:Name="midiButton3"
-            Width="150"
-            Height="50"
-            Margin="574,192,76,192"
-            Content="BANAAN" />
-
-
+            x:Name="D1Button"
+            Margin="54,266,697,0"
+            Content="D1" Click="midiButton2_Click" />
+        <Button
+            x:Name="E1Button"
+            Margin="108,266,643,0"
+            Content="E1" Click="midiButton2_Click" />
+        <Button
+            x:Name="F1Button"
+            Margin="162,266,589,0"
+            Content="F1" Click="midiButton2_Click" />
+        <Button
+            x:Name="G1Button"
+            Margin="216,266,535,0"
+            Content="G1" Click="midiButton2_Click" />
+        <Button
+            x:Name="A1Button"
+            Margin="270,266,481,0"
+            Content="A1" Click="midiButton2_Click" />
+        <Button
+            x:Name="B1Button"
+            Margin="325,266,426,0"
+            Content="B1" Click="midiButton2_Click" />
     </Grid>
 </Window>

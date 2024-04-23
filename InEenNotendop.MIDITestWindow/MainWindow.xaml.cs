@@ -30,7 +30,7 @@ namespace InEenNotendop.MIDITestWindow
         private void InitializeMidi()
         {
             int numDevices = MidiIn.NumberOfDevices;
-            int desiredDeviceIndex = 1; // Replace with the index you want
+            int desiredDeviceIndex = 0; // Replace with the index you want
             if (desiredDeviceIndex >= 0 && desiredDeviceIndex < numDevices)
             {
                 midiIn = new MidiIn(desiredDeviceIndex);
@@ -71,7 +71,12 @@ namespace InEenNotendop.MIDITestWindow
             {
                 if (activeMidiNotes.Any(note => note.IsPressed))
                 {
+                    //if (note)
                     midiButton.Background = System.Windows.Media.Brushes.Green;
+                    foreach (var note in activeMidiNotes)
+                    {
+                        //note.NoteNumber
+                    }
                 }
                 else
                 {
@@ -87,6 +92,7 @@ namespace InEenNotendop.MIDITestWindow
             midiIn.Stop();
             midiIn.Dispose();
         }
+
     }
 }
 class ActiveMidiNote
