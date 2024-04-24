@@ -75,5 +75,11 @@ namespace InEenNotendop.UI
                 settingsWindow.SetDarkMode(this);
             }
         }
+
+        private void ImportButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            ImportWindow import = new ImportWindow();
+            import.ShowDialog();
+        }
     }
 }
