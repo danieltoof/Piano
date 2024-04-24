@@ -66,6 +66,6 @@
                 </ItemsControl>
             </ScrollViewer>
         </Grid>
-        <Button Grid.Column="1" Name="ImportButton" Content="Import" Click="ImportButton_OnClick" FontSize="24" Margin="2098,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="359" Height="108" Grid.Row="2"/>
+        <Button Grid.Column="1" Name="ImportButton" Content="Import" Click="ImportButton_OnClick" FontSize="24" Margin="1531,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="317" Height="72" Grid.Row="2"/>
     </Grid>
 </Window>
