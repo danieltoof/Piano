@@ -51,8 +51,17 @@ namespace InEenNotendop.UI
             }
             string songName;
             string songArtist;
-            songName = ImportName.Text;
-            songArtist = ImportArtist.Text;
+
+            if (string.IsNullOrEmpty(ImportName.Text))
+            {
+                MessageBox.Show("Vul een naam in");
+            }
+            else { songName = ImportName.Text; }
+
+            if (string.IsNullOrEmpty(ImportArtist.Text))
+            {
+                MessageBox.Show("Vul een artiest in");
+            } else { songArtist = ImportArtist.Text; }
         }
 
         private void selectFile_Click(object sender, RoutedEventArgs e)
@@ -98,29 +107,5 @@ namespace InEenNotendop.UI
                 }
             }
         }
-
-        public string this[string columnName]
-        {
-            get
-            {
-                string error = string.Empty;
-
-                switch (columnName)
-                {
-                    case nameof(ImportArtist):
-                        if (string.IsNullOrWhiteSpace(ImportArtist.Text))
-                            error = "First artist cannot be empty.";
-                        break;
-
-                    case nameof(ImportName.Text):
-                        if (string.IsNullOrWhiteSpace(ImportName.Text))
-                            error = "Last name cannot be empty.";
-                        break;
-                }
-
-                return error;
-            }
-        }
-        public string Error => string.Empty;
     }
 }
