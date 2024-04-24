@@ -5,6 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -27,8 +28,32 @@ namespace InEenNotendop.UI
             InitializeComponent();
         }
 
-        private void saveButton_Click(object sender, RoutedEventArgs e)
+        private void selectFile_Click(object sender, RoutedEventArgs e)
         {
+            var dialog = new Microsoft.Win32.OpenFileDialog();
+            dialog.DefaultExt = ".midi"; // Default file extension
+            dialog.Filter = "midi documenten (.mid)|*.mid"; // Filter files by extension
+
+            // Show open file dialog box
+            bool? result = dialog.ShowDialog();
+
+            // Process open file dialog box results
+            if (result == true)
+            {
+                // Get the data from selected file
+                string fullPathToFolder = dialog.FileName;
+                string fileNameOnly = dialog.SafeFileName;
+                try
+                {
+                    File.Move(fullPathToFolder, @"c:\Users\lukas\Source\Repos\Piano\InEenNotendop\Resources\Songs\Song_" + fileNameOnly);
+                    MessageBox.Show("Het bestand " + fileNameOnly + " is succesvol verplaatst", "Succes");
+                } catch (Exception) { MessageBox.Show("Cant find file"); }
+            }
+        }
+
+        private async void saveButton_Click(object sender, RoutedEventArgs e)
+        {
+            int error = 1;
             int diffecultyCheckbox = 1;
             string myText = ImportName.Text;
             var checkedValue = "Easy";
@@ -51,30 +76,28 @@ namespace InEenNotendop.UI
             }
             string songName;
             string songArtist;
-            songName = ImportName.Text;
-            songArtist = ImportArtist.Text;
+
+            if (string.IsNullOrEmpty(ImportName.Text))
+            {
+                error = 1;
+                MessageBox.Show("Vul een naam in");
+            }
+            else { songName = ImportName.Text; error = 0; }
+
+            if (string.IsNullOrEmpty(ImportArtist.Text))
+            {
+                error = 1;
+                MessageBox.Show("Vul een artiest in");
+            }
+            else { songArtist = ImportArtist.Text; error = 0; }
+
+            if(error == 0)
+            {
+                MessageBox.Show("succes");
+                await Task.Delay(1000);
+                Close();
+            }
         }
-
-        private void selectFile_Click(object sender, RoutedEventArgs e)
-        {
-            // Create OpenFileDialog 
-            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-
-            // Set filter for file extension and default file extension 
-            dlg.DefaultExt = ".mid";
-            dlg.Filter = "MID Files (*.mid)|*.mid";
-
-            // Display OpenFileDialog by calling ShowDialog method 
-            Nullable<bool> result = dlg.ShowDialog();
-
-        }
-
-
-        private void CheckBox_Checked(object sender, RoutedEventArgs e)
-        {}
-
-        private void RadioButton_Checked(object sender, RoutedEventArgs e)
-        {}
 
         private static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
         {
@@ -98,29 +121,5 @@ namespace InEenNotendop.UI
                 }
             }
         }
-
-        public string this[string columnName]
-        {
-            get
-            {
-                string error = string.Empty;
-
-                switch (columnName)
-                {
-                    case nameof(ImportArtist):
-                        if (string.IsNullOrWhiteSpace(ImportArtist.Text))
-                            error = "First artist cannot be empty.";
-                        break;
-
-                    case nameof(ImportName.Text):
-                        if (string.IsNullOrWhiteSpace(ImportName.Text))
-                            error = "Last name cannot be empty.";
-                        break;
-                }
-
-                return error;
-            }
-        }
-        public string Error => string.Empty;
     }
 }
