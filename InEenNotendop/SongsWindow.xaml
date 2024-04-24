@@ -15,7 +15,7 @@
         <!-- Converter om de moeilijkheidstekst op te halen -->
         <local:MoeilijkheidConverter x:Key="MoeilijkheidConverter" />
     </Window.Resources>
-    
+
     <Grid Name="SongsGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
@@ -66,5 +66,6 @@
                 </ItemsControl>
             </ScrollViewer>
         </Grid>
+        <Button Grid.Column="1" Name="ImportButton" Content="Import" Click="ImportButton_OnClick" FontSize="24" Margin="2098,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="359" Height="108" Grid.Row="2"/>
     </Grid>
 </Window>
