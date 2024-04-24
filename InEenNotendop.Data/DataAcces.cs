@@ -86,16 +86,8 @@ namespace InEenNotendop.Data
                                 ('Title23', 'Artiest23', 400, 340, 2),
                                 ('Title24', 'Artiest24', 410, 350, 3),
                                 ('Title25', 'Artiest25', 420, 360, 1);
-                                CREATE TABLE Nummers (
-                                Title VARCHAR(255),
-                                Artiest VARCHAR(255),
-                                Lengte INT,
-                                Bpm INT,
-                                Moeilijkheid INT NOT NULL,
-                                ID INT IDENTITY(1,1) PRIMARY KEY,
-                                CONSTRAINT CHK_Moeilijkheidsgraad CHECK (Moeilijkheid >= 1 AND Moeilijkheid <= 3)
-                            );
-                        ";
+                            );";
+
                             using (SqlCommand createTablesCommand = new SqlCommand(createTablesQuery, connection))
                             {
                                 createTablesCommand.ExecuteNonQuery();

@@ -22,7 +22,7 @@ namespace InEenNotendop.UI
                     case 2:
                         return "medium";
                     case 3:
-                        return "difficult";
+                        return "hard";
                     default:
                         return "Unknown";
                 }
