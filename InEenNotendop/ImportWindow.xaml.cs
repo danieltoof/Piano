@@ -15,6 +15,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Interaction;
+using Microsoft.Data.SqlClient;
 
 namespace InEenNotendop.UI
 {
@@ -88,11 +91,69 @@ namespace InEenNotendop.UI
                 MessageBox.Show("Vul een artiest in");
             } else { songArtist = ImportArtist.Text; error = 0; }
 
-            // move selected file
-            if (string.IsNullOrEmpty(FilePath) && string.IsNullOrEmpty(FileName)) { 
-                error = 1; 
-                MessageBox.Show("Selecteer een bestand"); 
-            } else { File.Move(FilePath, @"\Resources\Songs\Song_" + FileName); error = 0; }
+            try
+            {
+                // move selected file
+                if (string.IsNullOrEmpty(FilePath) && string.IsNullOrEmpty(FileName))
+                {
+                    error = 1;
+                    MessageBox.Show("Selecteer een bestand");
+                }
+                else { File.Copy(FilePath, @"..\..\..\Resources\Songs\Song_" + FileName); error = 0; }
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine("Name duplicate");
+            }
+            
+
+            int songLength = GetLength(@"..\..\..\Resources\Songs\Song_" + FileName);
+            int bpm = GetStartTempo(@"..\..\..\Resources\Songs\Song_" + FileName);
+
+            string DBname = "PianoHeroDB";
+            string user = System.Net.Dns.GetHostName() + "\\" + Environment.UserName;
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+            builder.DataSource = "(localdb)\\MSSQLLocalDB";
+            builder.IntegratedSecurity = true;
+            builder.UserID = user;
+            builder.Password = "";
+            builder.ApplicationIntent = ApplicationIntent.ReadWrite;
+
+
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                connection.Open();
+
+                // Check if the database exists
+                string checkDatabaseExistsQuery = $"SELECT 1 FROM sys.databases WHERE name = '{DBname}'";
+                using (SqlCommand checkDatabaseExistsCommand = new SqlCommand(checkDatabaseExistsQuery, connection))
+                {
+                    object result = checkDatabaseExistsCommand.ExecuteScalar();
+                    if (result != null)
+                    {
+                        // add song
+                        string insertSongQuery = $@"
+
+                            INSERT INTO Nummers (Title, Artiest, Lengte, Bpm, Moeilijkheid)
+                            VALUES ('{ImportName.Text}', '{ImportArtist.Text}', {songLength}, {bpm}, {diffecultyCheckbox});
+                        ";
+                        using (SqlCommand insertSongCommand = new SqlCommand(insertSongQuery, connection))
+                        {
+                            insertSongCommand.ExecuteNonQuery();
+                        }
+                    }
+                    else
+                    {
+                        // Database exists, switch to it
+                        builder.InitialCatalog = DBname;
+                        connection.ChangeDatabase(DBname);
+                    }
+                }
+                connection.Close();
+            }
+
+
 
             // check if there are errors
             if (error == 0)
@@ -103,6 +164,54 @@ namespace InEenNotendop.UI
             }
         }
 
+        static int GetLength(string MidiFileName)
+        {
+            // check of bestandsnaam opgegeven is
+            if (!MidiFileName.EndsWith(".mid"))
+            {
+                //voeg bestandsnaam toe aan string
+                MidiFileName = MidiFileName + ".mid";
+            }
+
+            try
+            {
+                // inladen midi
+                var midi = MidiFile.Read(MidiFileName);
+
+                // lees lengte van midi
+                TimeSpan MidiFileDuration = midi.GetDuration<MetricTimeSpan>();
+
+                // return final waarde
+                return (int)MidiFileDuration.TotalSeconds;
+
+            }
+            catch (FileNotFoundException)
+            {
+                Console.WriteLine("ERROR: MIDI file niet gevonden.");
+            }
+
+            return 0;
+        }
+
+        static int GetStartTempo(string MidiFileName)
+        {
+            // inladen midi
+            var midi = MidiFile.Read(MidiFileName);
+
+            // haal tempo van midi op
+            using (var tempoMapManager = new TempoMapManager(
+                       midi.TimeDivision,
+                       midi.GetTrackChunks().Select(c => c.Events)))
+            {
+                // maken tempomap
+                TempoMap tempoMap = tempoMapManager.TempoMap;
+
+                // lezen start tempo
+                int tempoStart = (int)Math.Round(tempoMap.GetTempoAtTime((MidiTimeSpan)1).BeatsPerMinute);
+
+                return tempoStart;
+            }
+        }
         private static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
         {
             if (depObj != null)

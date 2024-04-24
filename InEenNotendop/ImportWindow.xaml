@@ -22,7 +22,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Row="0"  x:Name="SettingsText" Margin="0,0,0,0" FontFamily="Arial Black" FontSize="24" TextAlignment="Center" VerticalAlignment="Top"><Run Language="nl-nl" Text="Uploaden"/></TextBlock>
+            <TextBlock Grid.Row="0"  x:Name="SettingsText" Margin="0,0,0,0" FontFamily="Arial Black" FontSize="24" TextAlignment="Center" VerticalAlignment="Top"><Run Language="nl-nl" Text="Import song"/></TextBlock>
         </Grid>
 
         <!-- Second Row-->
@@ -35,17 +35,17 @@
 
             <!-- Col 0 -->
             <!-- Naam -->
-            <TextBlock Grid.Row="0" x:Name="ImportnameLabel" Margin="50,34,50,0" FontFamily="Arial Black" FontSize="24" TextAlignment="Center" VerticalAlignment="Top" Height="23"><Run Language="nl-nl" Text="Naam :"/></TextBlock>
+            <TextBlock Grid.Row="0" x:Name="ImportnameLabel" Margin="50,34,50,0" FontFamily="Arial Black" FontSize="24" TextAlignment="Center" VerticalAlignment="Top" Height="23"><Run Language="nl-nl" Text="Song:"/></TextBlock>
             <!-- Artiest -->
-            <TextBlock Grid.Row="0" x:Name="ImportArtistLabel" Margin="0,94,0,0" FontFamily="Arial Black" FontSize="24" TextAlignment="Center" VerticalAlignment="Top" Height="23"><Run Language="nl-nl" Text="Artiest :"/></TextBlock>
+            <TextBlock Grid.Row="0" x:Name="ImportArtistLabel" Margin="0,94,0,0" FontFamily="Arial Black" FontSize="24" TextAlignment="Center" VerticalAlignment="Top" Height="23"><Run Language="nl-nl" Text="Artist:"/></TextBlock>
             <!-- Moeilijkheid -->
-            <TextBlock Grid.Row="0" x:Name="ImportDiffecultyLabel" Margin="0,191,0,0"  FontFamily="Arial Black" FontSize="24" TextAlignment="Center" VerticalAlignment="Top" Height="29"><Run Language="nl-nl" Text="Moeilijkheidsgraad"/><Run Text=" :"/></TextBlock>
+            <TextBlock Grid.Row="0" x:Name="ImportDiffecultyLabel" Margin="0,191,0,0"  FontFamily="Arial Black" FontSize="24" TextAlignment="Center" VerticalAlignment="Top" Height="29"><Run Language="nl-nl" Text="Difficulty:"/></TextBlock>
 
 
             <!-- Col 1 -->
             <!-- Naam -->
             <TextBox  Width="250"  VerticalAlignment="Top" HorizontalAlignment="Left" x:Name="ImportName" Margin="0,44,0,0" Grid.Column="2"/>
-            <TextBlock IsHitTestVisible="False" Text="Vul hier je naam in" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,46,0,0" Foreground="DarkGray" Grid.Column="2">
+            <TextBlock IsHitTestVisible="False" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,46,0,0" Foreground="DarkGray" Grid.Column="2">
                 <TextBlock.Style>
                     <Style TargetType="{x:Type TextBlock}">
                         <Setter Property="Visibility" Value="Collapsed"/>
@@ -55,12 +55,11 @@
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                </TextBlock.Style>
-            </TextBlock>
+                </TextBlock.Style><Run Language="nl-nl" Text="Song name"/></TextBlock>
 
             <!-- Artiest -->
             <TextBox Text="{Binding FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"  Width="250"  VerticalAlignment="Top" HorizontalAlignment="Left" x:Name="ImportArtist" Margin="0,98,0,0" Grid.Column="2"/>
-            <TextBlock IsHitTestVisible="False" Text="Vul hier je de naam van de artiest in" VerticalAlignment="Top" HorizontalAlignment="Left" Foreground="DarkGray" Grid.Column="2" Margin="0,99,0,0">
+            <TextBlock IsHitTestVisible="False" VerticalAlignment="Top" HorizontalAlignment="Left" Foreground="DarkGray" Grid.Column="2" Margin="0,99,0,0">
                 <TextBlock.Style>
                     <Style TargetType="{x:Type TextBlock}">
                         <Setter Property="Visibility" Value="Collapsed"/>
@@ -70,8 +69,7 @@
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                </TextBlock.Style>
-            </TextBlock>
+                </TextBlock.Style><Run Language="nl-nl" Text="Artist name"/></TextBlock>
 
             <!-- Moeilijkheid -->
             <StackPanel Margin="14,181,0,0" Grid.Column="2" x:Name="ImportDiffeculty">
@@ -81,15 +79,17 @@
             </StackPanel>
 
             <!-- Upload Knop -->
-            <Button Style="{DynamicResource ButtonStyle}" x:Name="selectFileButton" Content="Selecteer bestand" Click="selectFile_Click" FontSize="24" Grid.Column="2" Margin="148,150,53,37"></Button>
+            <Button Style="{DynamicResource ButtonStyle}" x:Name="selectFileButton" Content="Select file" Click="selectFile_Click" FontSize="24" Grid.Column="2" Margin="148,150,53,37"></Button>
         </Grid>
         <!-- Second Row-->
         <Grid Grid.Row="2" Margin="0,54,0,0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="291*"/>
+                <ColumnDefinition Width="0*"/>
+                <ColumnDefinition Width="59*"/>
             </Grid.ColumnDefinitions>
 
-            <Button Style="{DynamicResource ButtonStyle}" Name="SaveButton" Content="upload" Click="saveButton_Click" FontSize="24" Margin="531,-28,23,10"></Button>
+            <Button Style="{DynamicResource ButtonStyle}" Name="SaveButton" Content="Upload" Click="saveButton_Click" FontSize="24" Margin="531,-28,23,10" Grid.ColumnSpan="3"></Button>
         </Grid>
     </Grid>
 </Window>
