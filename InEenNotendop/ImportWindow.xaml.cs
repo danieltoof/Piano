@@ -23,6 +23,8 @@ namespace InEenNotendop.UI
     /// </summary>
     public partial class ImportWindow : Window
     {
+        private string FilePath;
+        private string FileName;
         public ImportWindow()
         {
             InitializeComponent();
@@ -41,13 +43,8 @@ namespace InEenNotendop.UI
             if (result == true)
             {
                 // Get the data from selected file
-                string fullPathToFolder = dialog.FileName;
-                string fileNameOnly = dialog.SafeFileName;
-                try
-                {
-                    File.Move(fullPathToFolder, @"c:\Users\lukas\Source\Repos\Piano\InEenNotendop\Resources\Songs\Song_" + fileNameOnly);
-                    MessageBox.Show("Het bestand " + fileNameOnly + " is succesvol verplaatst", "Succes");
-                } catch (Exception) { MessageBox.Show("Cant find file"); }
+                FilePath = dialog.FileName;
+                FileName = dialog.SafeFileName;
             }
         }
 
@@ -57,6 +54,9 @@ namespace InEenNotendop.UI
             int diffecultyCheckbox = 1;
             string myText = ImportName.Text;
             var checkedValue = "Easy";
+            string songName;
+            string songArtist;
+
             RadioButton rb = FindVisualChildren<RadioButton>(ImportDiffeculty).FirstOrDefault(x => x.IsChecked == true);
             if (rb != null)
             {
@@ -74,24 +74,28 @@ namespace InEenNotendop.UI
                         break;
                 }
             }
-            string songName;
-            string songArtist;
-
+            // check if song is not null
             if (string.IsNullOrEmpty(ImportName.Text))
             {
                 error = 1;
                 MessageBox.Show("Vul een naam in");
-            }
-            else { songName = ImportName.Text; error = 0; }
+            } else { songName = ImportName.Text; error = 0; }
 
+            // check if artist is not null
             if (string.IsNullOrEmpty(ImportArtist.Text))
             {
                 error = 1;
                 MessageBox.Show("Vul een artiest in");
-            }
-            else { songArtist = ImportArtist.Text; error = 0; }
+            } else { songArtist = ImportArtist.Text; error = 0; }
 
-            if(error == 0)
+            // move selected file
+            if (string.IsNullOrEmpty(FilePath) && string.IsNullOrEmpty(FileName)) { 
+                error = 1; 
+                MessageBox.Show("Selecteer een bestand"); 
+            } else { File.Move(FilePath, @"\Resources\Songs\Song_" + FileName); error = 0; }
+
+            // check if there are errors
+            if (error == 0)
             {
                 MessageBox.Show("succes");
                 await Task.Delay(1000);
