@@ -11,6 +11,11 @@
         Icon="Resources/icon.png"
         WindowStartupLocation="CenterScreen"
         WindowState="Maximized">
+    <Window.Resources>
+        <!-- Converter om de moeilijkheidstekst op te halen -->
+        <local:MoeilijkheidConverter x:Key="MoeilijkheidConverter" />
+    </Window.Resources>
+    
     <Grid Name="SongsGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
@@ -50,8 +55,9 @@
                                     <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,175,0">
                                         <Run Text="{Binding Lengte}"/>
                                     </TextBlock>
-                                    <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,15,0">
-                                         <Run Text="{Binding Moeilijkheid}"/>
+                                    <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,15,0" >
+                                        <Run Text="Difficulty:"/>
+                                       <Run Text="{Binding Path=Moeilijkheid, Converter={StaticResource MoeilijkheidConverter}}"/>
                                     </TextBlock>
                                 </Grid>
                             </Grid>

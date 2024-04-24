@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using InEenNotendop.Data;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace InEenNotendop.UI
 {
@@ -52,9 +53,13 @@ namespace InEenNotendop.UI
                 if (nummer != null)
                 {
                     int nummerId = nummer.Id;
-                    MessageBox.Show($"Clicked on Nummer with ID: {nummerId}");
-                }
 
+                    // Use the MoeilijkheidConverter to get the readable Moeilijkheid text
+                    MoeilijkheidConverter moeilijkheidConverter = new MoeilijkheidConverter();
+                    string moeilijkheidText = moeilijkheidConverter.Convert(nummer.Moeilijkheid, typeof(string), null, CultureInfo.InvariantCulture) as string;
+
+                    MessageBox.Show($"Clicked on Nummer with ID: {nummerId}\nDifficulty: {moeilijkheidText}");
+                }
             }
         }
 
