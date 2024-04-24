@@ -53,7 +53,7 @@ namespace InEenNotendop.UI
             System.IO.File.WriteAllText(@"C:\Users\Lukas\Desktop\"+ myText + ".txt", myText + Environment.NewLine + "        " + checkedValue);
         }
 
-        private void uploadButton_Click(object sender, RoutedEventArgs e)
+        private void selectFile_Click(object sender, RoutedEventArgs e)
         {
             // Create OpenFileDialog 
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();

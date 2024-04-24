@@ -6,7 +6,9 @@
         xmlns:local="clr-namespace:InEenNotendop.UI"
         mc:Ignorable="d"
         Title="ImportWindow" Height="450" Width="700"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        >
 
     <Grid>
         <Grid.RowDefinitions>
@@ -73,20 +75,13 @@
 
             <!-- Moeilijkheid -->
             <StackPanel Margin="14,181,0,0" Grid.Column="2" x:Name="ImportDiffeculty">
-                <RadioButton GroupName="Diffeculty" IsChecked="True"  Content="Easy"   HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                <RadioButton GroupName="Diffeculty" IsChecked="False" Content="Medium" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                <RadioButton GroupName="Diffeculty" IsChecked="False" Content="Hard"/>
+                <RadioButton Style="{DynamicResource RadioButtonStyle}" GroupName="Diffeculty" IsChecked="True"  Content="Easy"   HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <RadioButton Style="{DynamicResource RadioButtonStyle}" GroupName="Diffeculty" IsChecked="False" Content="Medium" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <RadioButton Style="{DynamicResource RadioButtonStyle}" GroupName="Diffeculty" IsChecked="False" Content="Hard"/>
             </StackPanel>
 
             <!-- Upload Knop -->
-            <Button x:Name="uploadButton" Content="Selecteer bestand" Click="uploadButton_Click" FontSize="24" Grid.Column="2" Margin="154,150,47,37">
-                <Button.Resources>
-                    <Style TargetType="{x:Type Border}">
-                        <Setter Property="Cursor" Value="Hand"/>
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
-            </Button>
+            <Button Style="{DynamicResource ButtonStyle}" x:Name="selectFileButton" Content="Selecteer bestand" Click="selectFile_Click" FontSize="24" Grid.Column="2" Margin="148,150,53,37"></Button>
         </Grid>
         <!-- Second Row-->
         <Grid Grid.Row="2" Margin="0,54,0,0">
@@ -94,14 +89,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Button Name="SaveButton" Content="upload" Click="saveButton_Click" FontSize="24" Margin="531,-28,23,10">
-                <Button.Resources>
-                    <Style TargetType="{x:Type Border}">
-                        <Setter Property="TextBlock.Cursor" Value="Hand"/>
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
-            </Button>
+            <Button Style="{DynamicResource ButtonStyle}" Name="SaveButton" Content="upload" Click="saveButton_Click" FontSize="24" Margin="531,-28,23,10"></Button>
         </Grid>
     </Grid>
 </Window>

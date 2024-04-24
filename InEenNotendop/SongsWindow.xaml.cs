@@ -53,7 +53,7 @@ namespace InEenNotendop.UI
         private void ImportButton_OnClick(object sender, RoutedEventArgs e)
         {
             ImportWindow import = new ImportWindow();
-            import.Show();
+            import.ShowDialog();
         }
     }
 }
