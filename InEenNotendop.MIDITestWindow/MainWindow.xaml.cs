@@ -1,4 +1,5 @@
-﻿using NAudio.Midi;
+﻿using System.Diagnostics;
+using NAudio.Midi;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -74,22 +75,32 @@ namespace InEenNotendop.MIDITestWindow
                     var buttonData = midiNoteToButton[noteOnEvent.NoteNumber];
                     buttonData.Button.Dispatcher.Invoke(() =>
                     {
+                        Debug.WriteLine($"MIDI input detected! Note number: {noteOnEvent.NoteNumber}");
                         buttonData.Button.Background = System.Windows.Media.Brushes.Green; // Example color
                     });
                 }
             }
-            else if (e.MidiEvent is NoteEvent noteEvent && noteEvent.Velocity == 0)
+            else if (e.MidiEvent is NoteEvent noteEvent)
             {
                 if (midiNoteToButton.ContainsKey(noteEvent.NoteNumber))
                 {
                     var buttonData = midiNoteToButton[noteEvent.NoteNumber];
+                    // Update IsPressed state regardless (in case of missed Note On)
+                    var noteToRelease = activeMidiNotes.FirstOrDefault(note => note.NoteNumber == noteEvent.NoteNumber);
+                    if (noteToRelease != null)
+                    {
+                        Debug.WriteLine("Nu gaat die uit");
+                        noteToRelease.IsPressed = false;
+                    }
+
+                    // Now update the button color as before
                     buttonData.Button.Dispatcher.Invoke(() =>
                     {
-                        buttonData.Button.Background = buttonData.OriginalButtonColor; // Restore original color
+                        buttonData.Button.Background = Brushes.DarkGray; // Restore original color
                     });
                 }
             }
-            UpdateButtonColor();
+
 
         }
 
