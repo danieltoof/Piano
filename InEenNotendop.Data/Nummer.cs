@@ -12,7 +12,7 @@ namespace InEenNotendop.Data
         public string Artiest { get; set; }
         public int Lengte { get; set; }
         public int Bpm { get; set; }
-        public Moeilijkheid Moeilijkheid { get; set; }
+        public int Moeilijkheid { get; set; }
         public int Id { get; set; }
 
         public Nummer(string title, string artiest, int lengte, int bpm, int moeilijkheid, int id)
@@ -21,15 +21,9 @@ namespace InEenNotendop.Data
             Artiest = artiest;
             Lengte = lengte;
             Bpm = bpm;
-            Moeilijkheid = (Moeilijkheid)moeilijkheid;
+            Moeilijkheid = moeilijkheid;
             Id = id;
         }
     }
 
-    public enum Moeilijkheid
-    {
-        easy = 1,
-        medium = 2,
-        hard = 3,
-    }
 }
