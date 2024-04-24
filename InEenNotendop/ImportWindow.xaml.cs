@@ -134,7 +134,7 @@ namespace InEenNotendop.UI
                     {
                         // add song
                         string insertSongQuery = $@"
-
+                            USE PianoHeroDB
                             INSERT INTO Nummers (Title, Artiest, Lengte, Bpm, Moeilijkheid)
                             VALUES ('{ImportName.Text}', '{ImportArtist.Text}', {songLength}, {bpm}, {diffecultyCheckbox});
                         ";
