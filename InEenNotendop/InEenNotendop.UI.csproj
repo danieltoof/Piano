@@ -19,4 +19,8 @@
     <Resource Include="Resources\LogoLarge.png" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Resources\Songs\" />
+  </ItemGroup>
+
 </Project>
