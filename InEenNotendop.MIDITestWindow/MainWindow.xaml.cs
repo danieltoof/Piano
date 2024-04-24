@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace InEenNotendop.MIDITestWindow
 {
@@ -20,11 +21,32 @@ namespace InEenNotendop.MIDITestWindow
         private MidiIn midiIn;
         private List<ActiveMidiNote> activeMidiNotes = new List<ActiveMidiNote>();
         private System.Windows.Media.Brush originalButtonColor;
+        private Dictionary<int, ButtonColorData> midiNoteToButton = new Dictionary<int, ButtonColorData>(); // int = Midi note int, Button = button to assign to that Midi note
+
+        public class ButtonColorData
+        {
+            public Button Button { get; set; }
+            public System.Windows.Media.Brush OriginalButtonColor { get; set; }
+
+        }
         public MainWindow()
         {
             InitializeComponent();
             originalButtonColor = midiButton.Background; // Store original color
             InitializeMidi();
+            
+
+            // Mapping Midi notes - Buttons
+            midiNoteToButton.Add(72, new ButtonColorData(){ Button = C1Button,OriginalButtonColor = C1Button.Background}); 
+            midiNoteToButton.Add(74, new ButtonColorData() { Button =D1Button, OriginalButtonColor = D1Button.Background });
+            midiNoteToButton.Add(76, new ButtonColorData() { Button = E1Button, OriginalButtonColor = E1Button.Background });
+            midiNoteToButton.Add(77, new ButtonColorData() { Button = F1Button, OriginalButtonColor = F1Button.Background });
+            midiNoteToButton.Add(79, new ButtonColorData() { Button = F1Button, OriginalButtonColor = F1Button.Background });
+            midiNoteToButton.Add(81, new ButtonColorData() { Button = A1Button, OriginalButtonColor = A1Button.Background });
+            midiNoteToButton.Add(83, new ButtonColorData() { Button = B1Button, OriginalButtonColor = B1Button.Background });
+
+
+
         }
 
         private void InitializeMidi()
@@ -45,23 +67,30 @@ namespace InEenNotendop.MIDITestWindow
 
         private void MidiIn_MessageReceived(object sender, MidiInMessageEventArgs e)
         {
-            // Change the button color
+            if (e.MidiEvent is NoteOnEvent noteOnEvent)
             {
-                if (e.MidiEvent is NoteOnEvent noteOnEvent)
+                if (midiNoteToButton.ContainsKey(noteOnEvent.NoteNumber))
                 {
-                    activeMidiNotes.Add(new ActiveMidiNote() { NoteNumber = noteOnEvent.NoteNumber, IsPressed = true });
-                }
-                else if (e.MidiEvent is NoteEvent noteEvent && noteEvent.Velocity == 0)
-                {
-                    var noteToRelease = activeMidiNotes.FirstOrDefault(note => note.NoteNumber == noteEvent.NoteNumber);
-                    if (noteToRelease != null)
+                    var buttonData = midiNoteToButton[noteOnEvent.NoteNumber];
+                    buttonData.Button.Dispatcher.Invoke(() =>
                     {
-                        noteToRelease.IsPressed = false;
-                    }
+                        buttonData.Button.Background = System.Windows.Media.Brushes.Green; // Example color
+                    });
                 }
-
-                UpdateButtonColor();
             }
+            else if (e.MidiEvent is NoteEvent noteEvent && noteEvent.Velocity == 0)
+            {
+                if (midiNoteToButton.ContainsKey(noteEvent.NoteNumber))
+                {
+                    var buttonData = midiNoteToButton[noteEvent.NoteNumber];
+                    buttonData.Button.Dispatcher.Invoke(() =>
+                    {
+                        buttonData.Button.Background = buttonData.OriginalButtonColor; // Restore original color
+                    });
+                }
+            }
+            UpdateButtonColor();
+
         }
 
 
@@ -71,12 +100,7 @@ namespace InEenNotendop.MIDITestWindow
             {
                 if (activeMidiNotes.Any(note => note.IsPressed))
                 {
-                    //if (note)
                     midiButton.Background = System.Windows.Media.Brushes.Green;
-                    foreach (var note in activeMidiNotes)
-                    {
-                        //note.NoteNumber
-                    }
                 }
                 else
                 {
@@ -84,6 +108,8 @@ namespace InEenNotendop.MIDITestWindow
                 }
             });
         }
+
+
 
         // (Important) Dispose of the MidiIn object when the app closes
         protected override void OnClosed(EventArgs e)
