@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -28,29 +29,30 @@ namespace InEenNotendop.UI
 
         private void saveButton_Click(object sender, RoutedEventArgs e)
         {
+            int diffecultyCheckbox = 1;
             string myText = ImportName.Text;
             var checkedValue = "Easy";
             RadioButton rb = FindVisualChildren<RadioButton>(ImportDiffeculty).FirstOrDefault(x => x.IsChecked == true);
             if (rb != null)
             {
                 checkedValue = rb.Content.ToString();
-
                 switch (checkedValue)
                 {
                     case string x when x.StartsWith("Easy"):
-                        MessageBox.Show("1selected: " + rb.Content.ToString());
+                        diffecultyCheckbox |= 1;
                         break;
                     case string x when x.StartsWith("Medium"):
-                        MessageBox.Show("2selected: " + rb.Content.ToString());
+                        diffecultyCheckbox |= 2;
                         break;
                     case string x when x.StartsWith("Hard"):
-                        MessageBox.Show("3selected: " + rb.Content.ToString());
+                        diffecultyCheckbox |= 3;
                         break;
                 }
-
             }
-
-            System.IO.File.WriteAllText(@"C:\Users\Lukas\Desktop\"+ myText + ".txt", myText + Environment.NewLine + "        " + checkedValue);
+            string songName;
+            string songArtist;
+            songName = ImportName.Text;
+            songArtist = ImportArtist.Text;
         }
 
         private void selectFile_Click(object sender, RoutedEventArgs e)
@@ -69,14 +71,10 @@ namespace InEenNotendop.UI
 
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
+        {}
 
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
+        {}
 
         private static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
         {
@@ -100,5 +98,29 @@ namespace InEenNotendop.UI
                 }
             }
         }
+
+        public string this[string columnName]
+        {
+            get
+            {
+                string error = string.Empty;
+
+                switch (columnName)
+                {
+                    case nameof(ImportArtist):
+                        if (string.IsNullOrWhiteSpace(ImportArtist.Text))
+                            error = "First artist cannot be empty.";
+                        break;
+
+                    case nameof(ImportName.Text):
+                        if (string.IsNullOrWhiteSpace(ImportName.Text))
+                            error = "Last name cannot be empty.";
+                        break;
+                }
+
+                return error;
+            }
+        }
+        public string Error => string.Empty;
     }
 }

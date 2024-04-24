@@ -59,7 +59,7 @@
             </TextBlock>
 
             <!-- Artiest -->
-            <TextBox  Width="250"  VerticalAlignment="Top" HorizontalAlignment="Left" x:Name="ImportArtist" Margin="0,98,0,0" Grid.Column="2"/>
+            <TextBox Text="{Binding FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"  Width="250"  VerticalAlignment="Top" HorizontalAlignment="Left" x:Name="ImportArtist" Margin="0,98,0,0" Grid.Column="2"/>
             <TextBlock IsHitTestVisible="False" Text="Vul hier je de naam van de artiest in" VerticalAlignment="Top" HorizontalAlignment="Left" Foreground="DarkGray" Grid.Column="2" Margin="0,99,0,0">
                 <TextBlock.Style>
                     <Style TargetType="{x:Type TextBlock}">
