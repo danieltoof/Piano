@@ -124,7 +124,7 @@ namespace InEenNotendop.UI
             builder.UserID = user;
             builder.Password = "";
             builder.ApplicationIntent = ApplicationIntent.ReadWrite;
-
+            string filepath = "..\\..\\..\\Resources\\Songs\\Song_" + FileName;
 
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
@@ -138,14 +138,16 @@ namespace InEenNotendop.UI
                     object result = checkDatabaseExistsCommand.ExecuteScalar();
                     if (result != null)
                     {
-                        // add song
-                        string insertSongQuery = $@"
-                            USE PianoHeroDB
-                            INSERT INTO Nummers (Title, Artiest, Lengte, Bpm, Moeilijkheid)
-                            VALUES ('{ImportName.Text}', '{ImportArtist.Text}', {songLength}, {bpm}, {diffecultyCheckbox});
-                        ";
-                        using (SqlCommand insertSongCommand = new SqlCommand(insertSongQuery, connection))
+
+                        using (SqlCommand insertSongCommand = new SqlCommand("USE PianoHeroDB \n INSERT INTO Nummers (Title, Artiest, Lengte, Bpm, Moeilijkheid, Filepath) VALUES (@Title, @Artist, @Length, @Bpm, @Difficulty, @Filepath)", connection))
                         {
+                            insertSongCommand.Parameters.AddWithValue("@Title", ImportName.Text);
+                            insertSongCommand.Parameters.AddWithValue("@Artist", ImportArtist.Text);
+                            insertSongCommand.Parameters.AddWithValue("@Length", songLength);
+                            insertSongCommand.Parameters.AddWithValue("@Bpm", bpm);
+                            insertSongCommand.Parameters.AddWithValue("@Difficulty", diffecultyCheckbox);
+                            insertSongCommand.Parameters.AddWithValue("@Filepath", filepath);
+
                             insertSongCommand.ExecuteNonQuery();
                         }
                     }
