@@ -63,12 +63,13 @@ namespace InEenNotendop.UI
 
                     //MessageBox.Show($"Clicked on Nummer with ID: {nummerId}\nDifficulty: {moeilijkheidText}", nummerId.ToString(), MessageBoxButton.YesNo);
 
+                    // MessageBox met Yes/No buttons (zou ideaal zijn als we er een 3e kunnen maken en ze andere namen kunnen geven) - "Yes" gaat nu naar Play scherm en speelt de meegegeven midi
                     if (System.Windows.MessageBox.Show($"Clicked on Nummer with ID: {nummerId}\nDifficulty: {moeilijkheidText}", nummerId.ToString(), MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                     {
                         PlayWindow playWindow = new PlayWindow();
                         playWindow.Show();
                         Close();
-                        playWindow.StartPlay(@"..\..\..\..\midi-test\midis\07_Flower_Garden_GM.mid");
+                        playWindow.StartPlay(@"..\..\..\..\midi-test\midis\07_Flower_Garden_GM.mid"); //TODO: geef variabele mee
                     }
                     else
                     {
