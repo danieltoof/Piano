@@ -15,6 +15,8 @@ using System.Windows.Shapes;
 using InEenNotendop.Data;
 using System.Diagnostics;
 using System.Globalization;
+using System.Diagnostics.Eventing.Reader;
+using System.Windows.Forms;
 
 namespace InEenNotendop.UI
 {
@@ -59,7 +61,19 @@ namespace InEenNotendop.UI
                     MoeilijkheidConverter moeilijkheidConverter = new MoeilijkheidConverter();
                     string moeilijkheidText = moeilijkheidConverter.Convert(nummer.Moeilijkheid, typeof(string), null, CultureInfo.InvariantCulture) as string;
 
-                    MessageBox.Show($"Clicked on Nummer with ID: {nummerId}\nDifficulty: {moeilijkheidText}");
+                    //MessageBox.Show($"Clicked on Nummer with ID: {nummerId}\nDifficulty: {moeilijkheidText}", nummerId.ToString(), MessageBoxButton.YesNo);
+
+                    if (System.Windows.MessageBox.Show($"Clicked on Nummer with ID: {nummerId}\nDifficulty: {moeilijkheidText}", nummerId.ToString(), MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    {
+                        PlayWindow playWindow = new PlayWindow();
+                        playWindow.Show();
+                        Close();
+                        playWindow.StartPlay(@"..\..\..\..\midi-test\midis\07_Flower_Garden_GM.mid");
+                    }
+                    else
+                    {
+                        // If no
+                    }
                 }
             }
         }
