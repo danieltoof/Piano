@@ -24,12 +24,13 @@ namespace InEenNotendop.UI
     public partial class SongsWindow : Window
     {
         private SettingsWindow settingsWindow;
+        private DataProgram dataProgram;
 
 
         public SongsWindow(SettingsWindow settingsWindow)
         {
             InitializeComponent();
-            DataProgram dataProgram = new DataProgram();
+            dataProgram = new DataProgram();
             dataProgram.StartDataBase();
             Nummer.ItemsSource = dataProgram.MaakLijst();
             this.settingsWindow = settingsWindow;
@@ -74,6 +75,13 @@ namespace InEenNotendop.UI
             {
                 settingsWindow.SetDarkMode(this);
             }
+        }
+
+        private void ImportButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            ImportWindow import = new ImportWindow();
+            import.ShowDialog();
+            Nummer.ItemsSource = dataProgram.MaakLijst();
         }
     }
 }
