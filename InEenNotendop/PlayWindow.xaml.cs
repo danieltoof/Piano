@@ -23,6 +23,8 @@ namespace InEenNotendop.UI
     {
         public PlayWindow()
         {
+            //Thread playThread = new Thread(new ThreadStart(StartPlay(@"..\..\..\..\midi-test\midis\07_Flower_Garden_GM.mid"))); //todo...
+            playThread.Start();
             bool loaded = false;
             InitializeComponent();
             loaded = true; 

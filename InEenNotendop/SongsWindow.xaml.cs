@@ -69,7 +69,7 @@ namespace InEenNotendop.UI
                         PlayWindow playWindow = new PlayWindow();
                         playWindow.Show();
                         Close();
-                        playWindow.StartPlay(@"..\..\..\..\midi-test\midis\07_Flower_Garden_GM.mid"); //TODO: geef variabele mee
+                        //playWindow.StartPlay(@"..\..\..\..\midi-test\midis\07_Flower_Garden_GM.mid"); //TODO: geef variabele mee
                     }
                     else
                     {
