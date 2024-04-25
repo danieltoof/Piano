@@ -81,7 +81,7 @@ namespace InEenNotendop.UI
             if (string.IsNullOrEmpty(ImportName.Text))
             {
                 error = 1;
-                MessageBox.Show("Vul een naam in");
+                MessageBox.Show("Enter a name");
             }
             else { songName = ImportName.Text; error = 0; }
 
@@ -89,7 +89,7 @@ namespace InEenNotendop.UI
             if (string.IsNullOrEmpty(ImportArtist.Text))
             {
                 error = 1;
-                MessageBox.Show("Vul een artiest in");
+                MessageBox.Show("Enter an artist");
             }
             else { songArtist = ImportArtist.Text; error = 0; }
 
@@ -99,7 +99,7 @@ namespace InEenNotendop.UI
                 if (string.IsNullOrEmpty(FilePath) && string.IsNullOrEmpty(FileName))
                 {
                     error = 1;
-                    MessageBox.Show("Selecteer een bestand");
+                    MessageBox.Show("Select a file");
                 }
                 else { File.Copy(FilePath, @"..\..\..\Resources\Songs\Song_" + FileName); error = 0; }
             }
@@ -160,7 +160,7 @@ namespace InEenNotendop.UI
             // check if there are errors
             if (error == 0)
             {
-                MessageBox.Show("succes");
+                MessageBox.Show("Upload success!");
                 await Task.Delay(1000);
                 Close();
             }
@@ -189,7 +189,7 @@ namespace InEenNotendop.UI
             }
             catch (FileNotFoundException)
             {
-                Console.WriteLine("ERROR: MIDI file niet gevonden.");
+                Console.WriteLine("ERROR: MIDI file not found.");
             }
 
             return 0;
