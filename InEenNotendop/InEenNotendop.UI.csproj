@@ -15,8 +15,20 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Melanchall.DryWetMidi" Version="7.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\InEenNotendop.Data\InEenNotendop.Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Resources\icon.png" />
     <Resource Include="Resources\LogoLarge.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\Songs\" />
   </ItemGroup>
 
 </Project>

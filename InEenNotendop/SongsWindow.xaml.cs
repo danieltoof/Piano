@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using InEenNotendop.Data;
+using System.Diagnostics;
+using System.Globalization;
 
 namespace InEenNotendop.UI
 {
@@ -20,23 +24,46 @@ namespace InEenNotendop.UI
     public partial class SongsWindow : Window
     {
         private SettingsWindow settingsWindow;
-        
+        private DataProgram dataProgram;
+
+
         public SongsWindow(SettingsWindow settingsWindow)
         {
             InitializeComponent();
-            
+            dataProgram = new DataProgram();
+            dataProgram.StartDataBase();
+            Nummer.ItemsSource = dataProgram.MaakLijst();
             this.settingsWindow = settingsWindow;
             this.settingsWindow.ChangeSettingsOwner(this);
+
+            
 
             CheckDarkOrLight();
 
         }
-
-
         private void SettingsButton_OnClick(object sender, RoutedEventArgs e)
         {
             settingsWindow.OpenSettings();
         }
+
+        private void OnNumberClicked(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is FrameworkElement clickedElement)
+            {
+                var nummer = clickedElement.DataContext as Nummer;
+                if (nummer != null)
+                {
+                    int nummerId = nummer.Id;
+
+                    // Use the MoeilijkheidConverter to get the readable Moeilijkheid text
+                    MoeilijkheidConverter moeilijkheidConverter = new MoeilijkheidConverter();
+                    string moeilijkheidText = moeilijkheidConverter.Convert(nummer.Moeilijkheid, typeof(string), null, CultureInfo.InvariantCulture) as string;
+
+                    MessageBox.Show($"Clicked on Nummer with ID: {nummerId}\nDifficulty: {moeilijkheidText}");
+                }
+            }
+        }
+
 
         private void CheckDarkOrLight() // veranderd light mode naar dark mode en dark mode naar light mode
         {
@@ -48,6 +75,13 @@ namespace InEenNotendop.UI
             {
                 settingsWindow.SetDarkMode(this);
             }
+        }
+
+        private void ImportButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            ImportWindow import = new ImportWindow();
+            import.ShowDialog();
+            Nummer.ItemsSource = dataProgram.MaakLijst();
         }
     }
 }
