@@ -51,6 +51,7 @@ namespace InEenNotendop.Data
                             Bpm INT,
                             Moeilijkheid INT NOT NULL,
                             ID INT IDENTITY(1,1) PRIMARY KEY,
+                            Filepath varchar(255);
                             CONSTRAINT CHK_Moeilijkheidsgraad CHECK (Moeilijkheid >= 1 AND Moeilijkheid <= 3)
                         );
 
