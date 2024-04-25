@@ -28,9 +28,13 @@ namespace InEenNotendop.UI
     {
         private string FilePath;
         private string FileName;
-        public ImportWindow()
+        private int lightmode;
+        public ImportWindow(int lightmodeImport)
         {
             InitializeComponent();
+            lightmode = lightmodeImport;
+            CheckDarkOrLight();
+
         }
 
         private void selectFile_Click(object sender, RoutedEventArgs e)
@@ -235,6 +239,44 @@ namespace InEenNotendop.UI
                     }
                 }
             }
+        }
+
+        private void CheckDarkOrLight() // veranderd light mode naar dark mode en dark mode naar light mode
+        {
+            if (lightmode == 1)
+            {
+                SetLightMode();
+            }
+            else if (lightmode == 0)
+            {
+                SetDarkMode();
+            }
+        }
+
+        private void SetLightMode()
+        {
+            ImportGrid.Background = Brushes.White;
+            SettingsText.Foreground = Brushes.Black;
+            ImportArtistLabel.Foreground = Brushes.Black;
+            ImportDiffecultyLabel.Foreground = Brushes.Black; ;
+            ImportnameLabel.Foreground = Brushes.Black;
+
+            EasyButton.Foreground = Brushes.Black;
+            MediumButton.Foreground = Brushes.Black;
+            HardButton.Foreground = Brushes.Black;
+        }
+
+        private void SetDarkMode()
+        {
+            ImportGrid.Background = new SolidColorBrush(Color.FromRgb(25, 44, 49));
+            SettingsText.Foreground = Brushes.White;
+            ImportArtistLabel.Foreground = Brushes.White;
+            ImportDiffecultyLabel.Foreground = Brushes.White;
+            ImportnameLabel.Foreground = Brushes.White;
+
+            EasyButton.Foreground = Brushes.White;
+            MediumButton.Foreground = Brushes.White;
+            HardButton.Foreground = Brushes.White;
         }
     }
 }

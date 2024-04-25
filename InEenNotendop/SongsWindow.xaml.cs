@@ -25,6 +25,7 @@ namespace InEenNotendop.UI
     {
         private SettingsWindow settingsWindow;
         private DataProgram dataProgram;
+        private int lightmodeImport;
 
 
         public SongsWindow(SettingsWindow settingsWindow)
@@ -79,7 +80,8 @@ namespace InEenNotendop.UI
 
         private void ImportButton_OnClick(object sender, RoutedEventArgs e)
         {
-            ImportWindow import = new ImportWindow();
+            lightmodeImport = settingsWindow.lightmode;
+            ImportWindow import = new ImportWindow(lightmodeImport);
             import.ShowDialog();
             Nummer.ItemsSource = dataProgram.MaakLijst();
         }
