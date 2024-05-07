@@ -71,13 +71,13 @@ namespace InEenNotendop.UI
                 switch (checkedValue)
                 {
                     case string x when x.StartsWith("Easy"):
-                        diffecultyCheckbox |= 1;
+                        diffecultyCheckbox = 1;
                         break;
                     case string x when x.StartsWith("Medium"):
-                        diffecultyCheckbox |= 2;
+                        diffecultyCheckbox = 2;
                         break;
                     case string x when x.StartsWith("Hard"):
-                        diffecultyCheckbox |= 3;
+                        diffecultyCheckbox = 3;
                         break;
                 }
             }

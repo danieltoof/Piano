@@ -37,7 +37,12 @@ namespace InEenNotendop.UI
             this.settingsWindow = settingsWindow;
             this.settingsWindow.ChangeSettingsOwner(this);
 
-            
+
+            FilterBox.Items.Add("No Filter");
+            FilterBox.Items.Add("Easy");
+            FilterBox.Items.Add("Medium");
+            FilterBox.Items.Add("Hard");
+
 
             CheckDarkOrLight();
 
@@ -88,6 +93,38 @@ namespace InEenNotendop.UI
             ImportWindow import = new ImportWindow(lightmodeImport);
             import.ShowDialog();
             Nummer.ItemsSource = dataProgram.MaakLijst();
+        }
+
+
+        private void FilterBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string Filter = (sender as ComboBox).SelectedItem as string;
+            int Difficulty = 0;
+            switch (Filter)
+            {
+                case "Easy":
+                    Difficulty = 1;
+                    break;
+                case "Medium":
+                    Difficulty = 2;
+                    break;
+                case "Hard":
+                    Difficulty = 3;
+                    break;
+                case "No FIlter":
+                    Difficulty = 0;
+                    break;
+            }
+
+            if (Difficulty != 0)
+            {
+                Nummer.ItemsSource = dataProgram.MaakFilteredLijst(Difficulty);
+            }
+            else
+            {
+                Nummer.ItemsSource = dataProgram.MaakLijst();
+            }
+            
         }
     }
 }
