@@ -54,12 +54,16 @@ namespace InEenNotendop.UI
                 if (nummer != null)
                 {
                     int nummerId = nummer.Id;
-
-                    // Use the MoeilijkheidConverter to get the readable Moeilijkheid text
+                    String Title = nummer.Title;
+                    String Artiest = nummer.Artiest;
+                    int Lengte = nummer.Lengte;
+                    int Bpm = nummer.Bpm;
                     MoeilijkheidConverter moeilijkheidConverter = new MoeilijkheidConverter();
                     string moeilijkheidText = moeilijkheidConverter.Convert(nummer.Moeilijkheid, typeof(string), null, CultureInfo.InvariantCulture) as string;
 
-                    MessageBox.Show($"Clicked on Nummer with ID: {nummerId}\nDifficulty: {moeilijkheidText}");
+                    SelectingWindow detailsWindow = new SelectingWindow(nummerId, moeilijkheidText, Title, Artiest, Lengte, Bpm);
+                    detailsWindow.Owner = this;
+                    detailsWindow.ShowDialog();
                 }
             }
         }
