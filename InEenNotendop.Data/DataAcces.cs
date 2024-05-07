@@ -170,6 +170,47 @@ namespace InEenNotendop.Data
             return nummers;
         }
 
+        public List<Nummer> MakeSortedList(int Difficulty, string Sort)
+        {
+            List<Nummer> nummers = new List<Nummer>();
+
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                using (var command = connection.CreateCommand())
+                {
+                    if (Difficulty != 0)
+                    {
+                        command.CommandText = $"SELECT Title, Artiest, Lengte, Bpm, Moeilijkheid, ID FROM dbo.Nummers WHERE Moeilijkheid = {Difficulty} ORDER BY {Sort}";
+                    }
+                    else
+                    {
+                        command.CommandText = $"SELECT Title, Artiest, Lengte, Bpm, Moeilijkheid, ID FROM dbo.Nummers ORDER BY {Sort}";
+                    }
+                    
+                    connection.Open();
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string title = reader.GetString(reader.GetOrdinal("Title"));
+                            string artiest = reader.GetString(reader.GetOrdinal("Artiest"));
+                            int lengte = reader.GetInt32(reader.GetOrdinal("Lengte"));
+                            int bpm = reader.GetInt32(reader.GetOrdinal("Bpm"));
+                            int moeilijkheid = reader.GetInt32(reader.GetOrdinal("Moeilijkheid"));
+                            int id = reader.GetInt32(reader.GetOrdinal("Id"));
+
+                            Nummer nummer = new Nummer(title, artiest, lengte, bpm, moeilijkheid, id);
+
+                            nummers.Add(nummer);
+
+                        }
+                        connection.Close();
+                    }
+                }
+            }
+
+            return nummers;
+        }
         public List<Nummer> MaakFilteredLijst(int Difficulty)
         {
             List<Nummer> nummers = new List<Nummer>();
@@ -203,6 +244,7 @@ namespace InEenNotendop.Data
 
             return nummers;
         }
+
 
 
     }

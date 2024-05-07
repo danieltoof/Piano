@@ -26,7 +26,7 @@ namespace InEenNotendop.UI
         private SettingsWindow settingsWindow;
         private DataProgram dataProgram;
         private int lightmodeImport;
-
+        private int Difficulty = 0;
 
         public SongsWindow(SettingsWindow settingsWindow)
         {
@@ -43,6 +43,10 @@ namespace InEenNotendop.UI
             FilterBox.Items.Add("Medium");
             FilterBox.Items.Add("Hard");
 
+            SortBox.Items.Add("A-Z");
+            SortBox.Items.Add("Z-A");
+            SortBox.Items.Add("Diff. ascending");
+            SortBox.Items.Add("Diff. descending");
 
             CheckDarkOrLight();
 
@@ -99,7 +103,7 @@ namespace InEenNotendop.UI
         private void FilterBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             string Filter = (sender as ComboBox).SelectedItem as string;
-            int Difficulty = 0;
+
             switch (Filter)
             {
                 case "Easy":
@@ -111,7 +115,7 @@ namespace InEenNotendop.UI
                 case "Hard":
                     Difficulty = 3;
                     break;
-                case "No FIlter":
+                case "No Filter":
                     Difficulty = 0;
                     break;
             }
@@ -125,6 +129,29 @@ namespace InEenNotendop.UI
                 Nummer.ItemsSource = dataProgram.MaakLijst();
             }
             
+        }
+
+        private void SortBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string Sort = (sender as ComboBox).SelectedItem as string;
+            string CompleteSort = "";
+            switch (Sort)
+            {
+                case "A-Z":
+                    CompleteSort = "Title ASC";
+                    break;
+                case "Z-A":
+                    CompleteSort = "Title DESC";
+                    break;
+                case "Diff. ascending":
+                    CompleteSort = "Moeilijkheid ASC";
+                    break;
+                case "Diff. descending":
+                    CompleteSort = "Moeilijkheid DESC";
+                    break;
+            }
+            
+            Nummer.ItemsSource = dataProgram.MakeSortedList(Difficulty ,CompleteSort);
         }
     }
 }
