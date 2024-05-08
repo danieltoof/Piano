@@ -19,9 +19,13 @@ namespace InEenNotendop.UI
     /// </summary>
     public partial class SelectingWindow : Window
     {
-        public SelectingWindow(int nummerId, string moeilijkheidText, string Title, string Artiest, int Lengte, int Bpm)
+        public Window Owner { get; set; }
+        private SongsWindow songsWindow;
+        public SelectingWindow(int nummerId, string moeilijkheidText, string Title, string Artiest, int Lengte, int Bpm, object sender)
         {
             InitializeComponent();
+            songsWindow = (SongsWindow)sender;
+            Owner = songsWindow;
             DataContext = new NummerDetailsViewModel(nummerId, moeilijkheidText, Title, Artiest, Lengte, Bpm);
         }
 
@@ -55,9 +59,12 @@ namespace InEenNotendop.UI
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             PlayWindow playWindow = new PlayWindow();
+            //SongsWindow songsWindow = SongsWindow();
+            Owner.Close();
             playWindow.Show();
             Close();
-            //playWindow.StartPlay(@"..\..\..\..\midi-test\midis\07_Flower_Garden_GM.mid"); //TODO: geef variabele mee
+            //SongsWindow.Close();
+            //playWindow.StartPlay(@"..\..\..\..\midi-test\midis\Coldplay - Viva La Vida.mid"); //TODO: geef variabele mee
         }
     }
 }

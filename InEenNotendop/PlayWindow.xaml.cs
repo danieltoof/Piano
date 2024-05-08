@@ -2,6 +2,7 @@
 using Melanchall.DryWetMidi.Multimedia;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,16 +24,18 @@ namespace InEenNotendop.UI
     {
         public PlayWindow()
         {
-            //Thread playThread = new Thread(new ThreadStart(StartPlay(@"..\..\..\..\midi-test\midis\07_Flower_Garden_GM.mid"))); //todo...
-            //playThread.Start();
-            bool loaded = false;
             InitializeComponent();
-            loaded = true; 
-            if (loaded)
+
+            // run async thread zodat programma niet lockt tot de midi klaar is
+            Task.Run(async () =>
             {
-                //StartPlay(@"..\..\..\..\midi-test\midis\07_Flower_Garden_GM.mid");
-            }
+                // wacht 2 seconden zodat de midi niet direct begint met spelen
+                Thread.Sleep(2000);
+                StartPlay(@"..\..\..\..\midi-test\midis\07_Flower_Garden_GM.mid"); // todo: zorgen dat er een meegegeven midi gespeelt wordt
+            });
             
+
+
         }
 
         public void StartPlay(String MidiFileName)
