@@ -55,7 +55,7 @@
                                         <Run Text="{Binding Artiest}" />
                                     </TextBlock>
                                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0">
-                                        <Run Text="HIGHSCORE HERE"/>
+                                        <Run Text="{Binding Score}"/>
                                     </TextBlock>
                                     <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,175,0">
                                         <Run Text="{Binding Lengte}"/>

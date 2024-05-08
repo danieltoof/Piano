@@ -139,7 +139,7 @@ namespace InEenNotendop.UI
                     if (result != null)
                     {
 
-                        using (SqlCommand insertSongCommand = new SqlCommand("USE PianoHeroDB \n INSERT INTO Nummers (Title, Artiest, Lengte, Bpm, Moeilijkheid, Filepath) VALUES (@Title, @Artist, @Length, @Bpm, @Difficulty, @Filepath)", connection))
+                        using (SqlCommand insertSongCommand = new SqlCommand("USE PianoHeroDB \n INSERT INTO Nummers (Title, Artiest, Lengte, Bpm, Moeilijkheid, Filepath) OUTPUT INSERTED.ID VALUES (@Title, @Artist, @Length, @Bpm, @Difficulty, @Filepath)", connection))
                         {
                             insertSongCommand.Parameters.AddWithValue("@Title", ImportName.Text);
                             insertSongCommand.Parameters.AddWithValue("@Artist", ImportArtist.Text);
@@ -148,8 +148,17 @@ namespace InEenNotendop.UI
                             insertSongCommand.Parameters.AddWithValue("@Difficulty", diffecultyCheckbox);
                             insertSongCommand.Parameters.AddWithValue("@Filepath", filepath);
 
-                            insertSongCommand.ExecuteNonQuery();
+                            // haalt de ID van het liedje
+                            var lastInsertedId = (int)insertSongCommand.ExecuteScalar();
+
+                            // Insert een score van 0 in het nieuwe liedje
+                            using (SqlCommand insertScoreCommand = new SqlCommand("USE PianoHeroDB \n INSERT INTO Scores (Score, NummerID) VALUES (0, @LastInsertedId)", connection))
+                            {
+                                insertScoreCommand.Parameters.AddWithValue("@LastInsertedId", lastInsertedId);
+                                insertScoreCommand.ExecuteNonQuery();
+                            }
                         }
+
                     }
                     else
                     {

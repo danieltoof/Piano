@@ -33,7 +33,7 @@ namespace InEenNotendop.UI
             InitializeComponent();
             dataProgram = new DataProgram();
             dataProgram.StartDataBase();
-            Nummer.ItemsSource = dataProgram.MaakLijst();
+            
             this.settingsWindow = settingsWindow;
             this.settingsWindow.ChangeSettingsOwner(this);
 
@@ -48,6 +48,7 @@ namespace InEenNotendop.UI
             SortBox.Items.Add("Diff. ascending");
             SortBox.Items.Add("Diff. descending");
 
+            Nummer.ItemsSource = dataProgram.MaakLijst();
             CheckDarkOrLight();
 
         }
@@ -151,7 +152,7 @@ namespace InEenNotendop.UI
                     break;
             }
             
-            Nummer.ItemsSource = dataProgram.MakeSortedList(Difficulty ,CompleteSort);
+            Nummer.ItemsSource = dataProgram.MakeSortedList(Difficulty, CompleteSort);
         }
     }
 }
