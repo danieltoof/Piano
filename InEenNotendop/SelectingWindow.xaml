@@ -1,8 +1,10 @@
-﻿<Window x:Class="InEenNotendop.UI.SelectingWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:av="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="av" x:Class="InEenNotendop.UI.SelectingWindow"
         Title="Details" Height="350" Width="700"
         WindowStartupLocation="CenterScreen">
+
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -11,8 +13,8 @@
         </Grid.ColumnDefinitions>
 
         <!-- Title -->
-        <TextBlock Text="{Binding Title}" FontWeight="Bold" Margin="10 5 0 0" Grid.Column="1"/>
-        <TextBlock Text="{Binding MoeilijkheidText}" FontWeight="Bold" HorizontalAlignment="Right" Margin="10 5 50 0" Grid.Column="1"/>
+        <TextBlock Text="{Binding Title}" FontWeight="UltraBold" Margin="10 5 0 0" Grid.Column="1" FontSize="25" />
+        <TextBlock Text="{Binding MoeilijkheidText}" HorizontalAlignment="Right" Margin="10 12 50 0" Grid.Column="1"/>
 
         <!-- Lengte -->
         <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10 30 50 0">
@@ -27,13 +29,13 @@
         </StackPanel>
 
         <!-- Artiest -->
-        <TextBlock Text="{Binding Artiest}" Margin="10 20 0 0" Grid.Row="1" Grid.Column="2"/>
+        <TextBlock Text="{Binding Artiest}" Margin="13 35 0 0" Grid.Row="1" Grid.Column="2"/>
 
         <StackPanel Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="10">
             <!-- First Button -->
             <Button Content="PLAY" Height="41" Width="150" Margin="0 0 20 5"/>
             <!-- Second Button -->
-            <Button Content="AUTOPLAY" Height="41" Width="150" Margin="0 0 20 20"/>
+            <Button Content="AUTOPLAY" Height="41" Width="150" Margin="0 0 20 20" />
         </StackPanel>
     </Grid>
 </Window>
