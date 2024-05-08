@@ -280,5 +280,18 @@ namespace InEenNotendop.Data
             }
             return nummers;
         }
+        public void ChangeHighscore(int ID, int Score)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = $"UPDATE Scores SET Score = {Score} WHERE NummerID = {ID}";
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                    connection.Close();
+                }
+            }
+        }
     }
 }
