@@ -105,7 +105,7 @@ namespace InEenNotendop.UI
 
         private void FilterBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            string Filter = (sender as ComboBox).SelectedItem as string;
+            string Filter = (sender as System.Windows.Controls.ComboBox).SelectedItem as string;
 
             switch (Filter)
             {
@@ -136,7 +136,7 @@ namespace InEenNotendop.UI
 
         private void SortBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            string Sort = (sender as ComboBox).SelectedItem as string;
+            string Sort = (sender as System.Windows.Controls.ComboBox).SelectedItem as string;
             string CompleteSort = "";
             switch (Sort)
             {
