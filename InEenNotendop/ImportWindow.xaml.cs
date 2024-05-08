@@ -28,9 +28,13 @@ namespace InEenNotendop.UI
     {
         private string FilePath;
         private string FileName;
-        public ImportWindow()
+        private int lightmode;
+        public ImportWindow(int lightmodeImport)
         {
             InitializeComponent();
+            lightmode = lightmodeImport;
+            CheckDarkOrLight();
+
         }
 
         private void selectFile_Click(object sender, RoutedEventArgs e)
@@ -67,13 +71,13 @@ namespace InEenNotendop.UI
                 switch (checkedValue)
                 {
                     case string x when x.StartsWith("Easy"):
-                        diffecultyCheckbox |= 1;
+                        diffecultyCheckbox = 1;
                         break;
                     case string x when x.StartsWith("Medium"):
-                        diffecultyCheckbox |= 2;
+                        diffecultyCheckbox = 2;
                         break;
                     case string x when x.StartsWith("Hard"):
-                        diffecultyCheckbox |= 3;
+                        diffecultyCheckbox = 3;
                         break;
                 }
             }
@@ -120,7 +124,7 @@ namespace InEenNotendop.UI
             builder.UserID = user;
             builder.Password = "";
             builder.ApplicationIntent = ApplicationIntent.ReadWrite;
-
+            string filepath = "..\\..\\..\\Resources\\Songs\\Song_" + FileName;
 
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
@@ -134,16 +138,27 @@ namespace InEenNotendop.UI
                     object result = checkDatabaseExistsCommand.ExecuteScalar();
                     if (result != null)
                     {
-                        // add song
-                        string insertSongQuery = $@"
-                            USE PianoHeroDB
-                            INSERT INTO Nummers (Title, Artiest, Lengte, Bpm, Moeilijkheid)
-                            VALUES ('{ImportName.Text}', '{ImportArtist.Text}', {songLength}, {bpm}, {diffecultyCheckbox});
-                        ";
-                        using (SqlCommand insertSongCommand = new SqlCommand(insertSongQuery, connection))
+
+                        using (SqlCommand insertSongCommand = new SqlCommand("USE PianoHeroDB \n INSERT INTO Nummers (Title, Artiest, Lengte, Bpm, Moeilijkheid, Filepath) OUTPUT INSERTED.ID VALUES (@Title, @Artist, @Length, @Bpm, @Difficulty, @Filepath)", connection))
                         {
-                            insertSongCommand.ExecuteNonQuery();
+                            insertSongCommand.Parameters.AddWithValue("@Title", ImportName.Text);
+                            insertSongCommand.Parameters.AddWithValue("@Artist", ImportArtist.Text);
+                            insertSongCommand.Parameters.AddWithValue("@Length", songLength);
+                            insertSongCommand.Parameters.AddWithValue("@Bpm", bpm);
+                            insertSongCommand.Parameters.AddWithValue("@Difficulty", diffecultyCheckbox);
+                            insertSongCommand.Parameters.AddWithValue("@Filepath", filepath);
+
+                            // haalt de ID van het liedje
+                            var lastInsertedId = (int)insertSongCommand.ExecuteScalar();
+
+                            // Insert een score van 0 in het nieuwe liedje
+                            using (SqlCommand insertScoreCommand = new SqlCommand("USE PianoHeroDB \n INSERT INTO Scores (Score, NummerID) VALUES (0, @LastInsertedId)", connection))
+                            {
+                                insertScoreCommand.Parameters.AddWithValue("@LastInsertedId", lastInsertedId);
+                                insertScoreCommand.ExecuteNonQuery();
+                            }
                         }
+
                     }
                     else
                     {
@@ -235,6 +250,44 @@ namespace InEenNotendop.UI
                     }
                 }
             }
+        }
+
+        private void CheckDarkOrLight() // veranderd light mode naar dark mode en dark mode naar light mode
+        {
+            if (lightmode == 1)
+            {
+                SetLightMode();
+            }
+            else if (lightmode == 0)
+            {
+                SetDarkMode();
+            }
+        }
+
+        private void SetLightMode()
+        {
+            ImportGrid.Background = Brushes.White;
+            SettingsText.Foreground = Brushes.Black;
+            ImportArtistLabel.Foreground = Brushes.Black;
+            ImportDiffecultyLabel.Foreground = Brushes.Black; ;
+            ImportnameLabel.Foreground = Brushes.Black;
+
+            EasyButton.Foreground = Brushes.Black;
+            MediumButton.Foreground = Brushes.Black;
+            HardButton.Foreground = Brushes.Black;
+        }
+
+        private void SetDarkMode()
+        {
+            ImportGrid.Background = new SolidColorBrush(Color.FromRgb(25, 44, 49));
+            SettingsText.Foreground = Brushes.White;
+            ImportArtistLabel.Foreground = Brushes.White;
+            ImportDiffecultyLabel.Foreground = Brushes.White;
+            ImportnameLabel.Foreground = Brushes.White;
+
+            EasyButton.Foreground = Brushes.White;
+            MediumButton.Foreground = Brushes.White;
+            HardButton.Foreground = Brushes.White;
         }
     }
 }
