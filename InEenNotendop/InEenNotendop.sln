@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InEenNotendop.Business", ".
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InEenNotendop.MIDITestWindow", "..\InEenNotendop.MIDITestWindow\InEenNotendop.MIDITestWindow.csproj", "{367378B1-0DEA-4D2C-BB59-07187F661911}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InEenNotendop.UITests1", "..\InEenNotendop.UITests1\InEenNotendop.UITests1.csproj", "{B0EF51C7-7287-489D-8D70-24D8DC0432AE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InEenNotendop.UnitTesten", "..\InEenNotendop.UnitTesten\InEenNotendop.UnitTesten.csproj", "{CC190C3B-1172-45C1-BBFD-B91F54412FAF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +35,10 @@ Global
 		{367378B1-0DEA-4D2C-BB59-07187F661911}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{367378B1-0DEA-4D2C-BB59-07187F661911}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{367378B1-0DEA-4D2C-BB59-07187F661911}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B0EF51C7-7287-489D-8D70-24D8DC0432AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B0EF51C7-7287-489D-8D70-24D8DC0432AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B0EF51C7-7287-489D-8D70-24D8DC0432AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B0EF51C7-7287-489D-8D70-24D8DC0432AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC190C3B-1172-45C1-BBFD-B91F54412FAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC190C3B-1172-45C1-BBFD-B91F54412FAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC190C3B-1172-45C1-BBFD-B91F54412FAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC190C3B-1172-45C1-BBFD-B91F54412FAF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
