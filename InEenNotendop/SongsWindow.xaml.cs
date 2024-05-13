@@ -30,7 +30,7 @@ namespace InEenNotendop.UI
         {
             InitializeComponent();
             DataProgram dataProgram = new DataProgram();
-            dataProgram.StartDataBase();
+            dataProgram.MakeConnectionString();
             Nummer.ItemsSource = dataProgram.MaakLijst();
             this.settingsWindow = settingsWindow;
             this.settingsWindow.ChangeSettingsOwner(this);
