@@ -169,7 +169,10 @@ namespace InEenNotendop.UI
             lightmode = 0;
         }
 
-
+        public int GetLightMode()
+        {
+            return lightmode;
+        }
 
 
 
@@ -180,6 +183,11 @@ namespace InEenNotendop.UI
         }
 
         private void MainMenuButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            MainMenu();
+        }
+
+        public void MainMenu()
         {
             Window previousOwner = Owner;
             MainWindow mainWindow = new MainWindow(this);

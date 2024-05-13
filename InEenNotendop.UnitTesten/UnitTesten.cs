@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Globalization;
+using System.Security.Permissions;
+using System.Windows;
 
 namespace InEenNotendop.UI.Tests
 {
@@ -99,4 +101,71 @@ namespace InEenNotendop.UI.Tests
         }
     }
 
+    [TestClass]
+    public class SettingsWindowTesten
+    {
+        [TestMethod]
+        public void ChangedValue_SetLightMode()
+        {
+            Thread newThread = new Thread(() =>
+            {
+                // Arrange
+                MainWindow mainWindow = new MainWindow();
+                int lightmode;
+
+                // Act
+                mainWindow.settingsWindow.SetLightMode(mainWindow);
+                lightmode = mainWindow.settingsWindow.GetLightMode();
+
+                // Assert
+                Assert.IsTrue(lightmode == 1);
+            });
+
+            newThread.SetApartmentState(ApartmentState.STA);
+            newThread.Start();
+        }
+
+        [TestMethod]
+        public void ChangedValue_SetDarkMode()
+        {
+            Thread newThread = new Thread(() =>
+            {
+                // Arrange
+                MainWindow mainWindow = new MainWindow();
+                int lightmode;
+
+                // Act
+                mainWindow.settingsWindow.SetDarkMode(mainWindow);
+                lightmode = mainWindow.settingsWindow.GetLightMode();
+
+                // Assert
+                Assert.IsTrue(lightmode == 0);
+            });
+
+            newThread.SetApartmentState(ApartmentState.STA);
+            newThread.Start();
+        }
+
+        [TestMethod]
+        public void OpenWindow_MainMenu()
+        {
+            Thread newThread = new Thread(() =>
+            {
+                // Arrange
+                MainWindow mainWindow = new MainWindow();
+                SongsWindow songsWindow = new SongsWindow(mainWindow.settingsWindow);
+
+                Window expectedNewOwnerWindow = mainWindow;
+
+                // Act
+                mainWindow.settingsWindow.MainMenu();
+
+                // Assert
+                Assert.AreEqual(expectedNewOwnerWindow, mainWindow.settingsWindow.Owner);
+            });
+
+            newThread.SetApartmentState(ApartmentState.STA);
+            newThread.Start();
+        }
+    }
 }
