@@ -20,7 +20,7 @@ namespace InEenNotendop
     public partial class MainWindow : Window
     {
         
-        private SettingsWindow settingsWindow;
+        public SettingsWindow settingsWindow;
 
         public MainWindow()
         {
