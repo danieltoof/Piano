@@ -99,4 +99,27 @@ namespace InEenNotendop.UI.Tests
         }
     }
 
+    //testen van afspeelscherm functionaliteit
+    [TestClass]
+    public class AfspeelSchermTesten
+    {
+        [TestMethod]
+        public void PlayMidi_CheckError()
+        {
+            //Arrange
+
+            //Act
+            var thread = new Thread(() =>
+            { 
+            }
+
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.Start();
+            thread.Join();
+
+            //Assert
+
+        }
+    }
+
 }
