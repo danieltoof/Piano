@@ -1,4 +1,5 @@
-﻿using System;
+﻿using InEenNotendop.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,11 +22,13 @@ namespace InEenNotendop.UI
     {
         public Window Owner { get; set; }
         private SongsWindow songsWindow;
-        public SelectingWindow(int nummerId, string moeilijkheidText, string Title, string Artiest, int Lengte, int Bpm, object sender)
+        string FilePath;
+        public SelectingWindow(int nummerId, string moeilijkheidText, string Title, string Artiest, int Lengte, int Bpm, string FilePath, object sender)
         {
             InitializeComponent();
             songsWindow = (SongsWindow)sender;
             Owner = songsWindow;
+            this.FilePath = FilePath;
             DataContext = new NummerDetailsViewModel(nummerId, moeilijkheidText, Title, Artiest, Lengte, Bpm);
         }
 
@@ -58,7 +61,7 @@ namespace InEenNotendop.UI
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            PlayWindow playWindow = new PlayWindow();
+            PlayWindow playWindow = new PlayWindow(FilePath, this);
             //SongsWindow songsWindow = SongsWindow();
             Owner.Close();
             playWindow.Show();

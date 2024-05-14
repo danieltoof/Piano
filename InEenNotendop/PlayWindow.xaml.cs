@@ -22,16 +22,20 @@ namespace InEenNotendop.UI
     /// </summary>
     public partial class PlayWindow : Window
     {
-        public PlayWindow()
+        public Window Owner { get; set; }
+        private SelectingWindow selectingWindow;
+        public PlayWindow(string FilePath, object sender)
         {
             InitializeComponent();
+            selectingWindow = (SelectingWindow)sender;
 
             // run async thread zodat programma niet lockt tot de midi klaar is
             Task.Run(async () =>
             {
                 // wacht 2 seconden zodat de midi niet direct begint met spelen
                 Thread.Sleep(2000);
-                StartPlay(@"..\..\..\..\midi-test\midis\final-bowser-theme.mid"); // todo: zorgen dat er een meegegeven midi gespeelt wordt
+                StartPlay(@FilePath);
+                //StartPlay(@"..\..\..\..\midi-test\midis\final-bowser-theme.mid"); // todo: zorgen dat er een meegegeven midi gespeelt wordt
             });
             
 
