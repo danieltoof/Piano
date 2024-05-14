@@ -31,7 +31,7 @@ namespace InEenNotendop.UI
             {
                 // wacht 2 seconden zodat de midi niet direct begint met spelen
                 Thread.Sleep(2000);
-                StartPlay(@"..\..\..\..\midi-test\midis\07_Flower_Garden_GM.mid"); // todo: zorgen dat er een meegegeven midi gespeelt wordt
+                StartPlay(@"..\..\..\..\midi-test\midis\final-bowser-theme.mid"); // todo: zorgen dat er een meegegeven midi gespeelt wordt
             });
             
 

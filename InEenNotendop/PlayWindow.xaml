@@ -5,7 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InEenNotendop.UI"
         mc:Ignorable="d"
-        Title="PlayWindow" Height="450" Width="800">
+        
+        Title="PianoHero"
+        Width="{x:Static SystemParameters.PrimaryScreenWidth}"  
+        Height="{x:Static SystemParameters.PrimaryScreenHeight}" 
+        Icon="Resources/icon.png"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized">
     <Grid>
         <TextBlock HorizontalAlignment="Left" Margin="77,55,0,0" TextWrapping="Wrap" Text="{Binding }" VerticalAlignment="Top"/>
 
