@@ -15,6 +15,8 @@ using System.Windows.Shapes;
 using InEenNotendop.Data;
 using System.Diagnostics;
 using System.Globalization;
+using System.Diagnostics.Eventing.Reader;
+using System.Windows.Forms;
 
 namespace InEenNotendop.UI
 {
@@ -69,10 +71,11 @@ namespace InEenNotendop.UI
                     String Artiest = nummer.Artiest;
                     int Lengte = nummer.Lengte;
                     int Bpm = nummer.Bpm;
+                    String FilePath = nummer.Filepath;
                     MoeilijkheidConverter moeilijkheidConverter = new MoeilijkheidConverter();
                     string moeilijkheidText = moeilijkheidConverter.Convert(nummer.Moeilijkheid, typeof(string), null, CultureInfo.InvariantCulture) as string;
 
-                    SelectingWindow detailsWindow = new SelectingWindow(nummerId, moeilijkheidText, Title, Artiest, Lengte, Bpm);
+                    SelectingWindow detailsWindow = new SelectingWindow(nummerId, moeilijkheidText, Title, Artiest, Lengte, Bpm, FilePath, this);
                     detailsWindow.Owner = this;
                     detailsWindow.ShowDialog();
                 }
@@ -103,7 +106,7 @@ namespace InEenNotendop.UI
 
         private void FilterBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            string Filter = (sender as ComboBox).SelectedItem as string;
+            string Filter = (sender as System.Windows.Controls.ComboBox).SelectedItem as string;
 
             switch (Filter)
             {
@@ -134,7 +137,7 @@ namespace InEenNotendop.UI
 
         private void SortBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            string Sort = (sender as ComboBox).SelectedItem as string;
+            string Sort = (sender as System.Windows.Controls.ComboBox).SelectedItem as string;
             string CompleteSort = "";
             switch (Sort)
             {

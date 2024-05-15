@@ -35,7 +35,7 @@
             <!-- First Button -->
             <Button Content="PLAY" Height="41" Width="150" Margin="0 0 20 5"/>
             <!-- Second Button -->
-            <Button Content="AUTOPLAY" Height="41" Width="150" Margin="0 0 20 20" />
+            <Button Content="AUTOPLAY" Height="41" Width="150" Margin="0 0 20 20" Click="Button_Click" />
         </StackPanel>
     </Grid>
 </Window>
