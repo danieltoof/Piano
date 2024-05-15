@@ -110,8 +110,13 @@ namespace InEenNotendop.UI.Tests
 
             //Act
             var thread = new Thread(() =>
-            { 
-            }
+            {
+                try
+                {
+                    
+                }
+                catch { }
+            });
 
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();
