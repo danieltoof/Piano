@@ -31,47 +31,41 @@ namespace InEenNotendop.UI
             InitializeComponent();
             selectingWindow = (SelectingWindow)sender;
 
-            // run async thread zodat programma niet lockt tot de midi klaar is
-            Task.Run(async () =>
-            {
-                // wacht 2 seconden zodat de midi niet direct begint met spelen
-                StartPlay(@FilePath);
-                                
-                //StartPlay(@"..\..\..\..\midi-test\midis\final-bowser-theme.mid"); // todo: zorgen dat er een meegegeven midi gespeelt wordt
-            });
-            
-
-
+            StartPlay(@FilePath);
         }
 
         public void StartPlay(String MidiFileName)
         {
-            try
+            Task.Run(async () =>
             {
-                // check of midi meegegeven
-                if (MidiFileName == null)
+                try
                 {
-                    throw new FileNotFoundException("ERROR: FILE NOT FOUND");
-                }
-
-                else
-                {
-                    // inladen midi
-                    var midi = MidiFile.Read(MidiFileName);
-
-                    using (var output = OutputDevice.GetByName("Microsoft GS Wavetable Synth"))
-                    //using (var playback = midi.GetPlayback(output))
+                    // check of midi meegegeven
+                    if (MidiFileName == null)
                     {
-                        //playback.Speed = 5;
-                        //playback.Play();
-                        Thread.Sleep(2000);
-                        midi.Play(output);
+                        throw new FileNotFoundException("ERROR: FILE NOT FOUND");
                     }
+
+                    else
+                    {
+                        // inladen midi
+                        var midi = MidiFile.Read(MidiFileName);
+
+                        using (var output = OutputDevice.GetByName("Microsoft GS Wavetable Synth"))
+                        //using (var playback = midi.GetPlayback(output))
+                        {
+                            // wacht 2 seconden zodat de midi niet direct begint met spelen
+                            Thread.Sleep(2000);
+                            // run async thread zodat programma niet lockt tot de midi klaar is
+                        
+                            midi.Play(output);
+                        }
                 }
             } catch (FileNotFoundException ex)
             {
                 System.Windows.Forms.MessageBox.Show("File not found");
-            }
+                }
+            });
         }
     }
 }
