@@ -54,6 +54,20 @@ namespace InEenNotendop.UI
             CheckDarkOrLight();
 
         }
+
+        private void MenuToggleButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Toggle visibility of the MenuPanel
+            if (MenuPanel.Visibility == Visibility.Visible)
+            {
+                MenuPanel.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                MenuPanel.Visibility = Visibility.Visible;
+            }
+        }
+
         private void SettingsButton_OnClick(object sender, RoutedEventArgs e)
         {
             settingsWindow.OpenSettings();
@@ -156,6 +170,13 @@ namespace InEenNotendop.UI
             }
             
             Nummer.ItemsSource = dataProgram.MakeSortedList(Difficulty, CompleteSort);
+        }
+        
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.Show(); 
+            Close(); 
         }
     }
 }
