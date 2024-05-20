@@ -13,27 +13,31 @@
         </Grid.ColumnDefinitions>
 
         <!-- Title -->
-        <TextBlock Text="{Binding Title}" FontWeight="UltraBold" Margin="10 5 0 0" Grid.Column="1" FontSize="25" />
+        <TextBlock Text="{Binding Title}" FontWeight="UltraBold" Margin="10,5,369,271" Grid.Column="1" FontSize="25" />
         <TextBlock Text="{Binding MoeilijkheidText}" HorizontalAlignment="Right" Margin="10 12 50 0" Grid.Column="1"/>
 
-        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Left" Margin="40,68,0,42" Width="404" RenderTransformOrigin="0.5,0.5">
-            <TextBlock Text="High Scores" FontWeight="UltraBold" FontSize="25" Height="224" Width="144"/>
+
+        <!-- Artiest -->
+        <TextBlock Text="{Binding Artiest}" Margin="13,35,321,252" Grid.Column="1"/>
+
+        <StackPanel x:Name="HighScores_StackPanel" Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Left" Margin="40,68,0,0" Width="408" RenderTransformOrigin="0.5,0.5" Height="266" VerticalAlignment="Top">
+            <TextBlock Text="High Scores" Height="51" TextAlignment="Center" Width="406" FontSize="25"  FontWeight="UltraBold"/>
+            <Grid>
+                <DataGrid x:Name="HighScoresGrid" AutoGenerateColumns="True" IsReadOnly="True" CanUserAddRows="False" Margin="26,0,26,183" ColumnWidth="*"/>
+            </Grid>
         </StackPanel>
 
         <!-- Lengte -->
-        <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10 30 50 0">
+        <StackPanel x:Name="Lengte_StackPanel_" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,30,50,252">
             <TextBlock Text="Lengte: "/>
             <TextBlock Text="{Binding Lengte}"/>
         </StackPanel>
 
         <!-- BPM -->
-        <StackPanel Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10 50 50 0">
+        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,50,50,231">
             <TextBlock Text="BPM: "/>
             <TextBlock Text="{Binding Bpm}"/>
         </StackPanel>
-
-        <!-- Artiest -->
-        <TextBlock Text="{Binding Artiest}" Margin="13 35 0 0" Grid.Row="1" Grid.Column="2"/>
 
         <StackPanel Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="10">
             <!-- First Button -->
