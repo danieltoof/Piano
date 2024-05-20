@@ -1,4 +1,5 @@
-﻿using System;
+﻿using InEenNotendop.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,9 +20,15 @@ namespace InEenNotendop.UI
     /// </summary>
     public partial class SelectingWindow : Window
     {
-        public SelectingWindow(int nummerId, string moeilijkheidText, string Title, string Artiest, int Lengte, int Bpm)
+        public Window Owner { get; set; }
+        private SongsWindow songsWindow;
+        string FilePath;
+        public SelectingWindow(int nummerId, string moeilijkheidText, string Title, string Artiest, int Lengte, int Bpm, string FilePath, object sender)
         {
             InitializeComponent();
+            songsWindow = (SongsWindow)sender;
+            Owner = songsWindow;
+            this.FilePath = FilePath;
             DataContext = new NummerDetailsViewModel(nummerId, moeilijkheidText, Title, Artiest, Lengte, Bpm);
         }
 
@@ -50,6 +57,17 @@ namespace InEenNotendop.UI
                 Bpm = bpm ;
 
             }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            PlayWindow playWindow = new PlayWindow(FilePath, this);
+            //SongsWindow songsWindow = SongsWindow();
+            Owner.Close();
+            playWindow.Show();
+            Close();
+            //SongsWindow.Close();
+            //playWindow.StartPlay(@"..\..\..\..\midi-test\midis\Coldplay - Viva La Vida.mid"); //TODO: geef variabele mee
         }
     }
 }
