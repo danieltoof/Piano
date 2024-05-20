@@ -16,6 +16,10 @@
         <TextBlock Text="{Binding Title}" FontWeight="UltraBold" Margin="10 5 0 0" Grid.Column="1" FontSize="25" />
         <TextBlock Text="{Binding MoeilijkheidText}" HorizontalAlignment="Right" Margin="10 12 50 0" Grid.Column="1"/>
 
+        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Left" Margin="40,68,0,42" Width="404" RenderTransformOrigin="0.5,0.5">
+            <TextBlock Text="High Scores" FontWeight="UltraBold" FontSize="25" Height="224" Width="144"/>
+        </StackPanel>
+
         <!-- Lengte -->
         <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10 30 50 0">
             <TextBlock Text="Lengte: "/>
