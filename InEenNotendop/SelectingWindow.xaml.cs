@@ -87,7 +87,7 @@ namespace InEenNotendop.UI
             string CmdString = string.Empty;
             using (SqlConnection con = new SqlConnection(builder.ConnectionString))
             {
-                CmdString = $"USE PianoHeroDB \n SELECT score, SpelerId FROM HighScore WHERE NummerID = '{nummerId}'";
+                CmdString = $"USE PianoHeroDB \n SELECT score, SpelerID FROM HighScore WHERE NummerID = '{nummerId}'";
                 SqlCommand cmd = new SqlCommand(CmdString, con);
                 SqlDataAdapter sda = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();

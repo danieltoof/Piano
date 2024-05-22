@@ -16,6 +16,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Interaction;
 
 namespace InEenNotendop.UI
 {
@@ -46,6 +49,19 @@ namespace InEenNotendop.UI
 
         public void StartPlay(String MidiFileName)
         {
+            /*
+            var midiFile = new MidiFile();
+            midiFile = MidiFile.Read(MidiFileName);
+
+            TempoMap tempoMap = midiFile.GetTempoMap();
+            IEnumerable<Chord> chords = midiFile
+                .GetChords();
+
+            foreach (var d in chords)
+            {
+                Debug.WriteLine($"{d}");
+            }*/
+
             try
             {
                 // check of midi meegegeven
@@ -62,6 +78,14 @@ namespace InEenNotendop.UI
                     using (var output = OutputDevice.GetByName("Microsoft GS Wavetable Synth"))
                     //using (var playback = midi.GetPlayback(output))
                     {
+                        using (var outputDevice = OutputDevice.GetByName("Microsoft GS Wavetable Synth"))
+                        {
+                            outputDevice.EventSent += OnEventSent;
+
+                            outputDevice.SendEvent(new NoteOnEvent());
+                            outputDevice.SendEvent(new NoteOffEvent());
+                        }
+
                         //playback.Speed = 5;
                         //playback.Play();
                         Thread.Sleep(2000);
@@ -72,6 +96,11 @@ namespace InEenNotendop.UI
             {
                 System.Windows.Forms.MessageBox.Show("File not found");
             }
+        }
+        private void OnEventSent(object sender, MidiEventSentEventArgs e)
+        {
+            var midiDevice = (MidiDevice)sender;
+            Debug.WriteLine($"Event sent to '{midiDevice.Name}' at {DateTime.Now}: {e.Event}");
         }
     }
 }
