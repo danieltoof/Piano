@@ -194,3 +194,4 @@ namespace InEenNotendop.UI
         public bool IsFalling { get; set; } = false; // Flag indicating if the note is currently falling
     }
 }
+
