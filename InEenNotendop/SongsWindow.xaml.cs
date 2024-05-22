@@ -83,13 +83,13 @@ namespace InEenNotendop.UI
                     int nummerId = nummer.Id;
                     String Title = nummer.Title;
                     String Artiest = nummer.Artiest;
-                    int Lengte = nummer.Lengte;
+                    string FullTime = nummer.FullTime;
                     int Bpm = nummer.Bpm;
                     String FilePath = nummer.Filepath;
                     MoeilijkheidConverter moeilijkheidConverter = new MoeilijkheidConverter();
                     string moeilijkheidText = moeilijkheidConverter.Convert(nummer.Moeilijkheid, typeof(string), null, CultureInfo.InvariantCulture) as string;
 
-                    SelectingWindow detailsWindow = new SelectingWindow(nummerId, moeilijkheidText, Title, Artiest, Lengte, Bpm, FilePath, this);
+                    SelectingWindow detailsWindow = new SelectingWindow(nummerId, moeilijkheidText, Title, Artiest, FullTime, Bpm, FilePath, this);
                     detailsWindow.Owner = this;
                     detailsWindow.ShowDialog();
                 }

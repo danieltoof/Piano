@@ -23,7 +23,7 @@ namespace InEenNotendop.UI
         public Window Owner { get; set; }
         private SongsWindow songsWindow;
         string FilePath;
-        public SelectingWindow(int nummerId, string moeilijkheidText, string Title, string Artiest, int Lengte, int Bpm, string FilePath, object sender)
+        public SelectingWindow(int nummerId, string moeilijkheidText, string Title, string Artiest, string Lengte, int Bpm, string FilePath, object sender)
         {
             InitializeComponent();
             songsWindow = (SongsWindow)sender;
@@ -44,10 +44,10 @@ namespace InEenNotendop.UI
             public string MoeilijkheidText { get; }
             public string Title { get; }
             public string Artiest { get; }
-            public int Lengte { get; }
+            public string Lengte { get; }
             public int Bpm { get; }
 
-            public NummerDetailsViewModel(int nummerId, string moeilijkheidText, string title, string artiest, int lengte, int bpm)
+            public NummerDetailsViewModel(int nummerId, string moeilijkheidText, string title, string artiest, string lengte, int bpm)
             {
                 NummerIdText = $"Clicked on Nummer with ID: {nummerId}";
                 MoeilijkheidText = $"Difficulty: {moeilijkheidText}";
