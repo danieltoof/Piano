@@ -46,6 +46,7 @@ namespace InEenNotendop.Data
                             string createTablesQuery = @"USE PianoHeroDB
                                 DROP TABLE IF EXISTS Scores;
                                 DROP TABLE IF EXISTS Nummers;
+                                DROP TABLE IF EXISTS HighScore;
 
                                 CREATE TABLE Nummers (
                                     Title VARCHAR(255),
@@ -64,14 +65,18 @@ namespace InEenNotendop.Data
                                     FOREIGN KEY (NummerID) REFERENCES Nummers(ID)
                                     );
 
+                                CREATE TABLE HighScore (
+                                    ID INT IDENTITY(1,1) PRIMARY KEY,                                    
+                                    Score INT,
+                                    NummerID INT,
+                                    SpelerID INT
+                                );
 
                                 DECLARE @CurrentTitle VARCHAR(255) = 'Title1';
                                 DECLARE @CurrentTitleNumber INT = 1;
 
                                 DECLARE @CurrentArtist VARCHAR(255) = 'Artiest1';;
                                 DECLARE @CurrentArtistNumber INT = 1;
-
-
 
                                 WHILE @CurrentTitleNumber <= 25
                                 BEGIN
@@ -93,7 +98,14 @@ namespace InEenNotendop.Data
 
                                     SET @CurrentTitleNumber = @CurrentTitleNumber + 1;
                                     SET @CurrentArtistNumber = @CurrentArtistNumber + 1;
-                                END";
+                                END
+
+                                INSERT INTO HighScore (Score, NummerID, SpelerID)
+                                VALUES (0, 1, 1);
+                                INSERT INTO HighScore (Score, NummerID, SpelerID)
+                                VALUES (10, 1, 1);
+
+                                ";
 
                             using (SqlCommand createTablesCommand = new SqlCommand(createTablesQuery, connection))
                             {
