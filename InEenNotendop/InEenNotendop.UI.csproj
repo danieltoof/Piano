@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Melanchall.DryWetMidi" Version="7.0.2" />
+    <PackageReference Include="Melanchall.DryWetMidi" Version="7.1.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Resources\Images\" />
     <Folder Include="Resources\Songs\" />
   </ItemGroup>
 

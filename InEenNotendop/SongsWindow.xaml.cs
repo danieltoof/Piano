@@ -54,6 +54,20 @@ namespace InEenNotendop.UI
             CheckDarkOrLight();
 
         }
+
+        private void MenuToggleButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Toggle visibility of the MenuPanel
+            if (MenuPanel.Visibility == Visibility.Visible)
+            {
+                MenuPanel.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                MenuPanel.Visibility = Visibility.Visible;
+            }
+        }
+
         private void SettingsButton_OnClick(object sender, RoutedEventArgs e)
         {
             settingsWindow.OpenSettings();
@@ -69,13 +83,13 @@ namespace InEenNotendop.UI
                     int nummerId = nummer.Id;
                     String Title = nummer.Title;
                     String Artiest = nummer.Artiest;
-                    int Lengte = nummer.Lengte;
+                    string FullTime = nummer.FullTime;
                     int Bpm = nummer.Bpm;
                     String FilePath = nummer.Filepath;
                     MoeilijkheidConverter moeilijkheidConverter = new MoeilijkheidConverter();
                     string moeilijkheidText = moeilijkheidConverter.Convert(nummer.Moeilijkheid, typeof(string), null, CultureInfo.InvariantCulture) as string;
 
-                    SelectingWindow detailsWindow = new SelectingWindow(nummerId, moeilijkheidText, Title, Artiest, Lengte, Bpm, FilePath, this);
+                    SelectingWindow detailsWindow = new SelectingWindow(nummerId, moeilijkheidText, Title, Artiest, FullTime, Bpm, FilePath, this);
                     detailsWindow.Owner = this;
                     detailsWindow.ShowDialog();
                 }
@@ -156,6 +170,13 @@ namespace InEenNotendop.UI
             }
             
             Nummer.ItemsSource = dataProgram.MakeSortedList(Difficulty, CompleteSort);
+        }
+        
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.Show(); 
+            Close(); 
         }
     }
 }
