@@ -69,7 +69,7 @@ namespace InEenNotendop.Data
                                     ID INT IDENTITY(1,1) PRIMARY KEY,                                    
                                     Score INT,
                                     NummerID INT,
-                                    SpelerId INT
+                                    SpelerID INT
                                 );
 
                                 DECLARE @CurrentTitle VARCHAR(255) = 'Title1';
@@ -100,9 +100,9 @@ namespace InEenNotendop.Data
                                     SET @CurrentArtistNumber = @CurrentArtistNumber + 1;
                                 END
 
-                                INSERT INTO HighScore (Score, NummerID, SpelerId)
+                                INSERT INTO HighScore (Score, NummerID, SpelerID)
                                 VALUES (0, 1, 1);
-                                INSERT INTO HighScore (Score, NummerID, SpelerId)
+                                INSERT INTO HighScore (Score, NummerID, SpelerID)
                                 VALUES (10, 1, 1);
 
                                 ";
