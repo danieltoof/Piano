@@ -146,21 +146,6 @@ namespace InEenNotendop.UI
                     {
                         PianoCanvas.Children.RemoveAt(i);
                     }
-
-                    else
-                    {
-                        // inladen midi
-                        var midi = MidiFile.Read(MidiFileName);
-
-                        using (var output = OutputDevice.GetByName("Microsoft GS Wavetable Synth"))
-                        //using (var playback = midi.GetPlayback(output))
-                        {
-                            // wacht 2 seconden zodat de midi niet direct begint met spelen
-                            Thread.Sleep(2000);
-                            // run async thread zodat programma niet lockt tot de midi klaar is
-                        
-                            midi.Play(output);
-                        }
                 }
             }
 
