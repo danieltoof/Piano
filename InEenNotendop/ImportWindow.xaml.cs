@@ -18,6 +18,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using Microsoft.Data.SqlClient;
+using System.Diagnostics;
 
 namespace InEenNotendop.UI
 {
@@ -212,21 +213,34 @@ namespace InEenNotendop.UI
 
         static int GetStartTempo(string MidiFileName)
         {
-            // inladen midi
-            var midi = MidiFile.Read(MidiFileName);
-
-            // haal tempo van midi op
-            using (var tempoMapManager = new TempoMapManager(
-                       midi.TimeDivision,
-                       midi.GetTrackChunks().Select(c => c.Events)))
+            try
             {
-                // maken tempomap
-                TempoMap tempoMap = tempoMapManager.TempoMap;
+                // inladen midi
+                var midi = MidiFile.Read(MidiFileName);
 
-                // lezen start tempo
-                int tempoStart = (int)Math.Round(tempoMap.GetTempoAtTime((MidiTimeSpan)1).BeatsPerMinute);
+                // haal tempo van midi op
+                using (var tempoMapManager = new TempoMapManager(
+                           midi.TimeDivision,
+                           midi.GetTrackChunks().Select(c => c.Events)))
+                {
+                    // maken tempomap
+                    TempoMap tempoMap = tempoMapManager.TempoMap;
 
-                return tempoStart;
+                    // lezen start tempo
+                    int tempoStart = (int)Math.Round(tempoMap.GetTempoAtTime((MidiTimeSpan)1).BeatsPerMinute);
+
+                    return tempoStart;
+                }
+            }
+            catch (FileNotFoundException)
+            {
+                Debug.WriteLine("ERROR: MIDI file not found.");
+                return 0;
+            }
+            catch (Exception)
+            {
+                Debug.WriteLine("Overige error.");
+                return 0;
             }
         }
         private static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
