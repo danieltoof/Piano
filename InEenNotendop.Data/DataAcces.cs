@@ -112,6 +112,8 @@ namespace InEenNotendop.Data
                             string fullTime = minutesString + ":" + secondsString;
 
                             Nummer nummer = new Nummer(title, artiest, fullTime, bpm, moeilijkheid, id, filepath, score);
+
+                            nummers.Add(nummer);
                         }
                         connection.Close();
                     }
