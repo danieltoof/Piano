@@ -71,7 +71,7 @@ namespace InEenNotendop.UI.Tests
             {
                 try
                 {
-                    var window = new SelectingWindow(nummerId, moeilijkheidText, title, artist, lengte, bpm ,"path", this);
+                    var window = new SelectingWindow(nummerId, moeilijkheidText, title, artist, lengte, bpm);
 
                     // Assert
                     var viewModel = window.DataContext as SelectingWindow.NummerDetailsViewModel;
