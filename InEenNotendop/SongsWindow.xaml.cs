@@ -34,7 +34,7 @@ namespace InEenNotendop.UI
         {
             InitializeComponent();
             dataProgram = new DataProgram();
-            dataProgram.StartDataBase();
+            dataProgram.StartSshTunnel();
             
             this.settingsWindow = settingsWindow;
             this.settingsWindow.ChangeSettingsOwner(this);
