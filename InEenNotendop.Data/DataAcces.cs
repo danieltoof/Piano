@@ -21,13 +21,13 @@ namespace InEenNotendop.Data
             };
         }
 
-        public void DownloadSong() 
+        /*public void DownloadSong() 
         {
             string host = "145.44.235.225";
             string username = "student";
             string password = "PianoHero";
-            string remoteFilePath = $"/home/student/Music/{/*filename*/}";
-            string localSavePath = $".\\Resources\\Songs\\{/*file.mid*/}";
+            string remoteFilePath = $"/home/student/Music/{*//*filename*//*}";
+            string localSavePath = $".\\Resources\\Songs\\{*//*file.mid*//*}";
             using (var sftp = new SftpClient(host, username, password))
             {
                 sftp.Connect();
@@ -39,7 +39,7 @@ namespace InEenNotendop.Data
 
                 sftp.Disconnect();
             }
-        }
+        }*/
         public int getNummersAmount()
         {
             if (!string.IsNullOrEmpty(ConnectionString))
