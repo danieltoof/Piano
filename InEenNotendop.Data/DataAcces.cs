@@ -21,13 +21,13 @@ namespace InEenNotendop.Data
             };
         }
 
-        public void DownloadSong() 
+        /*public void DownloadSong() 
         {
             string host = "145.44.235.225";
             string username = "student";
             string password = "PianoHero";
-            string remoteFilePath = $"/home/student/Music/{/*filename*/}";
-            string localSavePath = $".\\Resources\\Songs\\{/*file.mid*/}";
+            string remoteFilePath = $"/home/student/Music/{*//*filename*//*}";
+            string localSavePath = $".\\Resources\\Songs\\{*//*file.mid*//*}";
             using (var sftp = new SftpClient(host, username, password))
             {
                 sftp.Connect();
@@ -39,7 +39,7 @@ namespace InEenNotendop.Data
 
                 sftp.Disconnect();
             }
-        }
+        }*/
         public int getNummersAmount()
         {
             if (!string.IsNullOrEmpty(ConnectionString))
@@ -91,9 +91,27 @@ namespace InEenNotendop.Data
                             { 
                                 filepath = null;
                             }
-                            int score = reader.GetInt32(reader.GetOrdinal("Score"));                          
-                            Nummer nummer = new Nummer(title,artiest,lengte,bpm,moeilijkheid,id,filepath,score);
-                            nummers.Add(nummer);
+                            int score = reader.GetInt32(reader.GetOrdinal("Score"));
+                            int minutes = (Convert.ToInt32(lengte) / 60);
+                            string minutesString = Convert.ToString(minutes);
+                            int seconds = (Convert.ToInt32(lengte) % 60);
+
+                            string secondsString = null;
+
+                            // 0 voor de secondes plakken als ze onder 10 zijn
+                            if (seconds < 10)
+                            {
+                                secondsString = "0" + seconds;
+                            }
+                            else
+                            {
+                                secondsString = seconds.ToString();
+                            }
+
+                            // minuten en secondes aan elkaar plakken
+                            string fullTime = minutesString + ":" + secondsString;
+
+                            Nummer nummer = new Nummer(title, artiest, fullTime, bpm, moeilijkheid, id, filepath, score);
                         }
                         connection.Close();
                     }
