@@ -18,6 +18,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using Microsoft.Data.SqlClient;
+using InEenNotendop.Data;
 
 namespace InEenNotendop.UI
 {
@@ -29,6 +30,7 @@ namespace InEenNotendop.UI
         private string FilePath;
         private string FileName;
         private int lightmode;
+        DataProgram data = new DataProgram();
         public ImportWindow(int lightmodeImport)
         {
             InitializeComponent();
@@ -115,61 +117,12 @@ namespace InEenNotendop.UI
 
             int songLength = GetLength(@"..\..\..\Resources\Songs\Song_" + FileName);
             int bpm = GetStartTempo(@"..\..\..\Resources\Songs\Song_" + FileName);
-
-            string DBname = "PianoHeroDB";
-            string user = System.Net.Dns.GetHostName() + "\\" + Environment.UserName;
-            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
-            builder.DataSource = "(localdb)\\MSSQLLocalDB";
-            builder.IntegratedSecurity = true;
-            builder.UserID = user;
-            builder.Password = "";
-            builder.ApplicationIntent = ApplicationIntent.ReadWrite;
-            string filepath = "..\\..\\..\\Resources\\Songs\\Song_" + FileName;
+            string filepath = $"/home/student/Music/{ImportArtist.Text} - {ImportName.Text}.mid";
 
 
-            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
-            {
-                connection.Open();
-
-                // Check if the database exists
-                string checkDatabaseExistsQuery = $"SELECT 1 FROM sys.databases WHERE name = '{DBname}'";
-                using (SqlCommand checkDatabaseExistsCommand = new SqlCommand(checkDatabaseExistsQuery, connection))
-                {
-                    object result = checkDatabaseExistsCommand.ExecuteScalar();
-                    if (result != null)
-                    {
-
-                        using (SqlCommand insertSongCommand = new SqlCommand("USE PianoHeroDB \n INSERT INTO Nummers (Title, Artiest, Lengte, Bpm, Moeilijkheid, Filepath) OUTPUT INSERTED.ID VALUES (@Title, @Artist, @Length, @Bpm, @Difficulty, @Filepath)", connection))
-                        {
-                            insertSongCommand.Parameters.AddWithValue("@Title", ImportName.Text);
-                            insertSongCommand.Parameters.AddWithValue("@Artist", ImportArtist.Text);
-                            insertSongCommand.Parameters.AddWithValue("@Length", songLength);
-                            insertSongCommand.Parameters.AddWithValue("@Bpm", bpm);
-                            insertSongCommand.Parameters.AddWithValue("@Difficulty", diffecultyCheckbox);
-                            insertSongCommand.Parameters.AddWithValue("@Filepath", filepath);
-
-                            // haalt de ID van het liedje
-                            var lastInsertedId = (int)insertSongCommand.ExecuteScalar();
-
-                            // Insert een score van 0 in het nieuwe liedje
-                            using (SqlCommand insertScoreCommand = new SqlCommand("USE PianoHeroDB \n INSERT INTO Scores (Score, NummerID) VALUES (0, @LastInsertedId)", connection))
-                            {
-                                insertScoreCommand.Parameters.AddWithValue("@LastInsertedId", lastInsertedId);
-                                insertScoreCommand.ExecuteNonQuery();
-                            }
-                        }
-
-                    }
-                    else
-                    {
-                        // Database exists, switch to it
-                        builder.InitialCatalog = DBname;
-                        connection.ChangeDatabase(DBname);
-                    }
-                }
-                connection.Close();
-            }
-
+            //import func here
+            data.UploadsongToDataBase(ImportName.Text, ImportArtist.Text, songLength, bpm, diffecultyCheckbox, filepath);
+            data.UploadSong(ImportName.Text, ImportArtist.Text, FilePath);
 
 
             // check if there are errors
