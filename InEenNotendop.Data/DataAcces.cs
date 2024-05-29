@@ -91,12 +91,9 @@ namespace InEenNotendop.Data
                             { 
                                 filepath = null;
                             }
-                            int score = reader.GetInt32(reader.GetOrdinal("Score"));
-                          
+                            int score = reader.GetInt32(reader.GetOrdinal("Score"));                          
                             Nummer nummer = new Nummer(title,artiest,lengte,bpm,moeilijkheid,id,filepath,score);
-
                             nummers.Add(nummer);
-
                         }
                         connection.Close();
                     }
@@ -146,7 +143,26 @@ namespace InEenNotendop.Data
                             }
                             int score = reader.GetInt32(reader.GetOrdinal("Score"));
 
-                            Nummer nummer = new Nummer(title, artiest, lengte, bpm, moeilijkheid, id, filepath, score);
+                            int minutes = (Convert.ToInt32(lengte) / 60);
+                            string minutesString = Convert.ToString(minutes);
+                            int seconds = (Convert.ToInt32(lengte) % 60);
+
+                            string secondsString = null;
+
+                            // 0 voor de secondes plakken als ze onder 10 zijn
+                            if (seconds < 10)
+                            {
+                                secondsString = "0" + seconds;
+                            }
+                            else
+                            {
+                                secondsString = seconds.ToString();
+                            }
+
+                            // minuten en secondes aan elkaar plakken
+                            string fullTime = minutesString + ":" + secondsString;
+
+                            Nummer nummer = new Nummer(title, artiest, fullTime, bpm, moeilijkheid, id, filepath, score);
 
                             nummers.Add(nummer);
                         }
@@ -189,7 +205,26 @@ namespace InEenNotendop.Data
                             }
                             int score = reader.GetInt32(reader.GetOrdinal("Score"));
 
-                            Nummer nummer = new Nummer(title, artiest, lengte, bpm, moeilijkheid, id, filepath, score);
+                            int minutes = (Convert.ToInt32(lengte) / 60);
+                            string minutesString = Convert.ToString(minutes);
+                            int seconds = (Convert.ToInt32(lengte) % 60);
+
+                            string secondsString = null;
+
+                            // 0 voor de secondes plakken als ze onder 10 zijn
+                            if (seconds < 10)
+                            {
+                                secondsString = "0" + seconds;
+                            }
+                            else
+                            {
+                                secondsString = seconds.ToString();
+                            }
+
+                            // minuten en secondes aan elkaar plakken
+                            string fullTime = minutesString + ":" + secondsString;
+
+                            Nummer nummer = new Nummer(title, artiest, fullTime, bpm, moeilijkheid, id, filepath, score);
 
                             nummers.Add(nummer);
                         }
