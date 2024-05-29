@@ -21,11 +21,14 @@ namespace InEenNotendop
     {
         
         public SettingsWindow settingsWindow;
+        DataProgram data = new DataProgram();
+
 
         public MainWindow()
         {
             InitializeComponent();
             settingsWindow = new SettingsWindow(this);
+            data.StartSshTunnel();
             CheckLightMode();
             CheckDarkOrLight();
         }

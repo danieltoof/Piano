@@ -59,7 +59,7 @@ namespace InEenNotendop.UI.Tests
             string moeilijkheidText = "easy";
             string title = "Title";
             string artist = "Artist";
-            int lengte = 180;
+            string lengte = "180";
             int bpm = 120;
             string expectedNummerIdText = "Clicked on Nummer with ID: 1";
             string expectedMoeilijkheidText = "Difficulty: easy";
@@ -71,7 +71,7 @@ namespace InEenNotendop.UI.Tests
             {
                 try
                 {
-                    var window = new SelectingWindow(nummerId, moeilijkheidText, title, artist, lengte, bpm);
+                    var window = new SelectingWindow(nummerId, moeilijkheidText, title, artist, lengte,  bpm, "path",this);
 
                     // Assert
                     var viewModel = window.DataContext as SelectingWindow.NummerDetailsViewModel;
