@@ -361,6 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-/InEenNotendop/Resources/Songs/Song_Animals As Leaders - CAFO (Mid Lead Section).mid
-/InEenNotendop/Resources/Songs/Song_Queen - Bohemian Rhapsody.mid
-/InEenNotendop/Resources/Songs/Song_Unknown_-_pokemon.mid
+
+*.mid
