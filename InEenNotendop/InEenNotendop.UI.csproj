@@ -21,10 +21,12 @@
 
   <ItemGroup>
     <PackageReference Include="Melanchall.DryWetMidi" Version="7.1.0" />
+    <PackageReference Include="NAudio.Midi" Version="2.2.1" />
     <PackageReference Include="SSH.NET" Version="2024.0.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\InEenNotendop.Business\InEenNotendop.Business.csproj" />
     <ProjectReference Include="..\InEenNotendop.Data\InEenNotendop.Data.csproj" />
   </ItemGroup>
 

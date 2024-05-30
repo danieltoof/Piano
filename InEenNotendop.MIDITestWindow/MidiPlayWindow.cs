@@ -12,27 +12,21 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using InEenNotendop.Business;
-using static InEenNotendop.UI.MidiPlayWindow;
+using static InEenNotendop.MIDITestWindow.MainWindow;
 using System.Windows.Media.Animation;
 using static Azure.Core.HttpHeader;
 using System;
-using System.IO;
 
-namespace InEenNotendop.UI
+namespace InEenNotendop.MIDITestWindow
 {
     /// <summary>
-    /// Interaction logic for MidiPlayWindow.xaml
+    /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MidiPlayWindow : Window
+    public partial class MainWindow : Window
     {
-        public Window Owner { get; set; }
-
-        private bool playMidiFile = false;
-        private bool freePlay = false;
-
         private MidiIn midiIn;
+
         private MidiPlayer midiPlayer;
-        private MidiFile midiFileSong;
 
         private string? desiredOutDevice { get; set; }
         //Kleurtjes van keys
@@ -66,23 +60,17 @@ namespace InEenNotendop.UI
         }
 
 
-        public MidiPlayWindow(string FilePath, object sender, bool playMidiFile)
+        public MainWindow()
         {
-            this.playMidiFile = playMidiFile;
+
             midiInputProcessor = new MidiInputProcessor();
 
             stopwatch = new Stopwatch();
             stopwatch.Start();
-            try
-            {
-                midiFileSong =
-    new MidiFile(FilePath);
-            } catch (FileNotFoundException e)
-            {
-                MessageBox.Show(e.Message);
 
-            }
-
+            MidiFile smokeOnTheWater =
+                new MidiFile(
+                    @"C:/Users/danie/source/repos/Piano/InEenNotendop.Business/Deep Purple - Smoke On The Water.mid");
             //_notesOfSongList = _midiInputProcessor.MidiToList(smokeOnTheWater);
 
 
@@ -91,28 +79,27 @@ namespace InEenNotendop.UI
             TimeSpan increment = TimeSpan.FromMilliseconds(4000); // Dit voegt een delay toe aan 
 
 
-            notesOfSongList = midiInputProcessor.MidiToList(midiFileSong);
+            notesOfSongList = midiInputProcessor.MidiToList(smokeOnTheWater);
 
             for (int i = 0; i < notesOfSongList.Count; i++) // Een delay toegevoegd aan de midi, omdat anders de eerste paar blokken niet goed gerenderd worden.
             {
                 notesOfSongList[i].NoteStartTime = notesOfSongList[i].NoteStartTime.Add(increment);
-            }
+            } 
 
-            notesOfSongToBePlayed = [.. midiInputProcessor.MidiToList(midiFileSong)]; // shallow koepie
+            notesOfSongToBePlayed = [..midiInputProcessor.MidiToList(smokeOnTheWater)]; // shallow koepie
+            
 
 
-            if(playMidiFile) { 
-                for (int i = 0; i < notesOfSongToBePlayed.Count; i++) // Nog een keer delay toevoegen op de liste met noten die gebruikt worden voor de midi playback
-                {
-                    notesOfSongToBePlayed[i].NoteStartTime = notesOfSongToBePlayed[i].NoteStartTime.Add(increment * 2);
-                }
+            for (int i = 0; i < notesOfSongToBePlayed.Count; i++) // Nog een keer delay toevoegen op de liste met noten die gebruikt worden voor de midi playback
+            {
+                notesOfSongToBePlayed[i].NoteStartTime = notesOfSongToBePlayed[i].NoteStartTime.Add(increment*2);
             }
 
             desiredOutDevice = "Microsoft GS Wavetable Synth";
-
+          
             InitializeComponent();
             InitializeMidi(desiredOutDevice);
-
+ 
             midiInputScoreCalculator = new MidiInputScoreCalculator(midiInputProcessor);
 
 
@@ -198,21 +185,19 @@ namespace InEenNotendop.UI
                 }
             }
 
-            if(playMidiFile) { 
-                foreach (var note in notesOfSongToBePlayed)
+            foreach (var note in notesOfSongToBePlayed)
+            {
+                if (!note.IsPlaying && currentTime >= note.NoteStartTime &&
+                    currentTime < note.NoteStartTime + note.NoteDuration)
                 {
-                    if (!note.IsPlaying && currentTime >= note.NoteStartTime &&
-                        currentTime < note.NoteStartTime + note.NoteDuration)
-                    {
-                        midiPlayer.PlayNote(note.NoteNumber);
-                        note.IsPlaying = true;
-                    }
+                    midiPlayer.PlayNote(note.NoteNumber);
+                    note.IsPlaying = true;
+                }
 
-                    if (note.IsPlaying && currentTime >= note.NoteStartTime + note.NoteDuration)
-                    {
-                        midiPlayer.StopNote(note.NoteNumber);
-                        note.IsPlaying = false;
-                    }
+                if (note.IsPlaying && currentTime >= note.NoteStartTime + note.NoteDuration)
+                {
+                    midiPlayer.StopNote(note.NoteNumber);
+                    note.IsPlaying = false;
                 }
             }
         }
@@ -291,16 +276,15 @@ namespace InEenNotendop.UI
             if (note.NoteNumber >= 36 && note.NoteNumber < PianoGrid.ColumnDefinitions.Count + 36)
             {
                 // Create a new rectangle
-
+                
                 var actualWidthGrid = NotesGrid.ColumnDefinitions[note.NoteNumber - 36].ActualWidth;
 
-                if (actualWidthGrid > 20)
+                if(actualWidthGrid > 20) 
                 {
                     fallingBlockBrush = Brushes.SaddleBrown;
-                }
-                else
+                } else
                 {
-                    fallingBlockBrush = Brushes.Black;
+                    fallingBlockBrush= Brushes.Black;
                 }
 
                 Rectangle rect = new Rectangle
