@@ -75,6 +75,14 @@ namespace InEenNotendop.UI
             //playWindow.StartPlay(@"..\..\..\..\midi-test\midis\Coldplay - Viva La Vida.mid"); //TODO: geef variabele mee
         }
 
+        private void OnDownloadClicked(object sender, RoutedEventArgs e)
+        {
+            var viewModel = DataContext as NummerDetailsViewModel;
+
+            dataProgram.DownloadSong(viewModel.Artiest,viewModel.Title);  
+        }
+
+
         private void FillDataGrid(int nummerId)
         {
             HighScoresGrid.ItemsSource = dataProgram.GetDataForGrid(nummerId);

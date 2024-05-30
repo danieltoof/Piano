@@ -2,6 +2,9 @@
 using System.Diagnostics;
 using Renci.SshNet;
 using System.Data;
+using System.Security.Cryptography.X509Certificates;
+using System.Resources;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace InEenNotendop.Data
 {
@@ -22,31 +25,70 @@ namespace InEenNotendop.Data
             };
         }
 
-        /* public void DownloadSong()
-         {
-             string host = "145.44.235.225";
-             string username = "student";
-             string password = "PianoHero";
-             string remoteFilePath = $"/home/student/Music/{filename}";
-             string localSavePath = $".\\Resources\\Songs\\{file.mid}";
-             using (var sftp = new SftpClient(host, username, password))
-             {
-                 sftp.Connect();
+        public void DownloadSong(string artist, string title)
+        {
+            string host = "145.44.235.225";
+            string username = "student";
+            string password = "PianoHero";
+            string remoteFilePath = $"/home/student/Music/{artist} - {title}.mid";
 
-                 using (Stream fileStream = File.Create(localSavePath))
-                 {
-                     sftp.DownloadFile(remoteFilePath, fileStream);
-                 }
+            // Get the absolute path of the current working directory
+            string currentDirectory = Directory.GetCurrentDirectory();
 
-                 sftp.Disconnect();
-             }
-         }*/
+            // Navigate up directories until the target directory "Songs" is found
+            string targetDirectory = "InEenNotendop";
+            string localSavePath = "";
+            while (!currentDirectory.EndsWith(targetDirectory) && !string.IsNullOrEmpty(currentDirectory))
+            {
+                if (Directory.Exists(localSavePath))
+                {
+                    break; // Found the target directory, exit the loop
+                }
+                currentDirectory = Path.GetDirectoryName(currentDirectory); // Move up one directory
+                localSavePath = $"{currentDirectory}" + $"\\Resources\\Song\\{artist} - {title}.mid";
+
+            }
+
+            if (string.IsNullOrEmpty(localSavePath))
+            {
+                Console.WriteLine($"Target directory '{targetDirectory}' not found.");
+                return;
+            }
+
+            try
+            {
+                using (var sftp = new SftpClient(host, username, password))
+                {
+                    sftp.Connect();
+
+                    if (!sftp.Exists(remoteFilePath))
+                    {
+                        Console.WriteLine($"File does not exist on the server: {remoteFilePath}");
+                        return;
+                    }
+
+                    using (Stream fileStream = File.Create(localSavePath))
+                    {
+                        sftp.DownloadFile(remoteFilePath, fileStream);
+                    }
+
+                    sftp.Disconnect();
+                    Console.WriteLine($"Downloaded song '{title}' by '{artist}' to {localSavePath}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+        }
+
+
         public void UploadSong(string name, string artist, string localPath)
         {
             string host = "145.44.235.225";
             string username = "student";
             string password = "PianoHero";
-            string remoteFilePath = Path.Combine("/home/student/Music", $"{name} - {artist}.mid");
+            string remoteFilePath = Path.Combine("/home/student/Music", $"{artist} - {name}.mid");
             string localSavePath = Path.Combine(localPath);
 
             using (var sftp = new SftpClient(host, username, password))
@@ -64,7 +106,7 @@ namespace InEenNotendop.Data
                     {
                         remoteFilePath = remoteFilePath.Replace("\\", "/");
                         sftp.UploadFile(fileStream, remoteFilePath);
-                        Console.WriteLine($"Successfully uploaded '{name}' by '{artist}' to the server.");
+                        Console.WriteLine($"Successfully uploaded '{artist}' by '{name}' to the server.");
                     }
                 }
                 catch (Exception ex)
