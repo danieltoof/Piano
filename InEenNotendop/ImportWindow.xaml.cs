@@ -110,7 +110,7 @@ namespace InEenNotendop.UI
                     error = 1;
                     MessageBox.Show("Select a file");
                 }
-                else { File.Copy(FilePath, @"..\..\..\Resources\Songs\" + FileName); error = 0; }
+                else { error = 0; }
             }
             catch (Exception exception)
             {
