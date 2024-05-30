@@ -32,7 +32,7 @@
 
         <Button Grid.Column="1" Name="BackButton" Click="BackButton_Click" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,10,10,0" Height="55" Width="55">
             <Button.Content>
-                <Image Source="C:\xampp\htdocs\C#\KBS\InEenNotendop\Resources\Images\PreviousIcon.png" Stretch="Uniform" />
+                <Image Source="\Resources\Images\PreviousIcon.png" Stretch="Uniform" />
             </Button.Content>
         </Button>
 
