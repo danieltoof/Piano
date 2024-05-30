@@ -52,7 +52,7 @@ namespace InEenNotendop.UI
         //private const double FallingDuration = 1.5; // Duration of the falling animation for all notes (in seconds)
         private const double FallingSpeed = 200.0; // Speed of falling blocks in units per second
 
-        private const double TimerInterval = 2; // in MS, hoe lager des te accurater de de code checkt wanneer een blok gegenereerd een een note gespeeld moet worden, maar kan meer performance kosten
+        private const double TimerInterval = 10; // in MS, hoe lager des te accurater de de code checkt wanneer een blok gegenereerd een een note gespeeld moet worden, maar kan meer performance kosten
 
         private double fallingDuration;
 
@@ -88,7 +88,8 @@ namespace InEenNotendop.UI
 
             //MidiFile smokeOnTheWater = new MidiFile(
             //@"C:/Users/danie/source/repos/Piano/InEenNotendop.MidiProcessorUnitTest/TestMidi/UnitTestMidi.mid");
-            TimeSpan increment = TimeSpan.FromMilliseconds(4000); // Dit voegt een delay toe aan 
+            TimeSpan increment = TimeSpan.FromMilliseconds(2000); // Dit voegt een delay toe aan 
+            TimeSpan increment2 = TimeSpan.FromMilliseconds(8000); // Dit voegt een delay toe aan 
 
 
             notesOfSongList = midiInputProcessor.MidiToList(midiFileSong);
@@ -104,7 +105,7 @@ namespace InEenNotendop.UI
             if(playMidiFile) { 
                 for (int i = 0; i < notesOfSongToBePlayed.Count; i++) // Nog een keer delay toevoegen op de liste met noten die gebruikt worden voor de midi playback
                 {
-                    notesOfSongToBePlayed[i].NoteStartTime = notesOfSongToBePlayed[i].NoteStartTime.Add(increment * 2);
+                    notesOfSongToBePlayed[i].NoteStartTime = notesOfSongToBePlayed[i].NoteStartTime.Add(increment2);
                 }
             }
 
@@ -227,7 +228,7 @@ namespace InEenNotendop.UI
             {
                 Debug.WriteLine($"Midi In Device {i}: {MidiIn.DeviceInfo(i)}");
             }
-            var desiredDeviceIndex = 0; // DEZE KAN VERANDEREN SOMS SPONTAAN
+            var desiredDeviceIndex = 1; // DEZE KAN VERANDEREN SOMS SPONTAAN
             if (desiredDeviceIndex < numDevices)
             {
                 midiIn = new MidiIn(desiredDeviceIndex);
