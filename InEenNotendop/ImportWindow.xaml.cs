@@ -110,7 +110,7 @@ namespace InEenNotendop.UI
                     error = 1;
                     MessageBox.Show("Select a file");
                 }
-                else { File.Copy(FilePath, @"..\..\..\Resources\Songs\Song_" + FileName); error = 0; }
+                else { File.Copy(FilePath, @"..\..\..\Resources\Songs\" + FileName); error = 0; }
             }
             catch (Exception exception)
             {
@@ -120,8 +120,8 @@ namespace InEenNotendop.UI
 
             int songLength = GetLength(FilePath);
             int bpm = GetStartTempo(FilePath);
-            string filepath = $"/home/student/Music/{ImportArtist.Text} - {ImportName.Text}.mid";
-
+            //string filepath = $@"\Resources\Song\{ImportArtist.Text} - {ImportName.Text}.mid";
+            string filepath = @"..\..\..\Resources\Song\" + ImportArtist.Text + " - " + ImportName.Text + ".mid";
 
             data.UploadsongToDataBase(ImportName.Text, ImportArtist.Text, songLength, bpm, diffecultyCheckbox, filepath);
             data.UploadSong(ImportName.Text, ImportArtist.Text, FilePath);
