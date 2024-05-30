@@ -83,7 +83,7 @@ namespace InEenNotendop.UI
                     int nummerId = nummer.Id;
                     String Title = nummer.Title;
                     String Artiest = nummer.Artiest;
-                    string FullTime = nummer.FullTime;
+                    int FullTime = nummer.FullTime;
                     int Bpm = nummer.Bpm;
                     String FilePath = nummer.Filepath;
                     MoeilijkheidConverter moeilijkheidConverter = new MoeilijkheidConverter();

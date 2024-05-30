@@ -1,6 +1,10 @@
 ﻿using Microsoft.Data.SqlClient;
 using System.Diagnostics;
 using Renci.SshNet;
+using System.Data;
+using System.Security.Cryptography.X509Certificates;
+using System.Resources;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace InEenNotendop.Data
 {
@@ -21,25 +25,188 @@ namespace InEenNotendop.Data
             };
         }
 
-        /*public void DownloadSong() 
+        public void DownloadSong(string artist, string title)
         {
             string host = "145.44.235.225";
             string username = "student";
             string password = "PianoHero";
-            string remoteFilePath = $"/home/student/Music/{*//*filename*//*}";
-            string localSavePath = $".\\Resources\\Songs\\{*//*file.mid*//*}";
+            string remoteFilePath = $"/home/student/Music/{artist} - {title}.mid";
+
+            // Get the absolute path of the current working directory
+            string currentDirectory = Directory.GetCurrentDirectory();
+
+            // Navigate up directories until the target directory "Songs" is found
+            string targetDirectory = "InEenNotendop";
+            string localSavePath = "";
+            while (!currentDirectory.EndsWith(targetDirectory) && !string.IsNullOrEmpty(currentDirectory))
+            {
+                if (Directory.Exists(localSavePath))
+                {
+                    break; // Found the target directory, exit the loop
+                }
+                currentDirectory = Path.GetDirectoryName(currentDirectory); // Move up one directory
+                localSavePath = $"{currentDirectory}" + $"\\Resources\\Song\\{artist} - {title}.mid";
+
+            }
+
+            if (string.IsNullOrEmpty(localSavePath))
+            {
+                Console.WriteLine($"Target directory '{targetDirectory}' not found.");
+                return;
+            }
+
+            try
+            {
+                using (var sftp = new SftpClient(host, username, password))
+                {
+                    sftp.Connect();
+
+                    if (!sftp.Exists(remoteFilePath))
+                    {
+                        Console.WriteLine($"File does not exist on the server: {remoteFilePath}");
+                        return;
+                    }
+
+                    using (Stream fileStream = File.Create(localSavePath))
+                    {
+                        sftp.DownloadFile(remoteFilePath, fileStream);
+                    }
+
+                    sftp.Disconnect();
+                    Console.WriteLine($"Downloaded song '{title}' by '{artist}' to {localSavePath}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+        }
+
+
+        public void UploadSong(string name, string artist, string localPath)
+        {
+            string host = "145.44.235.225";
+            string username = "student";
+            string password = "PianoHero";
+            string remoteFilePath = Path.Combine("/home/student/Music", $"{artist} - {name}.mid");
+            string localSavePath = Path.Combine(localPath);
+
             using (var sftp = new SftpClient(host, username, password))
             {
                 sftp.Connect();
 
-                using (Stream fileStream = File.Create(localSavePath))
+                if (!File.Exists(localSavePath))
                 {
-                    sftp.DownloadFile(remoteFilePath, fileStream);
+                    throw new FileNotFoundException($"The file does not exist at the specified path: {localSavePath}");
                 }
 
-                sftp.Disconnect();
+                try
+                {
+                    using (Stream fileStream = File.OpenRead(localSavePath))
+                    {
+                        remoteFilePath = remoteFilePath.Replace("\\", "/");
+                        sftp.UploadFile(fileStream, remoteFilePath);
+                        Console.WriteLine($"Successfully uploaded '{artist}' by '{name}' to the server.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"An error occurred while uploading the file: {ex.Message}");
+                }
+                finally
+                {
+                    sftp.Disconnect();
+                }
             }
-        }*/
+        }
+        public void UploadsongToDataBase(string name, string artiest, int length, int bpm, int diffeculty, string filepath)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open();
+
+                using (SqlCommand insertSongCommand = new SqlCommand("INSERT INTO Nummers (Title, Artiest, Lengte, Bpm, Moeilijkheid, Filepath) OUTPUT INSERTED.ID VALUES (@Title, @Artist, @Length, @Bpm, @Difficulty, @Filepath)", connection))
+                {
+                    insertSongCommand.Parameters.AddWithValue("@Title", name);
+                    insertSongCommand.Parameters.AddWithValue("@Artist", artiest);
+                    insertSongCommand.Parameters.AddWithValue("@Length", length);
+                    insertSongCommand.Parameters.AddWithValue("@Bpm", bpm);
+                    insertSongCommand.Parameters.AddWithValue("@Difficulty", diffeculty);
+                    insertSongCommand.Parameters.AddWithValue("@Filepath", filepath);
+
+                    // haalt de ID van het liedje
+                    var lastInsertedId = (int)insertSongCommand.ExecuteScalar();
+
+                    // Insert een score van 0 in het nieuwe liedje
+                    using (SqlCommand insertScoreCommand = new SqlCommand("USE PianoHeroDB \n INSERT INTO Scores (Score, NummerID) VALUES (0, @LastInsertedId)", connection))
+                    {
+                        insertScoreCommand.Parameters.AddWithValue("@LastInsertedId", lastInsertedId);
+                        insertScoreCommand.ExecuteNonQuery();
+                    }
+                }
+                connection.Close();
+            }
+        }
+
+        public DataView GetDataForGrid(int nummerId)
+        {
+           
+
+            string CmdString = string.Empty;
+            using (SqlConnection con = new SqlConnection(ConnectionString))
+            {
+                CmdString = $"SELECT Score FROM Scores WHERE NummerID = '{nummerId}'";
+                SqlCommand cmd = new SqlCommand(CmdString, con);
+                SqlDataAdapter sda = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                sda.Fill(dt);
+
+
+                return dt.DefaultView;
+            }
+        }
+
+        public List<Nummer> LijstFunc(string sqlcommand)
+        {
+            List<Nummer> nummers = new List<Nummer>();
+
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = sqlcommand;
+                    connection.Open();
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string title = reader.GetString(reader.GetOrdinal("Title"));
+                            string artiest = reader.GetString(reader.GetOrdinal("Artiest"));
+                            int lengte = reader.GetInt32(reader.GetOrdinal("Lengte"));
+                            int bpm = reader.GetInt32(reader.GetOrdinal("Bpm"));
+                            int moeilijkheid = reader.GetInt32(reader.GetOrdinal("Moeilijkheid"));
+                            int id = reader.GetInt32(reader.GetOrdinal("Id"));
+                            string filepath;
+                            int filepathOrdinal = reader.GetOrdinal("Filepath");
+                            if (!reader.IsDBNull(filepathOrdinal))
+                            {
+                                filepath = reader.GetString(filepathOrdinal);
+                            }
+                            else
+                            {
+                                filepath = null;
+                            }
+                            int score = reader.GetInt32(reader.GetOrdinal("Score"));
+                            Nummer nummer = new Nummer(title, artiest, lengte, bpm, moeilijkheid, id, filepath, score);
+                            nummers.Add(nummer);
+                        }
+                        connection.Close();
+                    }
+                }
+            }
+
+            return nummers;
+        }
         public int getNummersAmount()
         {
             if (!string.IsNullOrEmpty(ConnectionString))
@@ -47,7 +214,7 @@ namespace InEenNotendop.Data
                 using (SqlConnection connection = new SqlConnection(ConnectionString))
                 {
                     connection.Open();
-                    string sql = "SELECT COUNT(ID) FROM dbo.Nummers";
+                    string sql = "SELECT COUNT(ID) FROM Nummers";
                     using (SqlCommand command = new SqlCommand(sql,connection))
                     {
                         return (int)command.ExecuteScalar();
@@ -63,195 +230,25 @@ namespace InEenNotendop.Data
 
         public List<Nummer> MaakLijst()
         {
-            List<Nummer> nummers = new List<Nummer>();
-
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
-            {
-                using(var command = connection.CreateCommand())
-                {
-                    command.CommandText = "SELECT Title, Artiest, Lengte, Bpm, Moeilijkheid, ID, Filepath, Score FROM Nummers INNER JOIN Scores ON Nummers.ID = Scores.NummerID;";
-                    connection.Open();
-                    using(var reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            string title = reader.GetString(reader.GetOrdinal("Title"));
-                            string artiest = reader.GetString(reader.GetOrdinal("Artiest"));
-                            int lengte = reader.GetInt32(reader.GetOrdinal("Lengte"));
-                            int bpm = reader.GetInt32(reader.GetOrdinal("Bpm"));
-                            int moeilijkheid = reader.GetInt32(reader.GetOrdinal("Moeilijkheid"));
-                            int id = reader.GetInt32(reader.GetOrdinal("Id"));
-                            string filepath;
-                            int filepathOrdinal = reader.GetOrdinal("Filepath");
-                            if (!reader.IsDBNull(filepathOrdinal))
-                            {
-                                filepath = reader.GetString(filepathOrdinal);
-                            }
-                            else
-                            { 
-                                filepath = null;
-                            }
-                            int score = reader.GetInt32(reader.GetOrdinal("Score"));
-                            int minutes = (Convert.ToInt32(lengte) / 60);
-                            string minutesString = Convert.ToString(minutes);
-                            int seconds = (Convert.ToInt32(lengte) % 60);
-
-                            string secondsString = null;
-
-                            // 0 voor de secondes plakken als ze onder 10 zijn
-                            if (seconds < 10)
-                            {
-                                secondsString = "0" + seconds;
-                            }
-                            else
-                            {
-                                secondsString = seconds.ToString();
-                            }
-
-                            // minuten en secondes aan elkaar plakken
-                            string fullTime = minutesString + ":" + secondsString;
-
-                            Nummer nummer = new Nummer(title, artiest, fullTime, bpm, moeilijkheid, id, filepath, score);
-                        }
-                        connection.Close();
-                    }
-                }
-            }
-
-            return nummers;
+            return LijstFunc("SELECT Title, Artiest, Lengte, Bpm, Moeilijkheid, ID, Filepath, Score FROM Nummers INNER JOIN Scores ON Nummers.ID = Scores.NummerID;");
         }
 
         public List<Nummer> MakeSortedList(int Difficulty, string Sort)
         {
-            List<Nummer> nummers = new List<Nummer>();
-
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            if (Difficulty != 0)
             {
-                using (var command = connection.CreateCommand())
-                {
-                    if (Difficulty != 0)
-                    {
-                        command.CommandText = $"SELECT Title, Artiest, Lengte, Bpm, Moeilijkheid, ID, Filepath, Score FROM Nummers INNER JOIN Scores ON Nummers.ID = Scores.NummerID WHERE Moeilijkheid = {Difficulty} ORDER BY {Sort}";
-                    }
-                    else
-                    {
-                        command.CommandText = $"SELECT Title, Artiest, Lengte, Bpm, Moeilijkheid, ID, Filepath, Score FROM Nummers INNER JOIN Scores ON Nummers.ID = Scores.NummerID ORDER BY {Sort}";
-                    }
-                    
-                    connection.Open();
-                    using (var reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            string title = reader.GetString(reader.GetOrdinal("Title"));
-                            string artiest = reader.GetString(reader.GetOrdinal("Artiest"));
-                            int lengte = reader.GetInt32(reader.GetOrdinal("Lengte"));
-                            int bpm = reader.GetInt32(reader.GetOrdinal("Bpm"));
-                            int moeilijkheid = reader.GetInt32(reader.GetOrdinal("Moeilijkheid"));
-                            int id = reader.GetInt32(reader.GetOrdinal("Id"));
-                            string filepath;
-                            int filepathOrdinal = reader.GetOrdinal("Filepath");
-                            if (!reader.IsDBNull(filepathOrdinal))
-                            {
-                                filepath = reader.GetString(filepathOrdinal);
-                            }
-                            else
-                            {
-                                filepath = null;
-                            }
-                            int score = reader.GetInt32(reader.GetOrdinal("Score"));
-
-                            int minutes = (Convert.ToInt32(lengte) / 60);
-                            string minutesString = Convert.ToString(minutes);
-                            int seconds = (Convert.ToInt32(lengte) % 60);
-
-                            string secondsString = null;
-
-                            // 0 voor de secondes plakken als ze onder 10 zijn
-                            if (seconds < 10)
-                            {
-                                secondsString = "0" + seconds;
-                            }
-                            else
-                            {
-                                secondsString = seconds.ToString();
-                            }
-
-                            // minuten en secondes aan elkaar plakken
-                            string fullTime = minutesString + ":" + secondsString;
-
-                            Nummer nummer = new Nummer(title, artiest, fullTime, bpm, moeilijkheid, id, filepath, score);
-
-                            nummers.Add(nummer);
-                        }
-                        connection.Close();
-                    }
-                }
+                return LijstFunc($"SELECT Title, Artiest, Lengte, Bpm, Moeilijkheid, ID, Filepath, Score FROM Nummers INNER JOIN Scores ON Nummers.ID = Scores.NummerID WHERE Moeilijkheid = {Difficulty} ORDER BY {Sort}");
             }
-
-            return nummers;
+            else
+            {
+                return LijstFunc($"SELECT Title, Artiest, Lengte, Bpm, Moeilijkheid, ID, Filepath, Score FROM Nummers INNER JOIN Scores ON Nummers.ID = Scores.NummerID ORDER BY {Sort}");
+            }
         }
         public List<Nummer> MaakFilteredLijst(int Difficulty)
         {
-            List<Nummer> nummers = new List<Nummer>();
-
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
-            {
-                using (var command = connection.CreateCommand())
-                {
-                    command.CommandText = $"SELECT Title, Artiest, Lengte, Bpm, Moeilijkheid, ID, Filepath, Score FROM Nummers INNER JOIN Scores ON Nummers.ID = Scores.NummerID WHERE Moeilijkheid = {Difficulty}";
-                    connection.Open();
-                    using (var reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            string title = reader.GetString(reader.GetOrdinal("Title"));
-                            string artiest = reader.GetString(reader.GetOrdinal("Artiest"));
-                            int lengte = reader.GetInt32(reader.GetOrdinal("Lengte"));
-                            int bpm = reader.GetInt32(reader.GetOrdinal("Bpm"));
-                            int moeilijkheid = reader.GetInt32(reader.GetOrdinal("Moeilijkheid"));
-                            int id = reader.GetInt32(reader.GetOrdinal("Id"));
-                            string filepath;
-                            int filepathOrdinal = reader.GetOrdinal("Filepath");
-                            if (!reader.IsDBNull(filepathOrdinal))
-                            {
-                                filepath = reader.GetString(filepathOrdinal);
-                            }
-                            else
-                            {
-                                filepath = null;
-                            }
-                            int score = reader.GetInt32(reader.GetOrdinal("Score"));
-
-                            int minutes = (Convert.ToInt32(lengte) / 60);
-                            string minutesString = Convert.ToString(minutes);
-                            int seconds = (Convert.ToInt32(lengte) % 60);
-
-                            string secondsString = null;
-
-                            // 0 voor de secondes plakken als ze onder 10 zijn
-                            if (seconds < 10)
-                            {
-                                secondsString = "0" + seconds;
-                            }
-                            else
-                            {
-                                secondsString = seconds.ToString();
-                            }
-
-                            // minuten en secondes aan elkaar plakken
-                            string fullTime = minutesString + ":" + secondsString;
-
-                            Nummer nummer = new Nummer(title, artiest, fullTime, bpm, moeilijkheid, id, filepath, score);
-
-                            nummers.Add(nummer);
-                        }
-                        connection.Close();
-                    }
-                }
-            }
-            return nummers;
+            return LijstFunc($"SELECT Title, Artiest, Lengte, Bpm, Moeilijkheid, ID, Filepath, Score FROM Nummers INNER JOIN Scores ON Nummers.ID = Scores.NummerID WHERE Moeilijkheid = {Difficulty}");
         }
+
         public void ChangeHighscore(int ID, int Score)
         {
             using (SqlConnection connection = new SqlConnection(ConnectionString))
