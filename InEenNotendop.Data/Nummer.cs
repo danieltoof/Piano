@@ -10,14 +10,14 @@ namespace InEenNotendop.Data
     {
         public string Title { get; set; }
         public string Artiest { get; set; }
-        public string FullTime { get; set; }
+        public int FullTime { get; set; }
         public int Bpm { get; set; }
         public int Moeilijkheid { get; set; }
         public int Id { get; set; }
         public string Filepath { get; set; }
         public int Score { get; set; }
 
-        public Nummer(string title, string artiest, string fulltime, int bpm, int moeilijkheid, int id, string filepath, int score)
+        public Nummer(string title, string artiest, int fulltime, int bpm, int moeilijkheid, int id, string filepath, int score)
         {
             Title = title;
             Artiest = artiest;

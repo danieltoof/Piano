@@ -25,8 +25,9 @@ namespace InEenNotendop.UI
     {
         public Window Owner { get; set; }
         private SongsWindow songsWindow;
+        DataProgram dataProgram = new DataProgram();
         string FilePath;
-        public SelectingWindow(int nummerId, string moeilijkheidText, string Title, string Artiest, string Lengte, int Bpm, string FilePath, object sender)
+        public SelectingWindow(int nummerId, string moeilijkheidText, string Title, string Artiest, int Lengte, int Bpm, string FilePath, object sender)
         {
             InitializeComponent();
             songsWindow = (SongsWindow)sender;
@@ -48,17 +49,17 @@ namespace InEenNotendop.UI
             public string MoeilijkheidText { get; }
             public string Title { get; }
             public string Artiest { get; }
-            public string Lengte { get; }
+            public int Lengte { get; }
             public int Bpm { get; }
 
-            public NummerDetailsViewModel(int nummerId, string moeilijkheidText, string title, string artiest, string lengte, int bpm)
+            public NummerDetailsViewModel(int nummerId, string moeilijkheidText, string title, string artiest, int lengte, int bpm)
             {
                 NummerIdText = $"Clicked on Nummer with ID: {nummerId}";
                 MoeilijkheidText = $"Difficulty: {moeilijkheidText}";
                 Title = title;
-                Artiest = artiest ;
+                Artiest = artiest;
                 Lengte = lengte;
-                Bpm = bpm ;
+                Bpm = bpm;
 
             }
         }
@@ -74,26 +75,19 @@ namespace InEenNotendop.UI
             //playWindow.StartPlay(@"..\..\..\..\midi-test\midis\Coldplay - Viva La Vida.mid"); //TODO: geef variabele mee
         }
 
+        private void OnDownloadClicked(object sender, RoutedEventArgs e)
+        {
+            var viewModel = DataContext as NummerDetailsViewModel;
+
+            dataProgram.DownloadSong(viewModel.Artiest,viewModel.Title);  
+        }
+
+
         private void FillDataGrid(int nummerId)
         {
-            string user = System.Net.Dns.GetHostName() + "\\" + Environment.UserName;
-            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
-            builder.DataSource = "(localdb)\\MSSQLLocalDB";
-            builder.IntegratedSecurity = true;
-            builder.UserID = user;
-            builder.Password = "";
-            builder.ApplicationIntent = ApplicationIntent.ReadWrite;
-
-            string CmdString = string.Empty;
-            using (SqlConnection con = new SqlConnection(builder.ConnectionString))
-            {
-                CmdString = $"USE PianoHeroDB \n SELECT score, SpelerID FROM HighScore WHERE NummerID = '{nummerId}'";
-                SqlCommand cmd = new SqlCommand(CmdString, con);
-                SqlDataAdapter sda = new SqlDataAdapter(cmd);
-                DataTable dt = new DataTable();
-                sda.Fill(dt);
-                HighScoresGrid.ItemsSource = dt.DefaultView;
-            }
+            HighScoresGrid.ItemsSource = dataProgram.GetDataForGrid(nummerId);
         }
+
     }
+
 }
