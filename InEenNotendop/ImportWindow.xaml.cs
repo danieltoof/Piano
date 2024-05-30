@@ -120,7 +120,6 @@ namespace InEenNotendop.UI
 
             int songLength = GetLength(FilePath);
             int bpm = GetStartTempo(FilePath);
-            //string filepath = $@"\Resources\Song\{ImportArtist.Text} - {ImportName.Text}.mid";
             string filepath = @"..\..\..\Resources\Song\" + ImportArtist.Text + " - " + ImportName.Text + ".mid";
 
             data.UploadsongToDataBase(ImportName.Text, ImportArtist.Text, songLength, bpm, diffecultyCheckbox, filepath);
