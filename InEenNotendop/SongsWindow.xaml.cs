@@ -33,8 +33,6 @@ namespace InEenNotendop.UI
         public SongsWindow(SettingsWindow settingsWindow)
         {
             InitializeComponent();
-            dataProgram = new DataProgram();
-            dataProgram.StartSshTunnel();
             
             this.settingsWindow = settingsWindow;
             this.settingsWindow.ChangeSettingsOwner(this);

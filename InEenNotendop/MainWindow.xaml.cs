@@ -60,6 +60,7 @@ namespace InEenNotendop
 
         private void ExitButton_OnClick(object sender, RoutedEventArgs e)
         {
+            data.StopSshTunnel();
             Environment.Exit(0);
         }
 

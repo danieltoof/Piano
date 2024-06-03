@@ -11,18 +11,72 @@ namespace InEenNotendop.Data
     public class DataProgram
     {
         public string ConnectionString = "Data Source=127.0.0.1,1433;Initial Catalog=PianoHeroDB;User ID=Newlogin;Password=VeryStr0ngP@ssw0rd;Encrypt=False;";
+        private Process sshTunnelProcess;
+        private bool sshtunnelStarted = false;
 
         public void StartSshTunnel()
         {
-            ProcessStartInfo psi = new ProcessStartInfo
+            if (!sshtunnelStarted)
             {
-                FileName = "powershell.exe",
-                Arguments = ".\\sshtunnel.ps1",
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                CreateNoWindow = true
-            };
+                string currentDirectory = Directory.GetCurrentDirectory();
+                string targetDirectory = "InEenNotendop";
+                string sshTunnelFile = "";
+                while (!currentDirectory.EndsWith(targetDirectory) && !string.IsNullOrEmpty(currentDirectory))
+                {
+                    if (Directory.Exists(sshTunnelFile))
+                    {
+                        break; // Found the target directory, exit the loop
+                    }
+                    currentDirectory = Path.GetDirectoryName(currentDirectory); // Move up one directory
+                    sshTunnelFile = $"{currentDirectory}\\sshtunnel.ps1";
+                }
+
+                ProcessStartInfo psi = new ProcessStartInfo
+                {
+                    FileName = "powershell.exe",
+                    Arguments = sshTunnelFile,
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    CreateNoWindow = true
+                };
+
+                sshTunnelProcess = Process.Start(psi);
+                sshtunnelStarted = true;
+                 
+            }
+        }
+        public void StopSshTunnel()
+        {
+            if (sshtunnelStarted)
+            {
+                string currentDirectory = Directory.GetCurrentDirectory();
+                string targetDirectory = "InEenNotendop";
+                string sshTunnelFile = "";
+                while (!currentDirectory.EndsWith(targetDirectory) && !string.IsNullOrEmpty(currentDirectory))
+                {
+                    if (Directory.Exists(sshTunnelFile))
+                    {
+                        break; // Found the target directory, exit the loop
+                    }
+                    currentDirectory = Path.GetDirectoryName(currentDirectory); // Move up one directory
+                    sshTunnelFile = $"{currentDirectory}\\StopSshTunnel.ps1";
+                }
+
+                ProcessStartInfo psi = new ProcessStartInfo
+                {
+                    FileName = "powershell.exe",
+                    Arguments = sshTunnelFile,
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    CreateNoWindow = false
+                };
+
+                sshTunnelProcess = Process.Start(psi);
+                sshtunnelStarted = true;
+
+            }
         }
 
         public void DownloadSong(string artist, string title)

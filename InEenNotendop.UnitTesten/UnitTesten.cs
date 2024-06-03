@@ -195,5 +195,7 @@ namespace InEenNotendop.UI.Tests
 
         }
     }
+    [TestClass]
+    public class StartSshTunnel_SSHtunnel
 
 }
