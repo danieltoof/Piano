@@ -25,6 +25,7 @@ namespace InEenNotendop.UI
         public Window Owner { get; set; }
         private MainWindow mainWindow;
         private SongsWindow songWindow;
+        private MidiPlayWindow midiPlayWindow;
         private int isOkToClose = 0;
         
         public SettingsWindow(object sender)
@@ -39,6 +40,11 @@ namespace InEenNotendop.UI
                 case SongsWindow:
                     songWindow = (SongsWindow)sender;
                     Owner = songWindow;
+                    break;
+                case MidiPlayWindow:
+                    midiPlayWindow = (MidiPlayWindow)sender;
+                    Owner = midiPlayWindow;
+                    Owner.Closing += Owner_Closing;
                     break;
             }
 
@@ -95,8 +101,12 @@ namespace InEenNotendop.UI
                     Owner = songWindow;
                     Owner.Closing += Owner_Closing;
                     break;
+                case MidiPlayWindow:
+                    midiPlayWindow = (MidiPlayWindow)sender;
+                    Owner = midiPlayWindow;
+                    Owner.Closing += Owner_Closing;
+                    break;
             }
-
         }
 
         private void DarkOrLightMode_OnClick(object sender, RoutedEventArgs e)

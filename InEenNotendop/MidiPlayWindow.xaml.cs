@@ -25,7 +25,7 @@ namespace InEenNotendop.UI
     /// </summary>
     public partial class MidiPlayWindow : Window
     {
-        public Window Owner { get; set; }
+        private SettingsWindow settingsWindow;
 
         private bool playMidiFile = false;
         private bool freePlay = false;
@@ -66,8 +66,10 @@ namespace InEenNotendop.UI
         }
 
 
-        public MidiPlayWindow(string FilePath, object sender, bool playMidiFile)
+        public MidiPlayWindow(string FilePath, object sender, bool playMidiFile, SettingsWindow settingsWindow)
         {
+            this.settingsWindow = settingsWindow;
+            this.settingsWindow.ChangeSettingsOwner(this);
             this.playMidiFile = playMidiFile;
             midiInputProcessor = new MidiInputProcessor();
 
@@ -75,12 +77,10 @@ namespace InEenNotendop.UI
             stopwatch.Start();
             try
             {
-                midiFileSong =
-    new MidiFile(FilePath);
+                midiFileSong = new MidiFile(FilePath);
             } catch (FileNotFoundException e)
             {
                 MessageBox.Show(e.Message);
-
             }
 
             //_notesOfSongList = _midiInputProcessor.MidiToList(smokeOnTheWater);
