@@ -17,6 +17,7 @@ using System.Windows.Media.Animation;
 using static Azure.Core.HttpHeader;
 using System;
 using System.IO;
+using InEenNotendop.Data;
 
 namespace InEenNotendop.UI
 {
@@ -33,6 +34,9 @@ namespace InEenNotendop.UI
         private MidiIn midiIn;
         private MidiPlayer midiPlayer;
         private MidiFile midiFileSong;
+
+        DataProgram dataProgram = new DataProgram();
+        private int nummerID;
 
         private string? desiredOutDevice { get; set; }
         //Kleurtjes van keys
@@ -70,6 +74,7 @@ namespace InEenNotendop.UI
         {
             this.settingsWindow = settingsWindow;
             this.settingsWindow.ChangeSettingsOwner(this);
+
             this.playMidiFile = playMidiFile;
             midiInputProcessor = new MidiInputProcessor();
 
@@ -77,7 +82,9 @@ namespace InEenNotendop.UI
             stopwatch.Start();
             try
             {
+
                 midiFileSong = new MidiFile(FilePath);
+
             } catch (FileNotFoundException e)
             {
                 MessageBox.Show(e.Message);
@@ -362,9 +369,8 @@ namespace InEenNotendop.UI
             midiIn.Dispose();
             midiPlayer.Dispose();
             midiInputScoreCalculator.CalculateScoreAfterSongCompleted();
+            dataProgram.ChangeHighscore(nummerID, (int)midiInputScoreCalculator.Score);
             MessageBox.Show($"Score : {midiInputScoreCalculator.Score}");
-
-
         }
 
     }
