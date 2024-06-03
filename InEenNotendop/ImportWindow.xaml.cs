@@ -40,7 +40,8 @@ namespace InEenNotendop.UI
             CheckDarkOrLight();
         }
 
-        private void selectFile_Click(object sender, RoutedEventArgs e) // Code to process selecting file
+        // Code to process selecting file
+        private void selectFile_Click(object sender, RoutedEventArgs e) 
         {
             var dialog = new Microsoft.Win32.OpenFileDialog();
             dialog.DefaultExt = ".midi"; // Default file extension
@@ -58,7 +59,8 @@ namespace InEenNotendop.UI
             }
         }
 
-        private async void saveButton_Click(object sender, RoutedEventArgs e) // Code to process save button
+        // Code to process save button
+        private async void saveButton_Click(object sender, RoutedEventArgs e) 
         {
             int error = 1;
             int diffecultyCheckbox = 1;
@@ -100,7 +102,8 @@ namespace InEenNotendop.UI
             }
             else { songArtist = ImportArtist.Text; error = 0; }
 
-            if (string.IsNullOrEmpty(FilePath) && string.IsNullOrEmpty(FileName)) // Checks if file is selected
+            // Checks if file is selected
+            if (string.IsNullOrEmpty(FilePath) && string.IsNullOrEmpty(FileName)) 
             {
                 error = 1;
                 MessageBox.Show("Select a file");

@@ -45,7 +45,8 @@ namespace InEenNotendop.UI
             Owner.Closing += Owner_Closing;
         }
 
-        private void Owner_Closing(object? sender, CancelEventArgs e) // Makes sure settings window is closed when application is closed
+        // Makes sure settings window is closed when application is closed
+        private void Owner_Closing(object? sender, CancelEventArgs e) 
         {
             if (sender.Equals(Owner))
             {
@@ -53,7 +54,9 @@ namespace InEenNotendop.UI
                 Close();
             }
         }
-        protected override void OnClosing(CancelEventArgs e) // Makes sure settings window is not closed when not needed
+
+        // Makes sure settings window is not closed when not needed
+        protected override void OnClosing(CancelEventArgs e) 
         {
             if (isOkToClose != 1)
             {
@@ -66,9 +69,11 @@ namespace InEenNotendop.UI
             }
         }
 
-        public void OpenSettings() // Opens settings window
+        // Opens settings window
+        public void OpenSettings() 
         {
-            if (Owner is MainWindow) // Makes sure main menu button is not visible when on main menu
+            // Makes sure main menu button is not visible when on main menu
+            if (Owner is MainWindow) 
             {
                 MainMenuButton.Visibility = Visibility.Hidden;
             } else if (Owner is not MainWindow)
@@ -78,8 +83,8 @@ namespace InEenNotendop.UI
             ShowDialog();
         }
 
-
-        public void ChangeSettingsOwner(object sender) // Changes owner of settings window when switching between main menu and songs window
+        // Changes owner of settings window when switching between main menu and songs window
+        public void ChangeSettingsOwner(object sender) 
         {
             Owner.Closing -= Owner_Closing;
             switch (sender)
@@ -98,12 +103,14 @@ namespace InEenNotendop.UI
 
         }
 
-        private void DarkOrLightMode_OnClick(object sender, RoutedEventArgs e) // Gets the lightmode value of its current owner
+        // Gets the lightmode value of its current owner
+        private void DarkOrLightMode_OnClick(object sender, RoutedEventArgs e) 
         {
             CheckDarkOrLight(Owner);
         }
 
-        private void CheckDarkOrLight(object sender) // Checks lightmode value, and switches between dark- and lightmode
+        // Checks lightmode value, and switches between dark- and lightmode
+        private void CheckDarkOrLight(object sender) 
         {
             if (lightmode == 0)
             {
@@ -115,10 +122,11 @@ namespace InEenNotendop.UI
             }
         }
 
-
-        public void SetLightMode(object sender) // Code to change application to light mode
+        // Code to change application to light mode
+        public void SetLightMode(object sender) 
         {
-            switch (sender) // Makes sure the correct background is changed
+            // Makes sure the correct background is changed
+            switch (sender) 
             {
                 case MainWindow:
                     mainWindow.MainGrid.Background = Brushes.White;
@@ -137,7 +145,8 @@ namespace InEenNotendop.UI
 
         public void SetDarkMode(object sender)
         {
-            switch (sender) // Makes sure the correct background is changed
+            // Makes sure the correct background is changed
+            switch (sender) 
             {
                 case MainWindow:
                     mainWindow.MainGrid.Background = new SolidColorBrush(Color.FromRgb(25, 44, 49)); ;
@@ -158,17 +167,20 @@ namespace InEenNotendop.UI
             return lightmode;
         }
 
-        private void ExitButton_OnClick(object sender, RoutedEventArgs e) // Closes entire application when exit button is pressed
+        // Closes entire application when exit button is pressed
+        private void ExitButton_OnClick(object sender, RoutedEventArgs e) 
         {
             Environment.Exit(0);
         }
 
-        private void MainMenuButton_OnClick(object sender, RoutedEventArgs e) // Calls method to go back to main menu
+        // Calls method to go back to main menu
+        private void MainMenuButton_OnClick(object sender, RoutedEventArgs e) 
         {
             MainMenu();
         }
 
-        public void MainMenu() // Logic to go back to main menu
+        // Logic to go back to main menu
+        public void MainMenu() 
         {
             Window previousOwner = Owner;
             MainWindow mainWindow = new MainWindow(this);

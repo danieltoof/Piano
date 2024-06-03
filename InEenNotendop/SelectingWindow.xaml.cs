@@ -44,8 +44,8 @@ namespace InEenNotendop.UI
             Close();
         }
 
-
-        public class NummerDetailsViewModel // Class and constructor for detailed song screen
+        // Class and constructor for detailed song screen
+        public class NummerDetailsViewModel 
         {
             public string NummerIdText { get; }
             public string MoeilijkheidText { get; }
@@ -65,7 +65,7 @@ namespace InEenNotendop.UI
 
             }
         }
-        private void PLAY_Button_Click(object sender, RoutedEventArgs e) // 
+        private void PLAY_Button_Click(object sender, RoutedEventArgs e)
         {
             MidiPlayWindow midiPlayWindow = new MidiPlayWindow(FilePath, this, false, nummerID);
             Owner.Close();
@@ -94,8 +94,5 @@ namespace InEenNotendop.UI
         {
             HighScoresGrid.ItemsSource = dataProgram.GetDataForGrid(nummerId);
         }
-
-
     }
-
 }

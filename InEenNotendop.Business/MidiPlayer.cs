@@ -3,7 +3,8 @@ using System.Threading.Channels;
 
 namespace InEenNotendop.Business;
 
-public class MidiPlayer // Code for handling the Midi device input
+// Code for handling the Midi device input
+public class MidiPlayer 
 {
     private MidiOut midiOut;
 
