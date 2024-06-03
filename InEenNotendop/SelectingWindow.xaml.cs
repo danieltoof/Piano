@@ -27,6 +27,7 @@ namespace InEenNotendop.UI
         private SongsWindow songsWindow;
         DataProgram dataProgram = new DataProgram();
         string FilePath;
+        private int nummerID;
         public SelectingWindow(int nummerId, string moeilijkheidText, string Title, string Artiest, int Lengte, int Bpm, string FilePath, object sender)
         {
             InitializeComponent();
@@ -35,6 +36,7 @@ namespace InEenNotendop.UI
             this.FilePath = FilePath;
             DataContext = new NummerDetailsViewModel(nummerId, moeilijkheidText, Title, Artiest, Lengte, Bpm);
             FillDataGrid(nummerId);
+            this.nummerID = nummerId;
         }
 
         private void OnCloseClicked(object sender, RoutedEventArgs e)
@@ -43,7 +45,7 @@ namespace InEenNotendop.UI
         }
 
 
-        public class NummerDetailsViewModel
+        public class NummerDetailsViewModel // Class and constructor for detailed song screen
         {
             public string NummerIdText { get; }
             public string MoeilijkheidText { get; }
@@ -63,16 +65,16 @@ namespace InEenNotendop.UI
 
             }
         }
-        private void PLAY_Button_Click(object sender, RoutedEventArgs e)
+        private void PLAY_Button_Click(object sender, RoutedEventArgs e) // 
         {
-            MidiPlayWindow midiPlayWindow = new MidiPlayWindow(FilePath, this, false);
+            MidiPlayWindow midiPlayWindow = new MidiPlayWindow(FilePath, this, false, nummerID);
             Owner.Close();
             midiPlayWindow.Show();
             Close();
         }
         private void AUTOPLAY_Button_Click(object sender, RoutedEventArgs e)
         {
-            MidiPlayWindow midiPlayWindow = new MidiPlayWindow(FilePath, this, true);
+            MidiPlayWindow midiPlayWindow = new MidiPlayWindow(FilePath, this, true, nummerID);
             //SongsWindow songsWindow = SongsWindow();
             Owner.Close();
             midiPlayWindow.Show();

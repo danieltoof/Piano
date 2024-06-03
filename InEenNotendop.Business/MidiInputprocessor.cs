@@ -57,16 +57,6 @@ namespace InEenNotendop.Business
 
             return ListOfNotesSong;
         }
-
-
-
-
-
-
-
-
-
-
     }
 
     public static class MidiUtilities
@@ -92,8 +82,6 @@ namespace InEenNotendop.Business
         public bool IsPlaying { get; set; }
         public bool IsBlockGenerated { get; set; } = false;
         public bool ScoreIsCalculated = false;
-
-
 
         public Note(NoteOnEvent noteOnEvent, TimeSpan startTime) // voor midi input
         {

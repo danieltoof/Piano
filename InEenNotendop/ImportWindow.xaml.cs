@@ -38,11 +38,9 @@ namespace InEenNotendop.UI
             InitializeComponent();
             lightmode = lightmodeImport;
             CheckDarkOrLight();
-            
-
         }
 
-        private void selectFile_Click(object sender, RoutedEventArgs e)
+        private void selectFile_Click(object sender, RoutedEventArgs e) // Code to process selecting file
         {
             var dialog = new Microsoft.Win32.OpenFileDialog();
             dialog.DefaultExt = ".midi"; // Default file extension
@@ -60,7 +58,7 @@ namespace InEenNotendop.UI
             }
         }
 
-        private async void saveButton_Click(object sender, RoutedEventArgs e)
+        private async void saveButton_Click(object sender, RoutedEventArgs e) // Code to process save button
         {
             int error = 1;
             int diffecultyCheckbox = 1;
@@ -69,7 +67,7 @@ namespace InEenNotendop.UI
             string songName;
             string songArtist;
 
-            RadioButton rb = FindVisualChildren<RadioButton>(ImportDiffeculty).FirstOrDefault(x => x.IsChecked == true);
+            RadioButton rb = FindVisualChildren<RadioButton>(ImportDiffeculty).FirstOrDefault(x => x.IsChecked == true); // Gets selected difficulty from radio button
             if (rb != null)
             {
                 checkedValue = rb.Content.ToString();
@@ -102,19 +100,10 @@ namespace InEenNotendop.UI
             }
             else { songArtist = ImportArtist.Text; error = 0; }
 
-            try
+            if (string.IsNullOrEmpty(FilePath) && string.IsNullOrEmpty(FileName)) // Checks if file is selected
             {
-                // move selected file
-                if (string.IsNullOrEmpty(FilePath) && string.IsNullOrEmpty(FileName))
-                {
-                    error = 1;
-                    MessageBox.Show("Select a file");
-                }
-                else { error = 0; }
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine("Name duplicate");
+                error = 1;
+                MessageBox.Show("Select a file");
             }
 
 
@@ -195,7 +184,7 @@ namespace InEenNotendop.UI
                 return 0;
             }
         }
-        private static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
+        private static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject // Code to process the finding of the value from the radio button
         {
             if (depObj != null)
             {
@@ -218,7 +207,7 @@ namespace InEenNotendop.UI
             }
         }
 
-        private void CheckDarkOrLight() // veranderd light mode naar dark mode en dark mode naar light mode
+        private void CheckDarkOrLight() // Checks lightmode value and changes between dark- and lightmode
         {
             if (lightmode == 1)
             {

@@ -45,16 +45,15 @@ namespace InEenNotendop.UI
             Owner.Closing += Owner_Closing;
         }
 
-        private void Owner_Closing(object? sender, CancelEventArgs e)
+        private void Owner_Closing(object? sender, CancelEventArgs e) // Makes sure settings window is closed when application is closed
         {
             if (sender.Equals(Owner))
             {
                 isOkToClose = 1;
                 Close();
             }
-
         }
-        protected override void OnClosing(CancelEventArgs e)
+        protected override void OnClosing(CancelEventArgs e) // Makes sure settings window is not closed when not needed
         {
             if (isOkToClose != 1)
             {
@@ -67,9 +66,9 @@ namespace InEenNotendop.UI
             }
         }
 
-        public void OpenSettings()
+        public void OpenSettings() // Opens settings window
         {
-            if (Owner is MainWindow)
+            if (Owner is MainWindow) // Makes sure main menu button is not visible when on main menu
             {
                 MainMenuButton.Visibility = Visibility.Hidden;
             } else if (Owner is not MainWindow)
@@ -80,7 +79,7 @@ namespace InEenNotendop.UI
         }
 
 
-        public void ChangeSettingsOwner(object sender)
+        public void ChangeSettingsOwner(object sender) // Changes owner of settings window when switching between main menu and songs window
         {
             Owner.Closing -= Owner_Closing;
             switch (sender)
@@ -99,12 +98,12 @@ namespace InEenNotendop.UI
 
         }
 
-        private void DarkOrLightMode_OnClick(object sender, RoutedEventArgs e)
+        private void DarkOrLightMode_OnClick(object sender, RoutedEventArgs e) // Gets the lightmode value of its current owner
         {
             CheckDarkOrLight(Owner);
         }
 
-        private void CheckDarkOrLight(object sender) // veranderd light mode naar dark mode en dark mode naar light mode
+        private void CheckDarkOrLight(object sender) // Checks lightmode value, and switches between dark- and lightmode
         {
             if (lightmode == 0)
             {
@@ -117,77 +116,59 @@ namespace InEenNotendop.UI
         }
 
 
-        public void SetLightMode(object sender) // zet hier alle dingen die veranderen van kleur
+        public void SetLightMode(object sender) // Code to change application to light mode
         {
-
-            if (sender is MainWindow)
+            switch (sender) // Makes sure the correct background is changed
             {
-                //Alles van Start menu
-                mainWindow.MainGrid.Background = Brushes.White;
-                
+                case MainWindow:
+                    mainWindow.MainGrid.Background = Brushes.White;
+                    break;
+                case SongsWindow:
+                    songWindow.SongsGrid.Background = Brushes.White;
+                    break;
             }
 
-            if (sender is SongsWindow)
-            {
-                //Alles van de songs menu
-                songWindow.SongsGrid.Background = Brushes.White;
-            }
-
-
-            //Alles van main settings menu
             DarkOrLightMode.Content = "Light mode";
             SettingsGrid.Background = Brushes.White;
             SettingsText.Foreground = Brushes.Black;
 
-
-            //Setten van lightmode
             lightmode = 1;
         }
 
         public void SetDarkMode(object sender)
         {
-
-            if (sender is MainWindow)
+            switch (sender) // Makes sure the correct background is changed
             {
-                mainWindow.MainGrid.Background = new SolidColorBrush(Color.FromRgb(25, 44, 49));
-                
+                case MainWindow:
+                    mainWindow.MainGrid.Background = new SolidColorBrush(Color.FromRgb(25, 44, 49)); ;
+                    break;
+                case SongsWindow:
+                    songWindow.SongsGrid.Background = new SolidColorBrush(Color.FromRgb(25, 44, 49)); ;
+                    break;
             }
 
-            if (sender is SongsWindow)
-            {
-                songWindow.SongsGrid.Background = new SolidColorBrush(Color.FromRgb(25, 44, 49));
-            }
-
-
-
-            //Alles van main settings menu
             DarkOrLightMode.Content = "Dark mode";
             SettingsGrid.Background = new SolidColorBrush(Color.FromRgb(25, 44, 49));
             SettingsText.Foreground = Brushes.White;
 
-            //Setten van lightmode 
             lightmode = 0;
         }
-
         public int GetLightMode()
         {
             return lightmode;
         }
 
-
-
-
-        private void ExitButton_OnClick(object sender, RoutedEventArgs e)
+        private void ExitButton_OnClick(object sender, RoutedEventArgs e) // Closes entire application when exit button is pressed
         {
             Environment.Exit(0);
         }
 
-        private void MainMenuButton_OnClick(object sender, RoutedEventArgs e)
+        private void MainMenuButton_OnClick(object sender, RoutedEventArgs e) // Calls method to go back to main menu
         {
             MainMenu();
         }
 
-        public void MainMenu()
+        public void MainMenu() // Logic to go back to main menu
         {
             Window previousOwner = Owner;
             MainWindow mainWindow = new MainWindow(this);

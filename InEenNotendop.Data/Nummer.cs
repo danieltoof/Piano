@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace InEenNotendop.Data
 {
-    public class Nummer
+    public class Nummer // Custom class for songs
     {
         public string Title { get; set; }
         public string Artiest { get; set; }
