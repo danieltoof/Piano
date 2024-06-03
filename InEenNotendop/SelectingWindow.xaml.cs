@@ -63,16 +63,21 @@ namespace InEenNotendop.UI
 
             }
         }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void PLAY_Button_Click(object sender, RoutedEventArgs e)
         {
-            PlayWindow playWindow = new PlayWindow(FilePath, this);
+            MidiPlayWindow midiPlayWindow = new MidiPlayWindow(FilePath, this, false);
+            Owner.Close();
+            midiPlayWindow.Show();
+            Close();
+        }
+        private void AUTOPLAY_Button_Click(object sender, RoutedEventArgs e)
+        {
+            MidiPlayWindow midiPlayWindow = new MidiPlayWindow(FilePath, this, true);
             //SongsWindow songsWindow = SongsWindow();
             Owner.Close();
-            playWindow.Show();
+            midiPlayWindow.Show();
             Close();
-            //SongsWindow.Close();
-            //playWindow.StartPlay(@"..\..\..\..\midi-test\midis\Coldplay - Viva La Vida.mid"); //TODO: geef variabele mee
+
         }
 
         private void OnDownloadClicked(object sender, RoutedEventArgs e)
@@ -87,6 +92,7 @@ namespace InEenNotendop.UI
         {
             HighScoresGrid.ItemsSource = dataProgram.GetDataForGrid(nummerId);
         }
+
 
     }
 
