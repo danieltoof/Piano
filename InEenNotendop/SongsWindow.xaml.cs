@@ -73,7 +73,8 @@ namespace InEenNotendop.UI
             settingsWindow.OpenSettings();
         }
 
-        private void OnNumberClicked(object sender, MouseButtonEventArgs e)
+        // Creates pop-up window with detailed song information
+        private void OnNumberClicked(object sender, MouseButtonEventArgs e) 
         {
             if (sender is FrameworkElement clickedElement)
             {
@@ -96,8 +97,8 @@ namespace InEenNotendop.UI
             }
         }
 
-
-        private void CheckDarkOrLight() // veranderd light mode naar dark mode en dark mode naar light mode
+        // Checks lightmode value and changes between dark- and lightmode
+        private void CheckDarkOrLight() 
         {
             if (settingsWindow.lightmode == 1)
             {
@@ -109,7 +110,8 @@ namespace InEenNotendop.UI
             }
         }
 
-        private void ImportButton_OnClick(object sender, RoutedEventArgs e)
+        // Opens window to import song and refreshes list
+        private void ImportButton_OnClick(object sender, RoutedEventArgs e) 
         {
             lightmodeImport = settingsWindow.lightmode;
             ImportWindow import = new ImportWindow(lightmodeImport);
@@ -117,11 +119,10 @@ namespace InEenNotendop.UI
             Nummer.ItemsSource = dataProgram.MaakLijst();
         }
 
-
-        private void FilterBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        // Changes list to filtered list
+        private void FilterBox_SelectionChanged(object sender, SelectionChangedEventArgs e) 
         {
             string Filter = (sender as System.Windows.Controls.ComboBox).SelectedItem as string;
-
             switch (Filter)
             {
                 case "Easy":
@@ -137,7 +138,6 @@ namespace InEenNotendop.UI
                     Difficulty = 0;
                     break;
             }
-
             if (Difficulty != 0)
             {
                 Nummer.ItemsSource = dataProgram.MaakFilteredLijst(Difficulty);
@@ -146,10 +146,10 @@ namespace InEenNotendop.UI
             {
                 Nummer.ItemsSource = dataProgram.MaakLijst();
             }
-            
         }
 
-        private void SortBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        // Changes list to be sorted by chosen sorting method
+        private void SortBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e) 
         {
             string Sort = (sender as System.Windows.Controls.ComboBox).SelectedItem as string;
             string CompleteSort = "";
@@ -171,8 +171,9 @@ namespace InEenNotendop.UI
             
             Nummer.ItemsSource = dataProgram.MakeSortedList(Difficulty, CompleteSort);
         }
-        
-        private void BackButton_Click(object sender, RoutedEventArgs e)
+
+        // Goes back to main menu
+        private void BackButton_Click(object sender, RoutedEventArgs e) 
         {
             MainWindow mainWindow = new MainWindow();
             mainWindow.Show(); 

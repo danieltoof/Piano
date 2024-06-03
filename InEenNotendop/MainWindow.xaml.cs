@@ -23,8 +23,8 @@ namespace InEenNotendop
         public SettingsWindow settingsWindow;
         DataProgram data = new DataProgram();
 
-
-        public MainWindow()
+        // Default constructor
+        public MainWindow() 
         {
             InitializeComponent();
             settingsWindow = new SettingsWindow(this);
@@ -33,7 +33,8 @@ namespace InEenNotendop
             CheckDarkOrLight();
         }
 
-        public MainWindow(SettingsWindow settingsWindow)
+        // Constructor used for main menu button
+        public MainWindow(SettingsWindow settingsWindow) 
         {
             InitializeComponent();
             this.settingsWindow = settingsWindow;
@@ -42,12 +43,10 @@ namespace InEenNotendop
             this.settingsWindow.MainMenuButton.Visibility = Visibility.Hidden;
         }
 
-
-
-        public int CheckLightMode() // checkt systeem instellingen
+        // Checks system setting for lightmode
+        public int CheckLightMode() 
         {
             return settingsWindow.lightmode = (int)Microsoft.Win32.Registry.GetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", "AppsUseLightTheme", 1);
-
         }
 
 
@@ -68,7 +67,8 @@ namespace InEenNotendop
             settingsWindow.OpenSettings();
         }
 
-        private void CheckDarkOrLight() // veranderd light mode naar dark mode en dark mode naar light mode
+        // Checks lightmode value and changes between dark- and lightmode
+        private void CheckDarkOrLight() 
         {
             if (settingsWindow.lightmode == 1)
             {

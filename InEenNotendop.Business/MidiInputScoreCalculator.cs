@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using System.Diagnostics;
+
 
 namespace InEenNotendop.Business;
 
@@ -100,14 +100,8 @@ public class MidiInputScoreCalculator
                     }
                 }
             }
-            
-
             Score = Math.Round(Score);
-
         }
-
-
-
         return (int)Score;
     }
 

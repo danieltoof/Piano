@@ -8,11 +8,13 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace InEenNotendop.Data
 {
-    public class DataProgram
+    // Code to handle data coming from and going to the database
+    public class DataProgram 
     {
         public string ConnectionString = "Data Source=127.0.0.1,1433;Initial Catalog=PianoHeroDB;User ID=Newlogin;Password=VeryStr0ngP@ssw0rd;Encrypt=False;";
 
-        public void StartSshTunnel()
+        // Starts the powershell script to connect to the database
+        public void StartSshTunnel() 
         {
             ProcessStartInfo psi = new ProcessStartInfo
             {
@@ -25,7 +27,8 @@ namespace InEenNotendop.Data
             };
         }
 
-        public void DownloadSong(string artist, string title)
+        // Downloads selected song from the database
+        public void DownloadSong(string artist, string title) 
         {
             string host = "145.44.235.225";
             string username = "student";
@@ -82,8 +85,8 @@ namespace InEenNotendop.Data
             }
         }
 
-
-        public void UploadSong(string name, string artist, string localPath)
+        // Code to handle uploading the midi file to the database
+        public void UploadSong(string name, string artist, string localPath) 
         {
             string host = "145.44.235.225";
             string username = "student";
@@ -119,7 +122,9 @@ namespace InEenNotendop.Data
                 }
             }
         }
-        public void UploadsongToDataBase(string name, string artiest, int length, int bpm, int diffeculty, string filepath)
+
+        // Code to put the song in the SQL database
+        public void UploadsongToDataBase(string name, string artiest, int length, int bpm, int diffeculty, string filepath) 
         {
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
@@ -148,10 +153,9 @@ namespace InEenNotendop.Data
             }
         }
 
-        public DataView GetDataForGrid(int nummerId)
+        // Gets the score for the song
+        public DataView GetDataForGrid(int nummerId) 
         {
-           
-
             string CmdString = string.Empty;
             using (SqlConnection con = new SqlConnection(ConnectionString))
             {
@@ -161,12 +165,12 @@ namespace InEenNotendop.Data
                 DataTable dt = new DataTable();
                 sda.Fill(dt);
 
-
                 return dt.DefaultView;
             }
         }
 
-        public List<Nummer> LijstFunc(string sqlcommand)
+        // Generic function used to prevent double code with filtering and sorting
+        public List<Nummer> LijstFunc(string sqlcommand) 
         {
             List<Nummer> nummers = new List<Nummer>();
 
@@ -228,12 +232,14 @@ namespace InEenNotendop.Data
             }
         }
 
-        public List<Nummer> MaakLijst()
+        // Default list method
+        public List<Nummer> MaakLijst() 
         {
             return LijstFunc("SELECT Title, Artiest, Lengte, Bpm, Moeilijkheid, ID, Filepath, Score FROM Nummers INNER JOIN Scores ON Nummers.ID = Scores.NummerID;");
         }
 
-        public List<Nummer> MakeSortedList(int Difficulty, string Sort)
+        // Gets sorted list from database
+        public List<Nummer> MakeSortedList(int Difficulty, string Sort) 
         {
             if (Difficulty != 0)
             {
@@ -244,12 +250,15 @@ namespace InEenNotendop.Data
                 return LijstFunc($"SELECT Title, Artiest, Lengte, Bpm, Moeilijkheid, ID, Filepath, Score FROM Nummers INNER JOIN Scores ON Nummers.ID = Scores.NummerID ORDER BY {Sort}");
             }
         }
-        public List<Nummer> MaakFilteredLijst(int Difficulty)
+
+        // Gets filtered list from database
+        public List<Nummer> MaakFilteredLijst(int Difficulty) 
         {
             return LijstFunc($"SELECT Title, Artiest, Lengte, Bpm, Moeilijkheid, ID, Filepath, Score FROM Nummers INNER JOIN Scores ON Nummers.ID = Scores.NummerID WHERE Moeilijkheid = {Difficulty}");
         }
 
-        public void ChangeHighscore(int ID, int Score)
+        // Code to change high-score after song completion
+        public void ChangeHighscore(int ID, int Score) 
         {
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
@@ -262,6 +271,5 @@ namespace InEenNotendop.Data
                 }
             }
         }
-
     }
 }
