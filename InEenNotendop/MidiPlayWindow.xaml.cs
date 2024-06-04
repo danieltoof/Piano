@@ -16,6 +16,7 @@ using static InEenNotendop.UI.MidiPlayWindow;
 using System.Windows.Media.Animation;
 using static Azure.Core.HttpHeader;
 using System;
+using System.ComponentModel;
 using System.IO;
 using InEenNotendop.Data;
 
@@ -112,6 +113,7 @@ namespace InEenNotendop.UI
             }
 
             endLastNote = notesOfSongToBePlayed[notesOfSongToBePlayed.Count-1].NoteStartTime + notesOfSongToBePlayed[notesOfSongToBePlayed.Count - 1].NoteDuration;
+            endLastNote = endLastNote + TimeSpan.FromSeconds(10);
 
             desiredOutDevice = "Microsoft GS Wavetable Synth";
 
@@ -223,10 +225,36 @@ namespace InEenNotendop.UI
 
             if(currentTime >= endLastNote)
             {
-                Close();
+                songFinished = true;
+                ReturnToSongList();
             }
 
+        }
 
+        // (Important) Dispose of the MidiIn object when the app closes
+        private void ReturnToSongList()
+        {
+            midiIn.Stop();
+            midiIn.Dispose();
+            timer.Stop();
+            midiPlayer.Dispose();
+            midiInputScoreCalculator.CalculateScoreAfterSongCompleted();
+            dataProgram.ChangeHighscore(nummerID, (int)midiInputScoreCalculator.Score);
+            MessageBox.Show($"Score : {midiInputScoreCalculator.Score}");
+            Close();
+            songsWindow.Show();
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            if (!songFinished)
+            {
+                midiIn.Stop();
+                midiIn.Dispose();
+                timer.Stop();
+                midiPlayer.Dispose();
+                songsWindow.Show();
+            }
         }
 
         private void InitializeMidi(string desiredOutDevice)
@@ -365,18 +393,7 @@ namespace InEenNotendop.UI
             return left;
         }
 
-        // (Important) Dispose of the MidiIn object when the app closes
-        protected override void OnClosed(EventArgs e)
-        {
-            base.OnClosed(e);
-            midiIn.Stop();
-            midiIn.Dispose();
-            midiPlayer.Dispose();
-            midiInputScoreCalculator.CalculateScoreAfterSongCompleted();
-            dataProgram.ChangeHighscore(nummerID, (int)midiInputScoreCalculator.Score);
-            MessageBox.Show($"Score : {midiInputScoreCalculator.Score}");
-            songsWindow.Show();
-        }
+
 
     }
 }
