@@ -260,7 +260,7 @@ namespace InEenNotendop.Data
         }
 
         // Code to change high-score after song completion
-        public void ChangeHighscore(int ID, int Score)
+        public void ChangeHighscore(int ID, int Score, int currentScore)
         {
             if (Score > currentScore)
             {
@@ -299,3 +299,5 @@ namespace InEenNotendop.Data
             return minutesString + ":" + secondsString;
             //return "aaa";
         }
+    }
+}
