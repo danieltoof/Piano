@@ -28,13 +28,13 @@ namespace InEenNotendop.UI
         DataProgram dataProgram = new DataProgram();
         string FilePath;
         private int nummerID;
-        public SelectingWindow(int nummerId, string moeilijkheidText, string Title, string Artiest, int Lengte, int Bpm, string FilePath, object sender)
+        public SelectingWindow(int nummerId, string moeilijkheidText, string Title, string Artiest, int Lengte, int Bpm, string FilePath, string ConvertedTime, object sender)
         {
             InitializeComponent();
             songsWindow = (SongsWindow)sender;
             Owner = songsWindow;
             this.FilePath = FilePath;
-            DataContext = new NummerDetailsViewModel(nummerId, moeilijkheidText, Title, Artiest, Lengte, Bpm);
+            DataContext = new NummerDetailsViewModel(nummerId, moeilijkheidText, Title, Artiest, Lengte, Bpm, ConvertedTime);
             FillDataGrid(nummerId);
             this.nummerID = nummerId;
         }
@@ -53,8 +53,9 @@ namespace InEenNotendop.UI
             public string Artiest { get; }
             public int Lengte { get; }
             public int Bpm { get; }
+            public string ConvertedTime { get; }
 
-            public NummerDetailsViewModel(int nummerId, string moeilijkheidText, string title, string artiest, int lengte, int bpm)
+            public NummerDetailsViewModel(int nummerId, string moeilijkheidText, string title, string artiest, int lengte, int bpm, string convertedTime)
             {
                 NummerIdText = $"Clicked on Nummer with ID: {nummerId}";
                 MoeilijkheidText = $"Difficulty: {moeilijkheidText}";
@@ -62,6 +63,7 @@ namespace InEenNotendop.UI
                 Artiest = artiest;
                 Lengte = lengte;
                 Bpm = bpm;
+                ConvertedTime = convertedTime;
 
             }
         }
