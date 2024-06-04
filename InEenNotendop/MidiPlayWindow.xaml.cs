@@ -26,14 +26,16 @@ namespace InEenNotendop.UI
     /// </summary>
     public partial class MidiPlayWindow : Window
     {
-        public Window Owner { get; set; }
+        public SongsWindow songsWindow { get; set; }
 
         private bool playMidiFile = false;
         private bool freePlay = false;
+        private bool songFinished = false;
 
         private MidiIn midiIn;
         private MidiPlayer midiPlayer;
         private MidiFile midiFileSong;
+        private TimeSpan endLastNote;
 
         DataProgram dataProgram = new DataProgram();
         private int nummerID;
@@ -70,10 +72,10 @@ namespace InEenNotendop.UI
         }
 
 
-        public MidiPlayWindow(string FilePath, object sender, bool playMidiFile, int nummerID)
+        public MidiPlayWindow(string FilePath, object sender, bool playMidiFile, int nummerID, SongsWindow? songsWindow)
         {
             this.nummerID = nummerID;
-
+            this.songsWindow = songsWindow;
             this.playMidiFile = playMidiFile;
             midiInputProcessor = new MidiInputProcessor();
 
@@ -88,15 +90,9 @@ namespace InEenNotendop.UI
                 MessageBox.Show(e.Message);
 
             }
-
-            //_notesOfSongList = _midiInputProcessor.MidiToList(smokeOnTheWater);
-
-
-            //MidiFile smokeOnTheWater = new MidiFile(
-            //@"C:/Users/danie/source/repos/Piano/InEenNotendop.MidiProcessorUnitTest/TestMidi/UnitTestMidi.mid");
-            TimeSpan increment = TimeSpan.FromMilliseconds(2000); // Dit voegt een delay toe aan 
-            TimeSpan increment2 = TimeSpan.FromMilliseconds(8000); // Dit voegt een delay toe aan 
-
+            
+            TimeSpan increment = TimeSpan.FromMilliseconds(2000); // Dit voegt een delay toe aan noten genereren. Ander hebben we een bug met teveel noten weergeven aan het begin
+            TimeSpan increment2 = TimeSpan.FromMilliseconds(7800); // Dit voegt een delay toe aan get afspelen van midi noten, correspondeerd met vanaf waar de noten gegenereerd worden tot aan pianotoetsen op scherm
 
             notesOfSongList = midiInputProcessor.MidiToList(midiFileSong);
 
@@ -114,6 +110,8 @@ namespace InEenNotendop.UI
                     notesOfSongToBePlayed[i].NoteStartTime = notesOfSongToBePlayed[i].NoteStartTime.Add(increment2);
                 }
             }
+
+            endLastNote = notesOfSongToBePlayed[notesOfSongToBePlayed.Count-1].NoteStartTime + notesOfSongToBePlayed[notesOfSongToBePlayed.Count - 1].NoteDuration;
 
             desiredOutDevice = "Microsoft GS Wavetable Synth";
 
@@ -201,7 +199,7 @@ namespace InEenNotendop.UI
                 if (!note.IsBlockGenerated && currentTime >= note.NoteStartTime && currentTime < note.NoteStartTime + note.NoteDuration)
                 {
                     GenerateFallingBlock(note);
-                    note.IsBlockGenerated = true; // Mark the block as generated
+                    note.IsBlockGenerated = true;
                 }
             }
 
@@ -222,6 +220,13 @@ namespace InEenNotendop.UI
                     }
                 }
             }
+
+            if(currentTime >= endLastNote)
+            {
+                Close();
+            }
+
+
         }
 
         private void InitializeMidi(string desiredOutDevice)
@@ -234,7 +239,7 @@ namespace InEenNotendop.UI
             {
                 Debug.WriteLine($"Midi In Device {i}: {MidiIn.DeviceInfo(i)}");
             }
-            var desiredDeviceIndex = 1; // DEZE KAN VERANDEREN SOMS SPONTAAN
+            var desiredDeviceIndex = 0; // DEZE KAN VERANDEREN SOMS SPONTAAN
             if (desiredDeviceIndex < numDevices)
             {
                 midiIn = new MidiIn(desiredDeviceIndex);
@@ -370,6 +375,7 @@ namespace InEenNotendop.UI
             midiInputScoreCalculator.CalculateScoreAfterSongCompleted();
             dataProgram.ChangeHighscore(nummerID, (int)midiInputScoreCalculator.Score);
             MessageBox.Show($"Score : {midiInputScoreCalculator.Score}");
+            songsWindow.Show();
         }
 
     }

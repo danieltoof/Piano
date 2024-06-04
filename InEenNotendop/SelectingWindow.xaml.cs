@@ -67,16 +67,16 @@ namespace InEenNotendop.UI
         }
         private void PLAY_Button_Click(object sender, RoutedEventArgs e)
         {
-            MidiPlayWindow midiPlayWindow = new MidiPlayWindow(FilePath, this, false, nummerID);
-            Owner.Close();
+            MidiPlayWindow midiPlayWindow = new MidiPlayWindow(FilePath, this, false, nummerID, songsWindow);
+            Owner.Hide();
             midiPlayWindow.Show();
             Close();
         }
         private void AUTOPLAY_Button_Click(object sender, RoutedEventArgs e)
         {
-            MidiPlayWindow midiPlayWindow = new MidiPlayWindow(FilePath, this, true, nummerID);
+            MidiPlayWindow midiPlayWindow = new MidiPlayWindow(FilePath, this, true, nummerID, songsWindow);
             //SongsWindow songsWindow = SongsWindow();
-            Owner.Close();
+            Owner.Hide();
             midiPlayWindow.Show();
             Close();
 
