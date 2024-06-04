@@ -105,7 +105,7 @@ namespace InEenNotendop.UI.Tests
     public class SettingsWindowTesten
     {
         [TestMethod]
-        public void ChangedValue_SetLightMode()
+        public void SetLightMode_PressedButton_ChangedValue()
         {
             Thread newThread = new Thread(() =>
             {
@@ -126,7 +126,7 @@ namespace InEenNotendop.UI.Tests
         }
 
         [TestMethod]
-        public void ChangedValue_SetDarkMode()
+        public void SetDarkMode_PressedButton_ChangedValue()
         {
             Thread newThread = new Thread(() =>
             {
@@ -147,7 +147,7 @@ namespace InEenNotendop.UI.Tests
         }
 
         [TestMethod]
-        public void OpenWindow_MainMenu()
+        public void MainMenu_PressedMainMenuButton_ChangedOwner()
         {
             Thread newThread = new Thread(() =>
             {
