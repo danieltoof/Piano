@@ -9,11 +9,13 @@ using System.Threading.Tasks;
 using System.Globalization;
 using System.Security.Permissions;
 using System.Windows;
+using InEenNotendop.Business;
+using NAudio.Midi;
 
 namespace InEenNotendop.UI.Tests
 {
     //testen van de moeilijkheidsgraad
-    [TestClass()]
+    [TestClass]
     public class MoeilijkheidTests
     {
 
@@ -195,5 +197,162 @@ namespace InEenNotendop.UI.Tests
 
         }
     }
+    [TestClass]
+    public class MidiInputProcesserTest
+    {
+        private MidiInputProcessor midiInputProcessor;
+        private List<Note> notes;
+        private MidiFile midiFile;
+
+        [TestInitialize]
+        public void Setup()
+        {
+            midiInputProcessor = new MidiInputProcessor();
+            midiFile = new MidiFile(
+                @"C:/Users/danie/source/repos/Piano/InEenNotendop.MidiProcessorUnitTest/TestMidi/UnitTestMidi.mid");
+        }
+
+        [TestMethod]
+        public void MidiToList_MidiFileImported_ListContainsData()
+        {
+            notes = midiInputProcessor.MidiToList(midiFile);
+            Assert.IsTrue(notes[0] != null);
+        }
+
+        [TestMethod]
+        public void MidiToList_MidiFileImported_MidiFileConvertedToListWithCorrectStartTimes()
+        {
+
+            TimeSpan timeNote1Expected = new TimeSpan();
+            TimeSpan timeNote2Expected = new TimeSpan();
+            TimeSpan timeNote3Expected = new TimeSpan();
+            TimeSpan timeNote4Expected = new TimeSpan();
+
+            string format = @"hh\:mm\:ss\.fffffff";
+
+            TimeSpan.TryParseExact("00:00:00", format, null, out timeNote1Expected);
+            TimeSpan.TryParseExact("00:00:00.2727269", format, null, out timeNote2Expected);
+            TimeSpan.TryParseExact("00:00:00.6818175", format, null, out timeNote3Expected);
+            TimeSpan.TryParseExact("00:00:01.2272714", format, null, out timeNote4Expected);
+
+
+            notes = midiInputProcessor.MidiToList(midiFile);
+            Assert.AreEqual(timeNote1Expected, notes[0].NoteStartTime);
+            Assert.AreEqual(timeNote2Expected, notes[1].NoteStartTime);
+            Assert.AreEqual(timeNote3Expected, notes[2].NoteStartTime);
+            Assert.AreEqual(timeNote4Expected, notes[3].NoteStartTime);
+
+        }
+    }
+
+    [TestClass]
+    public class ScoreCalculatorTests
+    {
+        private MidiInputProcessor midiInputProcessor;
+        private MidiInputScoreCalculator midiInputScoreCalculator;
+        private MidiFile midiFile;
+
+        [TestInitialize]
+        public void Setup()
+        {
+            midiInputProcessor = new MidiInputProcessor();
+            midiFile = new MidiFile(
+                @"C:/Users/danie/source/repos/Piano/InEenNotendop.MidiProcessorUnitTest/TestMidi/UnitTestMidi.mid");
+            midiInputProcessor.MidiToList(midiFile);
+
+        }
+
+        [TestMethod]
+        public void CalculateScore_CompareMidiFileToCopyOfMidiFile_ScoreShouldBe1000()
+        {
+            midiInputProcessor.ListOfNotesPlayed = midiInputProcessor.ListOfNotesSong;
+            midiInputScoreCalculator = new MidiInputScoreCalculator(midiInputProcessor);
+
+            Assert.AreEqual(1000, midiInputScoreCalculator.CalculateScoreAfterSongCompleted());
+
+        }
+
+        [TestMethod]
+        public void CalculateScore_CompareMidiFileShifted10Milliseconds_ScoreShouldBe1000()
+        {
+            midiInputProcessor.ListOfNotesPlayed = midiInputProcessor.ListOfNotesSong;
+            midiInputProcessor.ListOfNotesPlayed.ForEach(note => note.NoteStartTime = note.NoteStartTime.Add(TimeSpan.FromMilliseconds(10)));
+            midiInputScoreCalculator = new MidiInputScoreCalculator(midiInputProcessor);
+
+            Assert.AreEqual(1000, midiInputScoreCalculator.CalculateScoreAfterSongCompleted());
+
+        }
+
+        [TestMethod]
+        public void CalculateScore_CompareMidiFileShifted30Milliseconds_ScoreShouldBe950()
+        {
+            midiInputProcessor.ListOfNotesPlayed = midiInputProcessor.ListOfNotesSong;
+            midiInputProcessor.ListOfNotesPlayed.ForEach(note => note.NoteStartTime = note.NoteStartTime.Add(TimeSpan.FromMilliseconds(30)));
+            midiInputScoreCalculator = new MidiInputScoreCalculator(midiInputProcessor);
+
+            Assert.AreEqual(950, midiInputScoreCalculator.CalculateScoreAfterSongCompleted());
+
+        }
+
+        [TestMethod]
+        public void CalculateScore_CompareMidiFileShifted60Milliseconds_ScoreShouldBe800()
+        {
+            midiInputProcessor.ListOfNotesPlayed = midiInputProcessor.ListOfNotesSong;
+            midiInputProcessor.ListOfNotesPlayed.ForEach(note => note.NoteStartTime = note.NoteStartTime.Add(TimeSpan.FromMilliseconds(60)));
+            midiInputScoreCalculator = new MidiInputScoreCalculator(midiInputProcessor);
+
+
+            Assert.AreEqual(800, midiInputScoreCalculator.CalculateScoreAfterSongCompleted());
+
+        }
+
+        [TestMethod]
+        public void CalculateScore_CompareMidiFileShifted90Milliseconds_ScoreShouldBe600()
+        {
+            midiInputProcessor.ListOfNotesPlayed = midiInputProcessor.ListOfNotesSong;
+            midiInputProcessor.ListOfNotesPlayed.ForEach(note => note.NoteStartTime = note.NoteStartTime.Add(TimeSpan.FromMilliseconds(90)));
+            midiInputScoreCalculator = new MidiInputScoreCalculator(midiInputProcessor);
+
+            Assert.AreEqual(600, midiInputScoreCalculator.CalculateScoreAfterSongCompleted());
+
+        }
+
+        [TestMethod]
+        public void CalculateScore_CompareMidiFileShifted120Milliseconds_ScoreShouldBe300()
+        {
+            midiInputProcessor.ListOfNotesPlayed = midiInputProcessor.ListOfNotesSong;
+            midiInputProcessor.ListOfNotesPlayed.ForEach(note => note.NoteStartTime = note.NoteStartTime.Add(TimeSpan.FromMilliseconds(120)));
+            midiInputScoreCalculator = new MidiInputScoreCalculator(midiInputProcessor);
+
+            Assert.AreEqual(300, midiInputScoreCalculator.CalculateScoreAfterSongCompleted());
+
+        }
+
+        [TestMethod]
+        public void CalculateScore_CompareMidiFileShifted150Milliseconds_ScoreShouldBe0()
+        {
+            midiInputProcessor.ListOfNotesPlayed = midiInputProcessor.ListOfNotesSong;
+            midiInputProcessor.ListOfNotesPlayed.ForEach(note => note.NoteStartTime = note.NoteStartTime.Add(TimeSpan.FromMilliseconds(150)));
+            midiInputScoreCalculator = new MidiInputScoreCalculator(midiInputProcessor);
+
+            Assert.AreEqual(0, midiInputScoreCalculator.CalculateScoreAfterSongCompleted());
+
+        }
+
+        [TestMethod]
+        public void CalculateScore_CalculateOneNoteCorrect_ShouldBe250()
+        {
+            List<Note> notes = new List<Note>();
+            notes.Add(midiInputProcessor.ListOfNotesSong[1]);
+            midiInputProcessor.ListOfNotesPlayed = notes;
+            midiInputScoreCalculator = new MidiInputScoreCalculator(midiInputProcessor);
+
+            var score = midiInputScoreCalculator.CalculateScoreAfterSongCompleted();
+            Assert.AreEqual(score, 250);
+        }
+
+    }
+
+
 
 }
