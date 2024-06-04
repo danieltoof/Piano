@@ -3,7 +3,7 @@ using System.Diagnostics;
 using Renci.SshNet;
 using System.Data;
 using System.Security.Cryptography.X509Certificates;
-using System.Resources;
+using System.Resources; 
 using static System.Net.Mime.MediaTypeNames;
 
 namespace InEenNotendop.Data
@@ -254,6 +254,7 @@ namespace InEenNotendop.Data
                                 filepath = null;
                             }
                             int score = reader.GetInt32(reader.GetOrdinal("Score"));
+
                             Nummer nummer = new Nummer(title, artiest, lengte, bpm, moeilijkheid, id, filepath, score);
                             nummers.Add(nummer);
                         }

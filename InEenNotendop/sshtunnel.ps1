@@ -1,1 +1,1 @@
-﻿Start-Process plink.exe -ArgumentList "-ssh", "student@145.44.235.225", "-P", "22", "-pw", "PianoHero", "-L", "1433:localhost:1433"-WindowStyle Hidden
+﻿Start-Process plink.exe -ArgumentList "-ssh", "student@145.44.235.225", "-P", "22", "-pw", "PianoHero", "-L", "1433:localhost:1433","-batch" -WindowStyle Hidden
