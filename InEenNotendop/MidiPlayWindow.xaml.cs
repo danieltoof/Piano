@@ -27,6 +27,7 @@ namespace InEenNotendop.UI
     /// </summary>
     public partial class MidiPlayWindow : Window
     {
+        private SettingsWindow settingsWindow;
         public SongsWindow songsWindow { get; set; }
 
         private bool playMidiFile = false;
@@ -73,7 +74,6 @@ namespace InEenNotendop.UI
             public System.Windows.Media.Brush ButtonColor { get; set; } = brush;
         }
 
-
         public MidiPlayWindow(string FilePath, object sender, bool playMidiFile, int nummerID, SongsWindow? songsWindow, int currentScore)
         {
             this.nummerID = nummerID;
@@ -86,12 +86,12 @@ namespace InEenNotendop.UI
             stopwatch.Start();
             try
             {
-                midiFileSong =
-            new MidiFile(FilePath);
+
+                midiFileSong = new MidiFile(FilePath);
+
             } catch (FileNotFoundException e)
             {
                 MessageBox.Show(e.Message);
-
             }
             
             TimeSpan increment = TimeSpan.FromMilliseconds(2000); // Dit voegt een delay toe aan noten genereren. Ander hebben we een bug met teveel noten weergeven aan het begin
@@ -254,8 +254,11 @@ namespace InEenNotendop.UI
         {
             if (!songFinished)
             {
-                midiIn.Stop();
-                midiIn.Dispose();
+                if (midiIn != null)
+                {
+                    midiIn.Stop();
+                    midiIn.Dispose();
+                }
                 timer.Stop();
                 midiPlayer.Dispose();
                 songsWindow.Show();
