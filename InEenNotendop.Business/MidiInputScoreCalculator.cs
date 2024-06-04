@@ -19,7 +19,7 @@ public class MidiInputScoreCalculator
     private decimal maxScorePerNote;
     public decimal Score { get; set; }
 
-    public MidiInputScoreCalculator(MidiInputProcessor midiInputProcessor)
+    public MidiInputScoreCalculator(MidiInputProcessor? midiInputProcessor)
     {
         MidiInputProcessor = midiInputProcessor;
         amountOfNotesInSong = MidiInputProcessor.ListOfNotesSong.Count;
@@ -44,7 +44,9 @@ public class MidiInputScoreCalculator
 
     public int CalculateScoreAfterSongCompleted() // SCORE BEREKENEN ALS NUMMER HELEMAAL VOLTOOID IS
     {
-
+        Score = 0;
+        HashNotesPlayed.Clear();
+        HashNotesSong.Clear();
         // Lists vanuit MidiInputProcessor overzettan naar lokale variabelen
         // Dat maakt dit document beter te lezen
         MidiInputProcessor.ListOfNotesSong.ForEach(note => HashNotesSong?.Add(note));
