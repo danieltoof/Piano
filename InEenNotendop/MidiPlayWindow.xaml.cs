@@ -254,8 +254,11 @@ namespace InEenNotendop.UI
         {
             if (!songFinished)
             {
-                midiIn.Stop();
-                midiIn.Dispose();
+                if (midiIn != null)
+                {
+                    midiIn.Stop();
+                    midiIn.Dispose();
+                }
                 timer.Stop();
                 midiPlayer.Dispose();
                 songsWindow.Show();
