@@ -303,7 +303,7 @@ namespace InEenNotendop.Data
                 return LijstFunc($"SELECT Title, Artiest, Lengte, Bpm, Moeilijkheid, ID, Filepath, Score FROM Nummers INNER JOIN Scores ON Nummers.ID = Scores.NummerID ORDER BY {Sort}");
             }
         }
-
+         
         // Gets filtered list from database
         public List<Nummer> MaakFilteredLijst(int Difficulty) 
         {
