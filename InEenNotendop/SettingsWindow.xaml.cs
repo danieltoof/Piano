@@ -1,4 +1,5 @@
-﻿using System;
+﻿using InEenNotendop.Data;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -9,6 +10,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -27,6 +29,7 @@ namespace InEenNotendop.UI
         private SongsWindow songWindow;
         private MidiPlayWindow midiPlayWindow;
         private int isOkToClose = 0;
+        private DataProgram data = new DataProgram();
         
         public SettingsWindow(object sender)
         {
@@ -69,6 +72,7 @@ namespace InEenNotendop.UI
             }
             else
             {
+                data.StopSshTunnel();
                 e.Cancel = false;
             }
         }

@@ -26,7 +26,7 @@ namespace InEenNotendop.UI
     public partial class SongsWindow : Window
     {
         public SettingsWindow settingsWindow;
-        private DataProgram dataProgram;
+        private DataProgram dataProgram = new DataProgram();
         private int lightmodeImport;
         private int Difficulty = 0;
 

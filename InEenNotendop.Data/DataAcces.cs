@@ -48,35 +48,34 @@ namespace InEenNotendop.Data
         }
         public void StopSshTunnel()
         {
-            if (sshtunnelStarted)
+
+            string currentDirectory = Directory.GetCurrentDirectory();
+            string targetDirectory = "InEenNotendop";
+            string sshTunnelFile = "";
+            while (!currentDirectory.EndsWith(targetDirectory) && !string.IsNullOrEmpty(currentDirectory))
             {
-                string currentDirectory = Directory.GetCurrentDirectory();
-                string targetDirectory = "InEenNotendop";
-                string sshTunnelFile = "";
-                while (!currentDirectory.EndsWith(targetDirectory) && !string.IsNullOrEmpty(currentDirectory))
+                if (Directory.Exists(sshTunnelFile))
                 {
-                    if (Directory.Exists(sshTunnelFile))
-                    {
-                        break; // Found the target directory, exit the loop
-                    }
-                    currentDirectory = Path.GetDirectoryName(currentDirectory); // Move up one directory
-                    sshTunnelFile = $"{currentDirectory}\\StopSshTunnel.ps1";
+                    break; // Found the target directory, exit the loop
                 }
-
-                ProcessStartInfo psi = new ProcessStartInfo
-                {
-                    FileName = "powershell.exe",
-                    Arguments = sshTunnelFile,
-                    UseShellExecute = false,
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    CreateNoWindow = false
-                };
-
-                sshTunnelProcess = Process.Start(psi);
-                sshtunnelStarted = true;
-
+                currentDirectory = Path.GetDirectoryName(currentDirectory); // Move up one directory
+                sshTunnelFile = $"{currentDirectory}\\StopSshTunnel.ps1";
             }
+
+            ProcessStartInfo psi = new ProcessStartInfo
+            {
+                FileName = "powershell.exe",
+                Arguments = sshTunnelFile,
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                CreateNoWindow = true
+            };
+
+            sshTunnelProcess = Process.Start(psi);
+            sshtunnelStarted = true;
+
+
         }
 
         public void DownloadSong(string artist, string title)
