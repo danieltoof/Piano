@@ -32,6 +32,7 @@ namespace InEenNotendop.UI
         private bool playMidiFile = false;
         private bool freePlay = false;
         private bool songFinished = false;
+        private int currentScore;
 
         private MidiIn midiIn;
         private MidiPlayer midiPlayer;
@@ -73,11 +74,12 @@ namespace InEenNotendop.UI
         }
 
 
-        public MidiPlayWindow(string FilePath, object sender, bool playMidiFile, int nummerID, SongsWindow? songsWindow)
+        public MidiPlayWindow(string FilePath, object sender, bool playMidiFile, int nummerID, SongsWindow? songsWindow, int currentScore)
         {
             this.nummerID = nummerID;
             this.songsWindow = songsWindow;
             this.playMidiFile = playMidiFile;
+            this.currentScore = currentScore;
             midiInputProcessor = new MidiInputProcessor();
 
             stopwatch = new Stopwatch();
@@ -242,7 +244,7 @@ namespace InEenNotendop.UI
             timer.Stop();
             midiPlayer.Dispose();
             midiInputScoreCalculator.CalculateScoreAfterSongCompleted();
-            dataProgram.ChangeHighscore(nummerID, (int)midiInputScoreCalculator.Score);
+            dataProgram.ChangeHighscore(nummerID, (int)midiInputScoreCalculator.Score, currentScore);
             MessageBox.Show($"Score : {midiInputScoreCalculator.Score}");
             Close();
             songsWindow.Show();
