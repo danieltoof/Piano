@@ -3,7 +3,7 @@ using System.Diagnostics;
 using Renci.SshNet;
 using System.Data;
 using System.Security.Cryptography.X509Certificates;
-using System.Resources;
+using System.Resources; 
 using static System.Net.Mime.MediaTypeNames;
 
 namespace InEenNotendop.Data
@@ -12,19 +12,72 @@ namespace InEenNotendop.Data
     public class DataProgram 
     {
         public string ConnectionString = "Data Source=127.0.0.1,1433;Initial Catalog=PianoHeroDB;User ID=Newlogin;Password=VeryStr0ngP@ssw0rd;Encrypt=False;";
+        private Process sshTunnelProcess;
+        private bool sshtunnelStarted = false;
 
         // Starts the powershell script to connect to the database
         public void StartSshTunnel() 
         {
+            if (!sshtunnelStarted)
+            {
+                string currentDirectory = Directory.GetCurrentDirectory();
+                string targetDirectory = "InEenNotendop";
+                string sshTunnelFile = "";
+                while (!currentDirectory.EndsWith(targetDirectory) && !string.IsNullOrEmpty(currentDirectory))
+                {
+                    if (Directory.Exists(sshTunnelFile))
+                    {
+                        break; // Found the target directory, exit the loop
+                    }
+                    currentDirectory = Path.GetDirectoryName(currentDirectory); // Move up one directory
+                    sshTunnelFile = $"{currentDirectory}\\sshtunnel.ps1";
+                }
+
+                ProcessStartInfo psi = new ProcessStartInfo
+                {
+                    FileName = "powershell.exe",
+                    Arguments = sshTunnelFile,
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    CreateNoWindow = true
+                };
+
+                sshTunnelProcess = Process.Start(psi);
+                sshtunnelStarted = true;
+                 
+            }
+        }
+        public void StopSshTunnel()
+        {
+
+            string currentDirectory = Directory.GetCurrentDirectory();
+            string targetDirectory = "InEenNotendop";
+            string sshTunnelFile = "";
+            while (!currentDirectory.EndsWith(targetDirectory) && !string.IsNullOrEmpty(currentDirectory))
+            {
+                if (Directory.Exists(sshTunnelFile))
+                {
+                    break; // Found the target directory, exit the loop
+                }
+                currentDirectory = Path.GetDirectoryName(currentDirectory); // Move up one directory
+                sshTunnelFile = $"{currentDirectory}\\StopSshTunnel.ps1";
+            }
+
             ProcessStartInfo psi = new ProcessStartInfo
             {
                 FileName = "powershell.exe",
-                Arguments = ".\\sshtunnel.ps1",
+                Arguments = sshTunnelFile,
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 CreateNoWindow = true
             };
+
+            sshTunnelProcess = Process.Start(psi);
+            sshtunnelStarted = true;
+
+
         }
 
         // Downloads selected song from the database
@@ -201,6 +254,7 @@ namespace InEenNotendop.Data
                                 filepath = null;
                             }
                             int score = reader.GetInt32(reader.GetOrdinal("Score"));
+
                             Nummer nummer = new Nummer(title, artiest, lengte, bpm, moeilijkheid, id, filepath, score);
                             nummers.Add(nummer);
                         }
@@ -250,7 +304,7 @@ namespace InEenNotendop.Data
                 return LijstFunc($"SELECT Title, Artiest, Lengte, Bpm, Moeilijkheid, ID, Filepath, Score FROM Nummers INNER JOIN Scores ON Nummers.ID = Scores.NummerID ORDER BY {Sort}");
             }
         }
-
+         
         // Gets filtered list from database
         public List<Nummer> MaakFilteredLijst(int Difficulty) 
         {

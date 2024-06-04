@@ -1,4 +1,5 @@
-﻿using System;
+﻿using InEenNotendop.Data;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -9,6 +10,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -25,7 +27,9 @@ namespace InEenNotendop.UI
         public Window Owner { get; set; }
         private MainWindow mainWindow;
         private SongsWindow songWindow;
+        private MidiPlayWindow midiPlayWindow;
         private int isOkToClose = 0;
+        private DataProgram data = new DataProgram();
         
         public SettingsWindow(object sender)
         {
@@ -39,6 +43,11 @@ namespace InEenNotendop.UI
                 case SongsWindow:
                     songWindow = (SongsWindow)sender;
                     Owner = songWindow;
+                    break;
+                case MidiPlayWindow:
+                    midiPlayWindow = (MidiPlayWindow)sender;
+                    Owner = midiPlayWindow;
+                    Owner.Closing += Owner_Closing;
                     break;
             }
 
@@ -65,6 +74,7 @@ namespace InEenNotendop.UI
             }
             else
             {
+                data.StopSshTunnel();
                 e.Cancel = false;
             }
         }
@@ -99,8 +109,12 @@ namespace InEenNotendop.UI
                     Owner = songWindow;
                     Owner.Closing += Owner_Closing;
                     break;
+                case MidiPlayWindow:
+                    midiPlayWindow = (MidiPlayWindow)sender;
+                    Owner = midiPlayWindow;
+                    Owner.Closing += Owner_Closing;
+                    break;
             }
-
         }
 
         // Gets the lightmode value of its current owner

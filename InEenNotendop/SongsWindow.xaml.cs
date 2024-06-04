@@ -25,16 +25,14 @@ namespace InEenNotendop.UI
     /// </summary>
     public partial class SongsWindow : Window
     {
-        private SettingsWindow settingsWindow;
-        private DataProgram dataProgram;
+        public SettingsWindow settingsWindow;
+        private DataProgram dataProgram = new DataProgram();
         private int lightmodeImport;
         private int Difficulty = 0;
 
         public SongsWindow(SettingsWindow settingsWindow)
         {
             InitializeComponent();
-            dataProgram = new DataProgram();
-            dataProgram.StartSshTunnel();
             
             this.settingsWindow = settingsWindow;
             this.settingsWindow.ChangeSettingsOwner(this);
