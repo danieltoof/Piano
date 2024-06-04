@@ -10,6 +10,8 @@
     Height="750"
     MinHeight="730"
     MaxHeight="750"
+    Icon="Resources/icon.png"
+    WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
 
 
