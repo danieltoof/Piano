@@ -234,8 +234,11 @@ namespace InEenNotendop.UI
         // (Important) Dispose of the MidiIn object when the app closes
         private void ReturnToSongList()
         {
-            midiIn.Stop();
-            midiIn.Dispose();
+            if (midiIn != null)
+            {
+                midiIn.Stop();
+                midiIn.Dispose();
+            }
             timer.Stop();
             midiPlayer.Dispose();
             midiInputScoreCalculator.CalculateScoreAfterSongCompleted();
