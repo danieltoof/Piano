@@ -262,14 +262,17 @@ namespace InEenNotendop.Data
         // Code to change high-score after song completion
         public void ChangeHighscore(int ID, int Score)
         {
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            if (Score > currentScore)
             {
-                using (var command = connection.CreateCommand())
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
                 {
-                    command.CommandText = $"UPDATE Scores SET Score = {Score} WHERE NummerID = {ID}";
-                    connection.Open();
-                    command.ExecuteNonQuery();
-                    connection.Close();
+                    using (var command = connection.CreateCommand())
+                    {
+                        command.CommandText = $"UPDATE Scores SET Score = {Score} WHERE NummerID = {ID}";
+                        connection.Open();
+                        command.ExecuteNonQuery();
+                        connection.Close();
+                    }
                 }
             }
         }
@@ -296,5 +299,3 @@ namespace InEenNotendop.Data
             return minutesString + ":" + secondsString;
             //return "aaa";
         }
-    }
-}

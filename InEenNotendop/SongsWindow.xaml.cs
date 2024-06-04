@@ -89,9 +89,10 @@ namespace InEenNotendop.UI
                     String FilePath = nummer.Filepath;
                     string ConvertedTime = nummer.ConvertedTime;
                     MoeilijkheidConverter moeilijkheidConverter = new MoeilijkheidConverter();
+                    int currentScore = nummer.Score;
                     string moeilijkheidText = moeilijkheidConverter.Convert(nummer.Moeilijkheid, typeof(string), null, CultureInfo.InvariantCulture) as string;
 
-                    SelectingWindow detailsWindow = new SelectingWindow(nummerId, moeilijkheidText, Title, Artiest, FullTime, Bpm, FilePath, ConvertedTime, this);
+                    SelectingWindow detailsWindow = new SelectingWindow(nummerId, moeilijkheidText, Title, Artiest, FullTime, Bpm, FilePath, ConvertedTime, this, currentScore);
                     detailsWindow.Owner = this;
                     detailsWindow.ShowDialog();
                 }
