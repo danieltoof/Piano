@@ -55,6 +55,7 @@ namespace InEenNotendop.UI
 
         }
 
+        // Zorgt dat lijst herlaad nadat liedje voorbij is, zodat de score update
         protected override void OnActivated(EventArgs e)
         {
             base.OnActivated(e);
