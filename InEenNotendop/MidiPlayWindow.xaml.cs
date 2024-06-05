@@ -255,6 +255,7 @@ namespace InEenNotendop.UI
             midiInputScoreCalculator.CalculateScoreAfterSongCompleted();
             dataProgram.ChangeHighscore(nummerID, (int)midiInputScoreCalculator.Score, currentScore);
             MessageBox.Show($"Score : {midiInputScoreCalculator.Score}");
+            songsWindow.songIsFinished = true;
             Close();
             songsWindow.Show();
         }

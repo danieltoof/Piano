@@ -30,6 +30,7 @@ namespace InEenNotendop.UI
         private DataProgram dataProgram = new DataProgram();
         private int lightmodeImport;
         private int Difficulty = 0;
+        public bool songIsFinished;
 
         public SongsWindow(SettingsWindow settingsWindow)
         {
@@ -52,6 +53,23 @@ namespace InEenNotendop.UI
             Nummer.ItemsSource = dataProgram.MaakLijst();
             CheckDarkOrLight();
 
+        }
+
+        protected override void OnActivated(EventArgs e)
+        {
+            base.OnActivated(e);
+            if (songIsFinished)
+            {
+                songIsFinished = false;
+                if (Difficulty != 0)
+                {
+                    Nummer.ItemsSource = dataProgram.MaakFilteredLijst(Difficulty);
+                }
+                else
+                {
+                    Nummer.ItemsSource = dataProgram.MaakLijst();
+                }
+            }
         }
 
         private void MenuToggleButton_Click(object sender, RoutedEventArgs e)
