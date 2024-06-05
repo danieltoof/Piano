@@ -20,7 +20,7 @@ namespace InEenNotendop.Business
             if (midiFile != null)
             {
                 int ticksPerQuarterNote = midiFile.DeltaTicksPerQuarterNote;
-                int tempo = 500000; // Default tempo in microseconds per quarter note (120 BPM)
+                int tempo = 500000; // Default microseconds per kwartnoot (120 BPM)
 
                 foreach (var track in midiFile.Events)
                 {

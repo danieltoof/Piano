@@ -15,12 +15,12 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using static System.Runtime.InteropServices.JavaScript.JSType;
-using Melanchall.DryWetMidi.Core;
-using Melanchall.DryWetMidi.Interaction;
 using Microsoft.Data.SqlClient;
 using System.Diagnostics;
 using InEenNotendop.Data;
 using System.Windows.Markup;
+using NAudio.Midi;
+using InEenNotendop.Business;
 
 namespace InEenNotendop.UI
 {
@@ -134,17 +134,13 @@ namespace InEenNotendop.UI
                 //voeg bestandsnaam toe aan string
                 MidiFileName = MidiFileName + ".mid";
             }
-
+           
             try
             {
                 // inladen midi
-                var midi = MidiFile.Read(MidiFileName);
-
-                // lees lengte van midi
-                TimeSpan MidiFileDuration = midi.GetDuration<MetricTimeSpan>();
-
-                // return final waarde
-                return (int)MidiFileDuration.TotalSeconds;
+                MidiFile midiFile = new MidiFile(MidiFileName);
+               
+                return (int)MidiUtilities.GetSongLength(midiFile).TotalSeconds;
 
             }
             catch (FileNotFoundException)
@@ -158,23 +154,10 @@ namespace InEenNotendop.UI
         static int GetStartTempo(string MidiFileName)
         {
             try
-            {
-                // inladen midi
-                var midi = MidiFile.Read(MidiFileName);
+            {             
+                MidiFile midiFile = new MidiFile(MidiFileName);
 
-                // haal tempo van midi op
-                using (var tempoMapManager = new TempoMapManager(
-                           midi.TimeDivision,
-                           midi.GetTrackChunks().Select(c => c.Events)))
-                {
-                    // maken tempomap
-                    TempoMap tempoMap = tempoMapManager.TempoMap;
-
-                    // lezen start tempo
-                    int tempoStart = (int)Math.Round(tempoMap.GetTempoAtTime((MidiTimeSpan)1).BeatsPerMinute);
-
-                    return tempoStart;
-                }
+                return MidiUtilities.GetMidiBPM(midiFile);
             }
             catch (FileNotFoundException)
             {
