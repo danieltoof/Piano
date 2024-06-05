@@ -73,7 +73,7 @@
             HorizontalAlignment="Right"
             Orientation="Horizontal">
             <TextBlock Text="Lengte: " />
-            <TextBlock Text="{Binding Lengte}" />
+            <TextBlock Text="{Binding ConvertedTime}" />
         </StackPanel>
 
         <!--  BPM  -->

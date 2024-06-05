@@ -16,6 +16,7 @@ using static InEenNotendop.UI.MidiPlayWindow;
 using System.Windows.Media.Animation;
 using static Azure.Core.HttpHeader;
 using System;
+using System.ComponentModel;
 using System.IO;
 using InEenNotendop.Data;
 
@@ -26,14 +27,18 @@ namespace InEenNotendop.UI
     /// </summary>
     public partial class MidiPlayWindow : Window
     {
-        public Window Owner { get; set; }
+        private SettingsWindow settingsWindow;
+        public SongsWindow songsWindow { get; set; }
 
         private bool playMidiFile = false;
         private bool freePlay = false;
+        private bool songFinished = false;
+        private int currentScore;
 
         private MidiIn midiIn;
         private MidiPlayer midiPlayer;
         private MidiFile midiFileSong;
+        private TimeSpan endLastNote;
 
         DataProgram dataProgram = new DataProgram();
         private int nummerID;
@@ -69,34 +74,28 @@ namespace InEenNotendop.UI
             public System.Windows.Media.Brush ButtonColor { get; set; } = brush;
         }
 
-
-        public MidiPlayWindow(string FilePath, object sender, bool playMidiFile, int nummerID)
+        public MidiPlayWindow(string FilePath, object sender, bool playMidiFile, int nummerID, SongsWindow? songsWindow, int currentScore)
         {
             this.nummerID = nummerID;
-
+            this.songsWindow = songsWindow;
             this.playMidiFile = playMidiFile;
+            this.currentScore = currentScore;
             midiInputProcessor = new MidiInputProcessor();
 
             stopwatch = new Stopwatch();
             stopwatch.Start();
             try
             {
-                midiFileSong =
-            new MidiFile(FilePath);
+
+                midiFileSong = new MidiFile(FilePath);
+
             } catch (FileNotFoundException e)
             {
                 MessageBox.Show(e.Message);
-
             }
-
-            //_notesOfSongList = _midiInputProcessor.MidiToList(smokeOnTheWater);
-
-
-            //MidiFile smokeOnTheWater = new MidiFile(
-            //@"C:/Users/danie/source/repos/Piano/InEenNotendop.MidiProcessorUnitTest/TestMidi/UnitTestMidi.mid");
-            TimeSpan increment = TimeSpan.FromMilliseconds(2000); // Dit voegt een delay toe aan 
-            TimeSpan increment2 = TimeSpan.FromMilliseconds(8000); // Dit voegt een delay toe aan 
-
+            
+            TimeSpan increment = TimeSpan.FromMilliseconds(2000); // Dit voegt een delay toe aan noten genereren. Ander hebben we een bug met teveel noten weergeven aan het begin
+            TimeSpan increment2 = TimeSpan.FromMilliseconds(7800); // Dit voegt een delay toe aan get afspelen van midi noten, correspondeerd met vanaf waar de noten gegenereerd worden tot aan pianotoetsen op scherm
 
             notesOfSongList = midiInputProcessor.MidiToList(midiFileSong);
 
@@ -114,6 +113,9 @@ namespace InEenNotendop.UI
                     notesOfSongToBePlayed[i].NoteStartTime = notesOfSongToBePlayed[i].NoteStartTime.Add(increment2);
                 }
             }
+
+            endLastNote = notesOfSongToBePlayed[notesOfSongToBePlayed.Count-1].NoteStartTime + notesOfSongToBePlayed[notesOfSongToBePlayed.Count - 1].NoteDuration;
+            endLastNote = endLastNote + TimeSpan.FromSeconds(10);
 
             desiredOutDevice = "Microsoft GS Wavetable Synth";
 
@@ -201,7 +203,7 @@ namespace InEenNotendop.UI
                 if (!note.IsBlockGenerated && currentTime >= note.NoteStartTime && currentTime < note.NoteStartTime + note.NoteDuration)
                 {
                     GenerateFallingBlock(note);
-                    note.IsBlockGenerated = true; // Mark the block as generated
+                    note.IsBlockGenerated = true;
                 }
             }
 
@@ -222,6 +224,45 @@ namespace InEenNotendop.UI
                     }
                 }
             }
+
+            if(currentTime >= endLastNote)
+            {
+                songFinished = true;
+                ReturnToSongList();
+            }
+
+        }
+
+        // (Important) Dispose of the MidiIn object when the app closes
+        private void ReturnToSongList()
+        {
+            if (midiIn != null)
+            {
+                midiIn.Stop();
+                midiIn.Dispose();
+            }
+            timer.Stop();
+            midiPlayer.Dispose();
+            midiInputScoreCalculator.CalculateScoreAfterSongCompleted();
+            dataProgram.ChangeHighscore(nummerID, (int)midiInputScoreCalculator.Score, currentScore);
+            MessageBox.Show($"Score : {midiInputScoreCalculator.Score}");
+            Close();
+            songsWindow.Show();
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            if (!songFinished)
+            {
+                if (midiIn != null)
+                {
+                    midiIn.Stop();
+                    midiIn.Dispose();
+                }
+                timer.Stop();
+                midiPlayer.Dispose();
+                songsWindow.Show();
+            }
         }
 
         private void InitializeMidi(string desiredOutDevice)
@@ -234,7 +275,7 @@ namespace InEenNotendop.UI
             {
                 Debug.WriteLine($"Midi In Device {i}: {MidiIn.DeviceInfo(i)}");
             }
-            var desiredDeviceIndex = 1; // DEZE KAN VERANDEREN SOMS SPONTAAN
+            var desiredDeviceIndex = 0; // DEZE KAN VERANDEREN SOMS SPONTAAN
             if (desiredDeviceIndex < numDevices)
             {
                 midiIn = new MidiIn(desiredDeviceIndex);
@@ -360,17 +401,7 @@ namespace InEenNotendop.UI
             return left;
         }
 
-        // (Important) Dispose of the MidiIn object when the app closes
-        protected override void OnClosed(EventArgs e)
-        {
-            base.OnClosed(e);
-            midiIn.Stop();
-            midiIn.Dispose();
-            midiPlayer.Dispose();
-            midiInputScoreCalculator.CalculateScoreAfterSongCompleted();
-            dataProgram.ChangeHighscore(nummerID, (int)midiInputScoreCalculator.Score);
-            MessageBox.Show($"Score : {midiInputScoreCalculator.Score}");
-        }
+
 
     }
 }

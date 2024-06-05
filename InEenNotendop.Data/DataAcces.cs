@@ -3,32 +3,85 @@ using System.Diagnostics;
 using Renci.SshNet;
 using System.Data;
 using System.Security.Cryptography.X509Certificates;
-using System.Resources;
+using System.Resources; 
 using static System.Net.Mime.MediaTypeNames;
 
 namespace InEenNotendop.Data
 {
     // Code to handle data coming from and going to the database
-    public class DataProgram 
+    public class DataProgram
     {
         public string ConnectionString = "Data Source=127.0.0.1,1433;Initial Catalog=PianoHeroDB;User ID=Newlogin;Password=VeryStr0ngP@ssw0rd;Encrypt=False;";
+        private Process sshTunnelProcess;
+        private bool sshtunnelStarted = false;
 
         // Starts the powershell script to connect to the database
-        public void StartSshTunnel() 
+        public void StartSshTunnel()
         {
+            if (!sshtunnelStarted)
+            {
+                string currentDirectory = Directory.GetCurrentDirectory();
+                string targetDirectory = "InEenNotendop";
+                string sshTunnelFile = "";
+                while (!currentDirectory.EndsWith(targetDirectory) && !string.IsNullOrEmpty(currentDirectory))
+                {
+                    if (Directory.Exists(sshTunnelFile))
+                    {
+                        break; // Found the target directory, exit the loop
+                    }
+                    currentDirectory = Path.GetDirectoryName(currentDirectory); // Move up one directory
+                    sshTunnelFile = $"{currentDirectory}\\sshtunnel.ps1";
+                }
+
+                ProcessStartInfo psi = new ProcessStartInfo
+                {
+                    FileName = "powershell.exe",
+                    Arguments = sshTunnelFile,
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    CreateNoWindow = true
+                };
+
+                sshTunnelProcess = Process.Start(psi);
+                sshtunnelStarted = true;
+                 
+            }
+        }
+        public void StopSshTunnel()
+        {
+
+            string currentDirectory = Directory.GetCurrentDirectory();
+            string targetDirectory = "InEenNotendop";
+            string sshTunnelFile = "";
+            while (!currentDirectory.EndsWith(targetDirectory) && !string.IsNullOrEmpty(currentDirectory))
+            {
+                if (Directory.Exists(sshTunnelFile))
+                {
+                    break; // Found the target directory, exit the loop
+                }
+                currentDirectory = Path.GetDirectoryName(currentDirectory); // Move up one directory
+                sshTunnelFile = $"{currentDirectory}\\StopSshTunnel.ps1";
+            }
+
             ProcessStartInfo psi = new ProcessStartInfo
             {
                 FileName = "powershell.exe",
-                Arguments = ".\\sshtunnel.ps1",
+                Arguments = sshTunnelFile,
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 CreateNoWindow = true
             };
+
+            sshTunnelProcess = Process.Start(psi);
+            sshtunnelStarted = true;
+
+
         }
 
         // Downloads selected song from the database
-        public void DownloadSong(string artist, string title) 
+        public void DownloadSong(string artist, string title)
         {
             string host = "145.44.235.225";
             string username = "student";
@@ -124,7 +177,7 @@ namespace InEenNotendop.Data
         }
 
         // Code to put the song in the SQL database
-        public void UploadsongToDataBase(string name, string artiest, int length, int bpm, int diffeculty, string filepath) 
+        public void UploadsongToDataBase(string name, string artiest, int length, int bpm, int diffeculty, string filepath)
         {
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
@@ -154,7 +207,7 @@ namespace InEenNotendop.Data
         }
 
         // Gets the score for the song
-        public DataView GetDataForGrid(int nummerId) 
+        public DataView GetDataForGrid(int nummerId)
         {
             string CmdString = string.Empty;
             using (SqlConnection con = new SqlConnection(ConnectionString))
@@ -170,7 +223,7 @@ namespace InEenNotendop.Data
         }
 
         // Generic function used to prevent double code with filtering and sorting
-        public List<Nummer> LijstFunc(string sqlcommand) 
+        public List<Nummer> LijstFunc(string sqlcommand)
         {
             List<Nummer> nummers = new List<Nummer>();
 
@@ -189,6 +242,8 @@ namespace InEenNotendop.Data
                             int lengte = reader.GetInt32(reader.GetOrdinal("Lengte"));
                             int bpm = reader.GetInt32(reader.GetOrdinal("Bpm"));
                             int moeilijkheid = reader.GetInt32(reader.GetOrdinal("Moeilijkheid"));
+                            MoeilijkheidConverter converter = new MoeilijkheidConverter();
+                            string ConvertedMoeilijkheid = converter.Convert(moeilijkheid);
                             int id = reader.GetInt32(reader.GetOrdinal("Id"));
                             string filepath;
                             int filepathOrdinal = reader.GetOrdinal("Filepath");
@@ -201,7 +256,9 @@ namespace InEenNotendop.Data
                                 filepath = null;
                             }
                             int score = reader.GetInt32(reader.GetOrdinal("Score"));
-                            Nummer nummer = new Nummer(title, artiest, lengte, bpm, moeilijkheid, id, filepath, score);
+
+                            string ConvertedTime = ToMinutesSeconds(lengte);
+                            Nummer nummer = new Nummer(title, artiest, lengte, bpm, moeilijkheid, id, filepath, score, ConvertedTime, ConvertedMoeilijkheid);
                             nummers.Add(nummer);
                         }
                         connection.Close();
@@ -219,7 +276,7 @@ namespace InEenNotendop.Data
                 {
                     connection.Open();
                     string sql = "SELECT COUNT(ID) FROM Nummers";
-                    using (SqlCommand command = new SqlCommand(sql,connection))
+                    using (SqlCommand command = new SqlCommand(sql, connection))
                     {
                         return (int)command.ExecuteScalar();
                     }
@@ -233,13 +290,13 @@ namespace InEenNotendop.Data
         }
 
         // Default list method
-        public List<Nummer> MaakLijst() 
+        public List<Nummer> MaakLijst()
         {
             return LijstFunc("SELECT Title, Artiest, Lengte, Bpm, Moeilijkheid, ID, Filepath, Score FROM Nummers INNER JOIN Scores ON Nummers.ID = Scores.NummerID;");
         }
 
         // Gets sorted list from database
-        public List<Nummer> MakeSortedList(int Difficulty, string Sort) 
+        public List<Nummer> MakeSortedList(int Difficulty, string Sort)
         {
             if (Difficulty != 0)
             {
@@ -250,26 +307,52 @@ namespace InEenNotendop.Data
                 return LijstFunc($"SELECT Title, Artiest, Lengte, Bpm, Moeilijkheid, ID, Filepath, Score FROM Nummers INNER JOIN Scores ON Nummers.ID = Scores.NummerID ORDER BY {Sort}");
             }
         }
-
+         
         // Gets filtered list from database
-        public List<Nummer> MaakFilteredLijst(int Difficulty) 
+        public List<Nummer> MaakFilteredLijst(int Difficulty)
         {
             return LijstFunc($"SELECT Title, Artiest, Lengte, Bpm, Moeilijkheid, ID, Filepath, Score FROM Nummers INNER JOIN Scores ON Nummers.ID = Scores.NummerID WHERE Moeilijkheid = {Difficulty}");
         }
 
         // Code to change high-score after song completion
-        public void ChangeHighscore(int ID, int Score) 
+        public void ChangeHighscore(int ID, int Score, int currentScore)
         {
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            if (Score > currentScore)
             {
-                using (var command = connection.CreateCommand())
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
                 {
-                    command.CommandText = $"UPDATE Scores SET Score = {Score} WHERE NummerID = {ID}";
-                    connection.Open();
-                    command.ExecuteNonQuery();
-                    connection.Close();
+                    using (var command = connection.CreateCommand())
+                    {
+                        command.CommandText = $"UPDATE Scores SET Score = {Score} WHERE NummerID = {ID}";
+                        connection.Open();
+                        command.ExecuteNonQuery();
+                        connection.Close();
+                    }
                 }
             }
+        }
+
+        public string ToMinutesSeconds(int FullTime)
+        {
+            int minutes = (Convert.ToInt32(FullTime) / 60);
+            string minutesString = Convert.ToString(minutes);
+            int seconds = (Convert.ToInt32(FullTime) % 60);
+
+            string secondsString = null;
+
+            // 0 voor de secondes plakken als ze onder 10 zijn
+            if (seconds < 10)
+            {
+                secondsString = "0" + seconds;
+            }
+            else
+            {
+                secondsString = seconds.ToString();
+            }
+
+            // minuten en secondes aan elkaar plakken
+            return minutesString + ":" + secondsString;
+            //return "aaa";
         }
     }
 }

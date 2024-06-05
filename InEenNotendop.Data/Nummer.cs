@@ -17,8 +17,10 @@ namespace InEenNotendop.Data
         public int Id { get; set; }
         public string Filepath { get; set; }
         public int Score { get; set; }
+        public string ConvertedTime { get; set; }
+        public string ConvertedMoeilijkheid { get; set; }
 
-        public Nummer(string title, string artiest, int fulltime, int bpm, int moeilijkheid, int id, string filepath, int score)
+        public Nummer(string title, string artiest, int fulltime, int bpm, int moeilijkheid, int id, string filepath, int score, string convertedTime, string convertedMoeilijkheid)
         {
             Title = title;
             Artiest = artiest;
@@ -28,6 +30,8 @@ namespace InEenNotendop.Data
             Id = id;
             Filepath = filepath;
             Score = score;
+            ConvertedTime = convertedTime;
+            ConvertedMoeilijkheid = convertedMoeilijkheid;
         }
     }
 

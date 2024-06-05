@@ -14,13 +14,13 @@ namespace InEenNotendop.Business
             ListOfNotesSong = [];
         }
 
-        public List<Note> MidiToList(MidiFile midiFile)
+        public List<Note> MidiToList(MidiFile? midiFile)
         {
             ListOfNotesSong = new List<Note>();
             if (midiFile != null)
             {
                 int ticksPerQuarterNote = midiFile.DeltaTicksPerQuarterNote;
-                int tempo = 500000; // Default tempo in microseconds per quarter note (120 BPM)
+                int tempo = 500000; // Default microseconds per kwartnoot (120 BPM)
 
                 foreach (var track in midiFile.Events)
                 {
@@ -59,20 +59,7 @@ namespace InEenNotendop.Business
         }
     }
 
-    public static class MidiUtilities
-    {
-        public static TimeSpan GetTimeSpanFromMidiTicks(int ticks, int ticksPerQuarterNote, int microsecondsPerQuarterNote)
-        {
-            // Convert microseconds to milliseconds
-            double millisecondsPerQuarterNote = microsecondsPerQuarterNote / 1000.0;
-            // Calculate milliseconds per tick
-            double millisecondsPerTick = millisecondsPerQuarterNote / ticksPerQuarterNote;
-            // Convert ticks to milliseconds
-            double totalMilliseconds = ticks * millisecondsPerTick;
-            // Convert milliseconds to TimeSpan
-            return TimeSpan.FromMilliseconds(totalMilliseconds);
-        }
-    }
+
 
     public class Note
     {
@@ -91,9 +78,10 @@ namespace InEenNotendop.Business
             
         }
 
-        public Note(int noteNumber, TimeSpan startTime, TimeSpan noteDuration) // voor midi playback met vertraging
+        public Note(int noteNumber, TimeSpan noteStartTime) // voor noot aanmaken zonder midi event
         {
-            
+            NoteNumber = noteNumber;
+            NoteStartTime = noteStartTime;
         }
 
         public void EndNote(TimeSpan endTime)
