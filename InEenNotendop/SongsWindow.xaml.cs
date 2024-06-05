@@ -17,6 +17,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Diagnostics.Eventing.Reader;
 using System.Windows.Forms;
+using InEenNotendop.Business;
 
 namespace InEenNotendop.UI
 {
@@ -88,7 +89,7 @@ namespace InEenNotendop.UI
                     string ConvertedTime = nummer.ConvertedTime;
                     MoeilijkheidConverter moeilijkheidConverter = new MoeilijkheidConverter();
                     int currentScore = nummer.Score;
-                    string moeilijkheidText = moeilijkheidConverter.Convert(nummer.Moeilijkheid, typeof(string), null, CultureInfo.InvariantCulture) as string;
+                    string moeilijkheidText = moeilijkheidConverter.Convert(nummer.Moeilijkheid);
 
                     SelectingWindow detailsWindow = new SelectingWindow(nummerId, moeilijkheidText, Title, Artiest, FullTime, Bpm, FilePath, ConvertedTime, this, currentScore);
                     detailsWindow.Owner = this;

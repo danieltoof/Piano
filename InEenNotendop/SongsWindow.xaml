@@ -4,6 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InEenNotendop.UI"
+        xmlns:ui="assembly=InEenNotendop.Business"
+        xmlns:business="clr-namespace:InEenNotendop.Business;assembly=InEenNotendop.Business"
         mc:Ignorable="d"
         Title="PianoHero"
         Width="{x:Static SystemParameters.PrimaryScreenWidth}"  
@@ -11,10 +13,6 @@
         Icon="Resources/icon.png"
         WindowStartupLocation="CenterScreen"
         WindowState="Maximized">
-    <Window.Resources>
-        <!-- Converter om de moeilijkheidstekst op te halen -->
-        <local:MoeilijkheidConverter x:Key="MoeilijkheidConverter" />
-    </Window.Resources>
 
     <Grid Name="SongsGrid" >
         <Grid.RowDefinitions>
@@ -63,8 +61,7 @@
                                         <Run Text="{Binding ConvertedTime}"/>
                                     </TextBlock>
                                     <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,15,0" >
-                                        <Run Text="Difficulty:"/>
-                                       <Run Text="{Binding Path=Moeilijkheid, Converter={StaticResource MoeilijkheidConverter}}"/>
+                                       <Run Text="{Binding ConvertedMoeilijkheid, StringFormat='Difficulty: {0}'}"/>
                                     </TextBlock>
                                 </Grid>
                             </Grid>

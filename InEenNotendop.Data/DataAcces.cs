@@ -242,6 +242,8 @@ namespace InEenNotendop.Data
                             int lengte = reader.GetInt32(reader.GetOrdinal("Lengte"));
                             int bpm = reader.GetInt32(reader.GetOrdinal("Bpm"));
                             int moeilijkheid = reader.GetInt32(reader.GetOrdinal("Moeilijkheid"));
+                            MoeilijkheidConverter converter = new MoeilijkheidConverter();
+                            string ConvertedMoeilijkheid = converter.Convert(moeilijkheid);
                             int id = reader.GetInt32(reader.GetOrdinal("Id"));
                             string filepath;
                             int filepathOrdinal = reader.GetOrdinal("Filepath");
@@ -256,7 +258,7 @@ namespace InEenNotendop.Data
                             int score = reader.GetInt32(reader.GetOrdinal("Score"));
 
                             string ConvertedTime = ToMinutesSeconds(lengte);
-                            Nummer nummer = new Nummer(title, artiest, lengte, bpm, moeilijkheid, id, filepath, score, ConvertedTime);
+                            Nummer nummer = new Nummer(title, artiest, lengte, bpm, moeilijkheid, id, filepath, score, ConvertedTime, ConvertedMoeilijkheid);
                             nummers.Add(nummer);
                         }
                         connection.Close();
