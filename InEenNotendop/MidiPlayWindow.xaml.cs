@@ -114,8 +114,17 @@ namespace InEenNotendop.UI
                 }
             }
 
-            endLastNote = notesOfSongToBePlayed[notesOfSongToBePlayed.Count-1].NoteStartTime + notesOfSongToBePlayed[notesOfSongToBePlayed.Count - 1].NoteDuration;
-            endLastNote = endLastNote + TimeSpan.FromSeconds(10);
+            try
+            {
+                endLastNote = notesOfSongToBePlayed[notesOfSongToBePlayed.Count - 1].NoteStartTime + notesOfSongToBePlayed[notesOfSongToBePlayed.Count - 1].NoteDuration;
+                endLastNote = endLastNote + TimeSpan.FromSeconds(10);
+            } 
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+                Close();
+            }
+
 
             desiredOutDevice = "Microsoft GS Wavetable Synth";
 
@@ -259,8 +268,14 @@ namespace InEenNotendop.UI
                     midiIn.Stop();
                     midiIn.Dispose();
                 }
-                timer.Stop();
-                midiPlayer.Dispose();
+                if(timer != null)
+                {
+                    timer.Stop();
+                }
+                if(midiPlayer != null)
+                {
+                    midiPlayer.Dispose();
+                }
                 songsWindow.Show();
             }
         }
@@ -336,7 +351,7 @@ namespace InEenNotendop.UI
         // new
         private void GenerateFallingBlock(Note note)
         {
-            if (note.NoteNumber >= 36 && note.NoteNumber < PianoGrid.ColumnDefinitions.Count + 36)
+            if (note.NoteNumber >= 36 && note.NoteNumber < NotesGrid.ColumnDefinitions.Count + 36)
             {
                 // Create a new rectangle
 
