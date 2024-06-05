@@ -21,6 +21,7 @@ using Microsoft.Data.SqlClient;
 using System.Diagnostics;
 using InEenNotendop.Data;
 using System.Windows.Markup;
+using Microsoft.IdentityModel.Tokens;
 
 namespace InEenNotendop.UI
 {
@@ -62,12 +63,12 @@ namespace InEenNotendop.UI
         // Code to process save button
         private async void saveButton_Click(object sender, RoutedEventArgs e) 
         {
-            int error = 1;
             int diffecultyCheckbox = 1;
             string myText = ImportName.Text;
             var checkedValue = "Easy";
-            string songName;
-            string songArtist;
+            string songName = "";
+            string songArtist = "";
+            bool fileLocation = false;
 
             RadioButton rb = FindVisualChildren<RadioButton>(ImportDiffeculty).FirstOrDefault(x => x.IsChecked == true); // Gets selected difficulty from radio button
             if (rb != null)
@@ -86,40 +87,41 @@ namespace InEenNotendop.UI
                         break;
                 }
             }
+            string messageName = "";
+            string messageArtist = "";
+            string messageFile = "";
             // check if song is not null
             if (string.IsNullOrEmpty(ImportName.Text))
             {
-                error = 1;
-                MessageBox.Show("Enter a name");
+                messageName = "Enter an artist";
             }
-            else { songName = ImportName.Text; error = 0; }
+            else { songName = ImportName.Text;  messageName = null; }
 
             // check if artist is not null
             if (string.IsNullOrEmpty(ImportArtist.Text))
             {
-                error = 1;
-                MessageBox.Show("Enter an artist");
+                messageArtist = "Enter an artist";
             }
-            else { songArtist = ImportArtist.Text; error = 0; }
+            else { songArtist = ImportArtist.Text; messageArtist = null; }
 
             // Checks if file is selected
             if (string.IsNullOrEmpty(FilePath) && string.IsNullOrEmpty(FileName)) 
             {
-                error = 1;
-                MessageBox.Show("Select a file");
+                fileLocation = true;
+                messageFile = "Select a file";
             }
 
+            string msg = messageName + Environment.NewLine + messageArtist + Environment.NewLine + messageFile;
+            MessageBox.Show(msg);
 
-            int songLength = GetLength(FilePath);
-            int bpm = GetStartTempo(FilePath);
-            string filepath = @"..\..\..\Resources\Song\" + ImportArtist.Text + " - " + ImportName.Text + ".mid";
+            if (!string.IsNullOrEmpty(songName) && !string.IsNullOrEmpty(songArtist) && fileLocation == true) {
+                int songLength = GetLength(FilePath);
+                int bpm = GetStartTempo(FilePath);
+                string filepath = @"..\..\..\Resources\Song\" + songArtist + " - " + songName + ".mid";
 
-            data.UploadsongToDataBase(ImportName.Text, ImportArtist.Text, songLength, bpm, diffecultyCheckbox, filepath);
-            data.UploadSong(ImportName.Text, ImportArtist.Text, FilePath);
+                data.UploadsongToDataBase(songName, songArtist, songLength, bpm, diffecultyCheckbox, filepath);
+                data.UploadSongToServer(songName, songArtist, FilePath);
 
-            // check if there are errors
-            if (error == 0)
-            {
                 MessageBox.Show("Upload success!");
                 await Task.Delay(1000);
                 Close();

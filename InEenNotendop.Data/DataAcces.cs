@@ -86,7 +86,7 @@ namespace InEenNotendop.Data
         }
 
         // Code to handle uploading the midi file to the database
-        public void UploadSong(string name, string artist, string localPath) 
+        public void UploadSongToServer(string name, string artist, string localPath) 
         {
             string host = "145.44.235.225";
             string username = "student";
