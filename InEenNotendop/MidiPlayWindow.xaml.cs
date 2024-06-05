@@ -301,18 +301,6 @@ namespace InEenNotendop.UI
             {
                 MessageBox.Show("Invalid MIDI device index or no devices found.");
             }
-
-            //int deviceIndex = 0;
-
-            //for (int deviceId = 0; deviceId < MidiOut.NumberOfDevices; deviceId++)
-            //{
-            //    if (MidiOut.DeviceInfo(deviceId).ProductName.Contains("Microsoft GS Wavetable Synth"))
-            //    {
-            //        deviceIndex = deviceId;
-            //        break;
-            //    }
-            //}
-
         }
 
         private void MidiIn_MessageReceived(object? sender, MidiInMessageEventArgs e)
