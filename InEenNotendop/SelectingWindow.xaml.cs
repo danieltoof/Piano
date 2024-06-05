@@ -29,13 +29,13 @@ namespace InEenNotendop.UI
         string FilePath;
         private int nummerID;
         private int currentScore;
-        public SelectingWindow(int nummerId, string moeilijkheidText, string Title, string Artiest, int Lengte, int Bpm, string FilePath, object sender, int currentScore)
+        public SelectingWindow(int nummerId, string moeilijkheidText, string Title, string Artiest, int Lengte, int Bpm, string FilePath, string ConvertedTime, object sender, int currentScore)
         {
             InitializeComponent();
             songsWindow = (SongsWindow)sender;
             Owner = songsWindow;
             this.FilePath = FilePath;
-            DataContext = new NummerDetailsViewModel(nummerId, moeilijkheidText, Title, Artiest, Lengte, Bpm, currentScore);
+            DataContext = new NummerDetailsViewModel(nummerId, moeilijkheidText, Title, Artiest, Lengte, Bpm, ConvertedTime, currentScore);
             FillDataGrid(nummerId);
             this.nummerID = nummerId;
             this.currentScore = currentScore;
@@ -56,9 +56,10 @@ namespace InEenNotendop.UI
             public string Artiest { get; }
             public int Lengte { get; }
             public int Bpm { get; }
+            public string ConvertedTime { get; }
             public int CurrentScore {get; }
 
-            public NummerDetailsViewModel(int nummerId, string moeilijkheidText, string title, string artiest, int lengte, int bpm, int currentScore)
+            public NummerDetailsViewModel(int nummerId, string moeilijkheidText, string title, string artiest, int lengte, int bpm, string convertedTime, int currentScore)
             {
                 NummerIdText = $"Clicked on Nummer with ID: {nummerId}";
                 MoeilijkheidText = $"Difficulty: {moeilijkheidText}";
@@ -66,6 +67,7 @@ namespace InEenNotendop.UI
                 Artiest = artiest;
                 Lengte = lengte;
                 Bpm = bpm;
+                ConvertedTime = convertedTime;
                 CurrentScore = currentScore;
 
             }
