@@ -301,18 +301,6 @@ namespace InEenNotendop.UI
             {
                 MessageBox.Show("Invalid MIDI device index or no devices found.");
             }
-
-            int deviceIndex = 0;
-
-            for (int deviceId = 0; deviceId < MidiOut.NumberOfDevices; deviceId++)
-            {
-                if (MidiOut.DeviceInfo(deviceId).ProductName.Contains("Microsoft GS Wavetable Synth"))
-                {
-                    deviceIndex = deviceId;
-                    break;
-                }
-            }
-
         }
 
         private void MidiIn_MessageReceived(object? sender, MidiInMessageEventArgs e)
@@ -323,7 +311,9 @@ namespace InEenNotendop.UI
                 {
                     midiNoteToButton[noteOnEvent.NoteNumber].Button.Dispatcher.Invoke(() =>
                     {
+                        // kleur toets veranderen
                         midiNoteToButton[noteOnEvent.NoteNumber].Button.Background = noteHitBrush;
+                        // noot beginnnen met spelen
                         midiPlayer.PlayNote(noteOnEvent.NoteNumber);
 
                         // Tijd berekenen sinds start spelen
@@ -333,11 +323,13 @@ namespace InEenNotendop.UI
                     });
                 }
             }
-            else if (e.MidiEvent is NoteEvent noteEvent)
+            else if (e.MidiEvent is NoteEvent noteEvent) // een noteevent wat geen noteonevent is is in dit geval altijd een event die een noot eindigt.
             {
                 if (midiNoteToButton.ContainsKey(noteEvent.NoteNumber))
                 {
+                    //noot stoppen met spelen
                     midiPlayer.StopNote(noteEvent.NoteNumber);
+                    // toets terugveranderen naar originele kleur
                     midiNoteToButton[noteEvent.NoteNumber].Button.Dispatcher.Invoke(() =>
                     {
                         midiNoteToButton[noteEvent.NoteNumber].Button.Background = midiNoteToButton[noteEvent.NoteNumber].ButtonColor;
@@ -348,58 +340,61 @@ namespace InEenNotendop.UI
 
 
         }
-        // new
+        
         private void GenerateFallingBlock(Note note)
         {
-            if (note.NoteNumber >= 36 && note.NoteNumber < NotesGrid.ColumnDefinitions.Count + 36)
-            {
-                // Create a new rectangle
+            // het zal wellicht opvallen dat soms bij een notenummer +36 of -35 staat. Dat komt omdat de nootnummer niet direct correspondeerd aan het grid nummer.
+            // mijn midi keyboard (Impact GX49) begint namelijk bij 36 als eerste nootnummer. vandaar dat dit gecorrigeerd wordt.
 
+            if (note.NoteNumber >= 36 && note.NoteNumber < NotesGrid.ColumnDefinitions.Count + 36) // noten moeten binnen de range vallen anders krijgen we exceptions
+            {
+                // noot breedte op basis van hoe breed de specifieke kolom is.
                 var actualWidthGrid = NotesGrid.ColumnDefinitions[note.NoteNumber - 36].ActualWidth;
 
-                if (actualWidthGrid > 20)
+                if (actualWidthGrid > 20) // Als noot witte toets is, bruin blokje
                 {
                     fallingBlockBrush = Brushes.SaddleBrown;
                 }
-                else
+                else // anders zwarte toets, zwart blokje
                 {
                     fallingBlockBrush = Brushes.Black;
                 }
 
                 Rectangle rect = new Rectangle
                 {
-                    Width = actualWidthGrid,  // Fixed width for the block
-                    Height = NoteHeightPerSecond * note.NoteDuration.TotalSeconds,  // Height based on note duration
-                    Fill = fallingBlockBrush  // Color of the block
+                    Width = actualWidthGrid,  
+                    Height = NoteHeightPerSecond * note.NoteDuration.TotalSeconds,  // hoogte van noot is varierend, om het accuraat te maken gebruiken we deze formule
+                    Fill = fallingBlockBrush // kleurtje
                 };
 
-                // Calculate the left position based on the column definitions
+                // horizontale positie bepalen van noot op basis van het kolomnummer
                 double leftPosition = GetLeftPositionForColumn(note.NoteNumber - 36);
                 Canvas.SetLeft(rect, leftPosition);
 
-                // Set the starting top position of the rectangle to be just off-screen above the visible area
+                // positie van top van blokje. hij is zo ingesteld dat elke blok boven het zichtbare scherm wordt gegenereerd. Dit zodat de gebruiker niet kan zien dat
+                // de noten gegenereerd worden. dit geeft een mooiere indruk en een gestroomlijnder ervaring.
                 double startTopPosition = AnimationCanvas.ActualHeight;
 
-                // Add the rectangle to the canvas
+                // blokje toevoegen aan canvas
                 AnimationCanvas.Children.Add(rect);
 
                 double fallingDistance = AnimationCanvas.ActualHeight + (rect.Height);
 
-                // Fixed falling duration for all notes
+                // hoe lang duur thet voordat blokje de piano moet bereiken?
                 fallingDuration = fallingDistance / FallingSpeed;
 
-                // Calculate the ending top position to be just off-screen below the visible area
-                double endTopPosition = startTopPosition + rect.Height + 10;  // Move it below the visible area by its height + some margin
+                // eindpositie van het blokkje zodat het onder de pianotoetsen terecht komt en niet meer zichtbaar is.
+                double endTopPosition = startTopPosition + rect.Height + 10; 
 
-                // Create and configure the animation to move from off-screen above to below
+                // animatie aanmekn
                 DoubleAnimation animation = new DoubleAnimation
                 {
-                    From = -rect.Height,  // Start just above the top of the canvas
-                    To = AnimationCanvas.ActualHeight,  // End just below the bottom of the canvas
+                    From = -rect.Height,  // net boven het canvas beginnen
+                    To = AnimationCanvas.ActualHeight,  // eindigen op de bodem van canvas
                     Duration = TimeSpan.FromSeconds(fallingDuration)  // Constant duration for the animation
                 };
 
-                // Start the animation on the Canvas.TopProperty
+                // starten van de animatie              
                 rect.BeginAnimation(Canvas.TopProperty, animation);
             }
         }
