@@ -111,8 +111,7 @@ namespace InEenNotendop.UI
                 messageFile = "Select a file";
             }
 
-            string msg = messageName + Environment.NewLine + messageArtist + Environment.NewLine + messageFile;
-            MessageBox.Show(msg);
+
 
             if (!string.IsNullOrEmpty(songName) && !string.IsNullOrEmpty(songArtist) && fileLocation == true) {
                 int songLength = GetLength(FilePath);
@@ -125,6 +124,11 @@ namespace InEenNotendop.UI
                 MessageBox.Show("Upload success!");
                 await Task.Delay(1000);
                 Close();
+            }
+            else
+            {
+                string msg = messageName + Environment.NewLine + messageArtist + Environment.NewLine + messageFile;
+                MessageBox.Show(msg);
             }
         }
 
