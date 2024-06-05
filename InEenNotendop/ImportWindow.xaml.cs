@@ -107,8 +107,12 @@ namespace InEenNotendop.UI
             // Checks if file is selected
             if (string.IsNullOrEmpty(FilePath) && string.IsNullOrEmpty(FileName)) 
             {
-                fileLocation = true;
+                fileLocation = false;
                 messageFile = "Select a file";
+            }
+            else
+            {
+                fileLocation = true;
             }
 
 
