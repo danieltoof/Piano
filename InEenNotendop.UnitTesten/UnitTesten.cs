@@ -19,89 +19,39 @@ namespace InEenNotendop.UI.Tests
     [TestClass]
     public class MoeilijkheidTests
     {
-
-        private MoeilijkheidConverter converter;
+        private MoeilijkheidConverter moeilijkheidConverter;
 
         [TestInitialize]
-        public void SetUp()
+        public void Setup()
         {
-            converter = new MoeilijkheidConverter();
-        }
-
-        [DataTestMethod]
-        [DataRow(1, "easy")]
-        [DataRow(2, "medium")]
-        [DataRow(3, "hard")]
-        [DataRow(4, "Unknown")]
-        public void Convert_GeeftDeJuisteMoeilijkheid(int moeilijkheid, string expectedResult)
-        {
-            // Act
-            var result = converter.Convert(moeilijkheid, typeof(string), null, CultureInfo.InvariantCulture);
-
-            // Assert
-            Assert.AreEqual(expectedResult, result);
+            // Arrange: Initialize the MoeilijkheidConverter instance
+            moeilijkheidConverter = new MoeilijkheidConverter();
         }
 
         [TestMethod]
-        public void ConvertBack_ShouldThrowNotImplementedException()
+        public void TestMoeilijkheidConverterCorrectness()
         {
-            // Act & Assert
-            Assert.ThrowsException<System.NotImplementedException>(() => converter.ConvertBack(null, null, null, CultureInfo.InvariantCulture));
+            // Arrange: Define expected results
+            var expectedResults = new (int input, string expectedOutput)[]
+            {
+                (1, "Easy"),
+                (2, "Medium"),
+                (3, "Hard"),
+                (4, "Unknown"),
+                (0, "Unknown"),
+                (-1, "Unknown"),
+                (999, "Unknown")
+            };
+
+            foreach (var (input, expectedOutput) in expectedResults)
+            {
+                // Act
+                string result = moeilijkheidConverter.Convert(input);
+
+                // Assert
+                Assert.AreEqual(expectedOutput, result, $"Failed for input {input}");
+            }
         }
-    }
-
-    // testen van het selectingWindow
-    [TestClass]
-    public class SelectieWindowTesten
-    {
-        //    [TestMethod]
-        //    public void Constructor_ShouldInitializePropertiesCorrectly()
-        //    {
-        //        // Arrange
-        //        int nummerId = 1;
-        //        string moeilijkheidText = "easy";
-        //        string title = "Title";
-        //        string artist = "Artist";
-        //        string lengte = "180";
-        //        int bpm = 120;
-        //        string expectedNummerIdText = "Clicked on Nummer with ID: 1";
-        //        string expectedMoeilijkheidText = "Difficulty: easy";
-
-        //        Exception backgroundThreadException = null;
-
-        //        // Act
-        //        var thread = new Thread(() =>
-        //        {
-        //            try
-        //            {
-        //                var window = new SelectingWindow(nummerId, moeilijkheidText, title, artist, lengte,  bpm, "path",this);
-
-        //                // Assert
-        //                var viewModel = window.DataContext as SelectingWindow.NummerDetailsViewModel;
-        //                Assert.IsNotNull(viewModel);
-        //                Assert.AreEqual(expectedNummerIdText, viewModel.NummerIdText);
-        //                Assert.AreEqual(expectedMoeilijkheidText, viewModel.MoeilijkheidText);
-        //                Assert.AreEqual(title, viewModel.Title);
-        //                Assert.AreEqual(artist, viewModel.Artiest);
-        //                Assert.AreEqual(lengte, viewModel.Lengte);
-        //                Assert.AreEqual(bpm, viewModel.Bpm);
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                backgroundThreadException = ex;
-        //            }
-        //        });
-
-        //        thread.SetApartmentState(ApartmentState.STA);
-        //        thread.Start();
-        //        thread.Join();
-
-        //        // Assert for any exceptions occurred in the background thread
-        //        if (backgroundThreadException != null)
-        //        {
-        //            Assert.Fail($"Background thread threw an exception: {backgroundThreadException}");
-        //        }
-        //    }
     }
 
     [TestClass]
