@@ -147,6 +147,7 @@ namespace InEenNotendop.UI
                     break;
                 case SongsWindow:
                     songWindow.SongsGrid.Background = Brushes.White;
+                    songWindow.MenuPanelGrid.Background = Brushes.White;
                     break;
             }
 
@@ -163,10 +164,11 @@ namespace InEenNotendop.UI
             switch (sender) 
             {
                 case MainWindow:
-                    mainWindow.MainGrid.Background = new SolidColorBrush(Color.FromRgb(25, 44, 49)); ;
+                    mainWindow.MainGrid.Background = new SolidColorBrush(Color.FromRgb(25, 44, 49));
                     break;
                 case SongsWindow:
-                    songWindow.SongsGrid.Background = new SolidColorBrush(Color.FromRgb(25, 44, 49)); ;
+                    songWindow.SongsGrid.Background = new SolidColorBrush(Color.FromRgb(25, 44, 49));
+                    songWindow.MenuPanelGrid.Background = new SolidColorBrush(Color.FromRgb(25, 44, 49));
                     break;
             }
 
