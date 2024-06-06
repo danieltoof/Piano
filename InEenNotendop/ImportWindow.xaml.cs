@@ -1,25 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using Microsoft.Data.SqlClient;
 using System.Diagnostics;
 using InEenNotendop.Data;
-using System.Windows.Markup;
-using Microsoft.IdentityModel.Tokens;
 using NAudio.Midi;
 using InEenNotendop.Business;
 
@@ -115,8 +99,7 @@ namespace InEenNotendop.UI
                 fileLocation = true;
             }
 
-
-
+            // Final check before uploading
             if (!string.IsNullOrEmpty(songName) && !string.IsNullOrEmpty(songArtist) && fileLocation == true) {
                 int songLength = GetLength(FilePath);
                 int bpm = GetStartTempo(FilePath);
@@ -157,7 +140,6 @@ namespace InEenNotendop.UI
             {
                 Console.WriteLine("ERROR: MIDI file not found.");
             }
-
             return 0;
         }
 
@@ -227,7 +209,6 @@ namespace InEenNotendop.UI
             MediumButton.Foreground = Brushes.Black;
             HardButton.Foreground = Brushes.Black;
         }
-
         private void SetDarkMode()
         {
             ImportGrid.Background = new SolidColorBrush(Color.FromRgb(25, 44, 49));

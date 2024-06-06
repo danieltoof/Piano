@@ -1,13 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using InEenNotendop.UI;
-using InEenNotendop.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Globalization;
-using System.Security.Permissions;
+﻿using InEenNotendop.Data;
 using System.Windows;
 using InEenNotendop.Business;
 using NAudio.Midi;

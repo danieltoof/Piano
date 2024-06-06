@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using NAudio.Midi;
+﻿using NAudio.Midi;
 
 namespace InEenNotendop.Business
 {
@@ -54,12 +52,9 @@ namespace InEenNotendop.Business
                     }
                 }
             }
-
             return ListOfNotesSong;
         }
     }
-
-
 
     public class Note
     {

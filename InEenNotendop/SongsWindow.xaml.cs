@@ -1,23 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using InEenNotendop.Data;
-using System.Diagnostics;
-using System.Globalization;
-using System.Diagnostics.Eventing.Reader;
-using System.Windows.Forms;
-using InEenNotendop.Business;
 
 namespace InEenNotendop.UI
 {
@@ -52,10 +36,9 @@ namespace InEenNotendop.UI
 
             Nummer.ItemsSource = dataProgram.MaakLijst();
             CheckDarkOrLight();
-
         }
 
-        // Zorgt dat lijst herlaad nadat liedje voorbij is, zodat de score update
+        // Updates the song list so the new score is shown, also keeps the selected filter
         protected override void OnActivated(EventArgs e)
         {
             base.OnActivated(e);
@@ -188,7 +171,6 @@ namespace InEenNotendop.UI
                     CompleteSort = "Moeilijkheid DESC";
                     break;
             }
-            
             Nummer.ItemsSource = dataProgram.MakeSortedList(Difficulty, CompleteSort);
         }
 

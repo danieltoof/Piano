@@ -1,22 +1,12 @@
 ﻿using System.Diagnostics;
 using NAudio.Midi;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using InEenNotendop.Business;
-using static InEenNotendop.UI.MidiPlayWindow;
 using System.Windows.Media.Animation;
-using static Azure.Core.HttpHeader;
-using System;
-using System.ComponentModel;
 using System.IO;
 using InEenNotendop.Data;
 
@@ -27,11 +17,9 @@ namespace InEenNotendop.UI
     /// </summary>
     public partial class MidiPlayWindow : Window
     {
-        private SettingsWindow settingsWindow;
         public SongsWindow songsWindow { get; set; }
 
         private bool playMidiFile = false;
-        private bool freePlay = false;
         private bool songFinished = false;
         private int currentScore;
 
@@ -106,7 +94,6 @@ namespace InEenNotendop.UI
 
             notesOfSongToBePlayed = [.. midiInputProcessor.MidiToList(midiFileSong)]; // shallow koepie
 
-
             if(playMidiFile) { 
                 for (int i = 0; i < notesOfSongToBePlayed.Count; i++) // Nog een keer delay toevoegen op de liste met noten die gebruikt worden voor de midi playback
                 {
@@ -125,14 +112,12 @@ namespace InEenNotendop.UI
                 Close();
             }
 
-
             desiredOutDevice = "Microsoft GS Wavetable Synth";
 
             InitializeComponent();
             InitializeMidi(desiredOutDevice);
 
             midiInputScoreCalculator = new MidiInputScoreCalculator(midiInputProcessor);
-
 
             #region mapping midi notes to the buttons
 
@@ -239,7 +224,6 @@ namespace InEenNotendop.UI
                 songFinished = true;
                 ReturnToSongList();
             }
-
         }
 
         // (Important) Dispose of the MidiIn object when the app closes
@@ -260,6 +244,7 @@ namespace InEenNotendop.UI
             songsWindow.Show();
         }
 
+        //Checks if midi device is connected so the application doesn't crash
         protected override void OnClosed(EventArgs e)
         {
             if (!songFinished)
@@ -283,7 +268,6 @@ namespace InEenNotendop.UI
 
         private void InitializeMidi(string desiredOutDevice)
         {
-
             midiPlayer = new MidiPlayer(desiredOutDevice);
 
             var numDevices = MidiIn.NumberOfDevices;
@@ -337,16 +321,12 @@ namespace InEenNotendop.UI
                     });
                 }
             }
-
-
-
         }
         
         private void GenerateFallingBlock(Note note)
         {
             // het zal wellicht opvallen dat soms bij een notenummer +36 of -35 staat. Dat komt omdat de nootnummer niet direct correspondeerd aan het grid nummer.
             // mijn midi keyboard (Impact GX49) begint namelijk bij 36 als eerste nootnummer. vandaar dat dit gecorrigeerd wordt.
-
             if (note.NoteNumber >= 36 && note.NoteNumber < NotesGrid.ColumnDefinitions.Count + 36) // noten moeten binnen de range vallen anders krijgen we exceptions
             {
                 // noot breedte op basis van hoe breed de specifieke kolom is.
@@ -400,8 +380,6 @@ namespace InEenNotendop.UI
             }
         }
 
-
-
         private double GetLeftPositionForColumn(int column)
         {
             double left = 0;
@@ -411,8 +389,5 @@ namespace InEenNotendop.UI
             }
             return left;
         }
-
-
-
     }
 }
