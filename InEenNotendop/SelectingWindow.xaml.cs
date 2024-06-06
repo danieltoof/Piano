@@ -1,20 +1,5 @@
 ﻿using InEenNotendop.Data;
-using Microsoft.Data.SqlClient;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace InEenNotendop.UI
 {
@@ -39,7 +24,6 @@ namespace InEenNotendop.UI
             FillDataGrid(nummerId);
             this.nummerID = nummerId;
             this.currentScore = currentScore;
-
         }
 
         private void OnCloseClicked(object sender, RoutedEventArgs e)
@@ -99,7 +83,6 @@ namespace InEenNotendop.UI
 
             dataProgram.DownloadSong(viewModel.Artiest,viewModel.Title);  
         }
-
 
         private void FillDataGrid(int nummerId)
         {

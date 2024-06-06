@@ -1,7 +1,4 @@
-﻿using System.Collections;
-
-
-namespace InEenNotendop.Business;
+﻿namespace InEenNotendop.Business;
 
 public class MidiInputScoreCalculator
 {
@@ -28,8 +25,7 @@ public class MidiInputScoreCalculator
             amountOfNotesInSong = 1;
         }
 
-        maxScorePerNote = maxScore
-                                  / amountOfNotesInSong;
+        maxScorePerNote = maxScore / amountOfNotesInSong;
 
         // Elke unieke noot uit het liedje wordt opgeslagen.
         foreach (var note in MidiInputProcessor.ListOfNotesSong) 
@@ -39,7 +35,6 @@ public class MidiInputScoreCalculator
                 NotesInSong.Add(note.NoteNumber);
             }
         }
-
     }
 
     public int CalculateScoreAfterSongCompleted() // SCORE BEREKENEN ALS NUMMER HELEMAAL VOLTOOID IS
@@ -51,7 +46,6 @@ public class MidiInputScoreCalculator
         // Dat maakt dit document beter te lezen
         MidiInputProcessor.ListOfNotesSong.ForEach(note => HashNotesSong?.Add(note));
         MidiInputProcessor.ListOfNotesPlayed.ForEach(note => HashNotesPlayed?.Add(note));
-
 
         #region DebugRegion
 
@@ -71,7 +65,6 @@ public class MidiInputScoreCalculator
 
         #endregion
 
-
         // Per noot die in het nummer voorkomt gaan we de score berekenen van alle instances
         foreach (var noteNumber in NotesInSong)
         {
@@ -81,7 +74,6 @@ public class MidiInputScoreCalculator
                 from note in HashNotesSong where note.NoteNumber == noteNumber select note ;
             var hashNotesPlayedFilteredByNote =
                 from note in HashNotesPlayed where note.NoteNumber == noteNumber select note;
-
 
             // Per noot gaan we nu kijken hoe ver hij van een potentiële noot die geraakt zou moeten worden zit
             // Hij itereert elke keer door elke instance van de specifieke noot, wat wellicht inefficiënt lijkt
@@ -133,5 +125,4 @@ public class MidiInputScoreCalculator
                 return 0;
         }
     }
-
 }

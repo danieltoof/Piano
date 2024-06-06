@@ -2,9 +2,6 @@
 using System.Diagnostics;
 using Renci.SshNet;
 using System.Data;
-using System.Security.Cryptography.X509Certificates;
-using System.Resources; 
-using static System.Net.Mime.MediaTypeNames;
 
 namespace InEenNotendop.Data
 {
@@ -48,9 +45,10 @@ namespace InEenNotendop.Data
                  
             }
         }
+
+        // Stops the powershell script after program has shut down
         public void StopSshTunnel()
         {
-
             string currentDirectory = Directory.GetCurrentDirectory();
             string targetDirectory = "InEenNotendop";
             string sshTunnelFile = "";
@@ -76,8 +74,6 @@ namespace InEenNotendop.Data
 
             sshTunnelProcess = Process.Start(psi);
             sshtunnelStarted = true;
-
-
         }
 
         // Downloads selected song from the database
@@ -102,7 +98,6 @@ namespace InEenNotendop.Data
                 }
                 currentDirectory = Path.GetDirectoryName(currentDirectory); // Move up one directory
                 localSavePath = $"{currentDirectory}" + $"\\Resources\\Song\\{artist} - {title}.mid";
-
             }
 
             if (string.IsNullOrEmpty(localSavePath))
@@ -265,7 +260,6 @@ namespace InEenNotendop.Data
                     }
                 }
             }
-
             return nummers;
         }
         public int getNummersAmount()

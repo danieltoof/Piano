@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace InEenNotendop.Data
+﻿namespace InEenNotendop.Data
 {
     // Custom class for songs
     public class Nummer 
@@ -34,5 +28,4 @@ namespace InEenNotendop.Data
             ConvertedMoeilijkheid = convertedMoeilijkheid;
         }
     }
-
 }

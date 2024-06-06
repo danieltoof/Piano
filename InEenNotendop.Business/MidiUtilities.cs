@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NAudio.Midi;
+﻿using NAudio.Midi;
 
 namespace InEenNotendop.Business
 {
@@ -41,7 +36,6 @@ namespace InEenNotendop.Business
                     }
                 }
             }
-
             // Als geen waarde is gevonden standaard BPM (120 returnen)
             return (int)Math.Round(tempo);
         }
@@ -66,13 +60,9 @@ namespace InEenNotendop.Business
                     }
                 }
             }
-
             // nu gaan we eerder gedefinieerde functie gebruiken om een timespan te maken
             TimeSpan timeSpanMidiFile = GetTimeSpanFromMidiTicks((int)totalTime, midiFile.DeltaTicksPerQuarterNote, 60000000 / bpm);
             return timeSpanMidiFile;
         }
-
     }
-
-    
 }
