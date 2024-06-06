@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
-using InEenNotendop.Data;
+using PianoHero.Data;
 
-namespace InEenNotendop.Business
+namespace PianoHero.Business
 {
     public class NummerLijst : INotifyPropertyChanged
     {

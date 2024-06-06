@@ -1,10 +1,10 @@
-﻿using InEenNotendop.Data;
+﻿using PianoHero.Data;
 using System.Windows;
-using InEenNotendop.Business;
+using PianoHero.Business;
 using NAudio.Midi;
 
 
-namespace InEenNotendop.UI.Tests
+namespace PianoHero.UI.Tests
 {
     //testen van de moeilijkheidsgraad
     [TestClass]

@@ -3,11 +3,11 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Diagnostics;
-using InEenNotendop.Data;
+using PianoHero.Data;
 using NAudio.Midi;
-using InEenNotendop.Business;
+using PianoHero.Business;
 
-namespace InEenNotendop.UI
+namespace PianoHero.UI
 {
     /// <summary>
     /// Interaction logic for ImportWindow.xaml

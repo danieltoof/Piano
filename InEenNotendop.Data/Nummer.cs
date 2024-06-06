@@ -1,4 +1,4 @@
-﻿namespace InEenNotendop.Data
+﻿namespace PianoHero.Data
 {
     // Custom class for songs
     public class Nummer 

@@ -1,7 +1,7 @@
-﻿using InEenNotendop.Data;
+﻿using PianoHero.Data;
 using System.Windows;
 
-namespace InEenNotendop.UI
+namespace PianoHero.UI
 {
     /// <summary>
     /// Interaction logic for SelectingWindow.xaml

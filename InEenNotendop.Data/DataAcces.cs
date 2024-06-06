@@ -3,7 +3,7 @@ using System.Diagnostics;
 using Renci.SshNet;
 using System.Data;
 
-namespace InEenNotendop.Data
+namespace PianoHero.Data
 {
     // Code to handle data coming from and going to the database
     public class DataProgram

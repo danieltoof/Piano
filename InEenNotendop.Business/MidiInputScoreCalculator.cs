@@ -1,4 +1,4 @@
-﻿namespace InEenNotendop.Business;
+﻿namespace PianoHero.Business;
 
 public class MidiInputScoreCalculator
 {

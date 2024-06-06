@@ -1,8 +1,8 @@
 ﻿using System.Windows;
-using InEenNotendop.Data;
-using InEenNotendop.UI;
+using PianoHero.Data;
+using PianoHero.UI;
 
-namespace InEenNotendop
+namespace PianoHero
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

@@ -1,6 +1,6 @@
 ﻿using NAudio.Midi;
 
-namespace InEenNotendop.Business;
+namespace PianoHero.Business;
 
 // Code for handling the Midi device input
 public class MidiPlayer 

@@ -1,6 +1,6 @@
 ﻿using NAudio.Midi;
 
-namespace InEenNotendop.Business
+namespace PianoHero.Business
 {
     public static class MidiUtilities
     {

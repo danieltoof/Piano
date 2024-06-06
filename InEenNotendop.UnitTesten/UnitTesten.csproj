@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\InEenNotendop\InEenNotendop.UI.csproj" />
+    <ProjectReference Include="..\InEenNotendop\PianoHero.csproj" />
   </ItemGroup>
 
   <ItemGroup>

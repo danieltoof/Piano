@@ -1,6 +1,8 @@
-﻿using System.Windows;
+﻿using System.Configuration;
+using System.Data;
+using System.Windows;
 
-namespace InEenNotendop
+namespace PianoHero
 {
     /// <summary>
     /// Interaction logic for App.xaml

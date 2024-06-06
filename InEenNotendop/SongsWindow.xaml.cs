@@ -1,9 +1,9 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using InEenNotendop.Data;
+using PianoHero.Data;
 
-namespace InEenNotendop.UI
+namespace PianoHero.UI
 {
     /// <summary>
     /// Interaction logic for SongsWindow.xaml

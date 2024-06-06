@@ -5,12 +5,12 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Threading;
-using InEenNotendop.Business;
+using PianoHero.Business;
 using System.Windows.Media.Animation;
 using System.IO;
-using InEenNotendop.Data;
+using PianoHero.Data;
 
-namespace InEenNotendop.UI
+namespace PianoHero.UI
 {
     /// <summary>
     /// Interaction logic for MidiPlayWindow.xaml
