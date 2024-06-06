@@ -29,7 +29,7 @@ namespace InEenNotendop.UI.Tests
         }
 
         [TestMethod]
-        public void TestMoeilijkheidConverterCorrectness()
+        public void Convert_ValidAndInvalidInputs_CorrectOutputs()
         {
             // Arrange: Define expected results
             var expectedResults = new (int input, string expectedOutput)[]
