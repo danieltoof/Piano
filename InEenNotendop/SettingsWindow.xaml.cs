@@ -16,7 +16,7 @@ namespace InEenNotendop.UI
         private SongsWindow _songWindow;
         private MidiPlayWindow _midiPlayWindow;
         private int _isOkToClose = 0;
-        private DataProgram _data = new DataProgram();
+        SshScript _sshScript = new SshScript();
         
         public SettingsWindow(object sender)
         {
@@ -60,7 +60,7 @@ namespace InEenNotendop.UI
             }
             else
             {
-                _data.StopSshTunnel();
+                _sshScript.StopSshTunnel();
                 e.Cancel = false;
             }
         }

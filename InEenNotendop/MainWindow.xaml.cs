@@ -11,14 +11,14 @@ namespace InEenNotendop
     {
         
         public SettingsWindow SettingsWindow;
-        DataProgram _data = new DataProgram();
+        private SshScript _sshScript = new SshScript();
 
         // Default constructor
         public MainWindow() 
         {
             InitializeComponent();
             SettingsWindow = new SettingsWindow(this);
-            _data.StartSshTunnel();
+            _sshScript.StartSshTunnel();
             CheckLightMode();
             CheckDarkOrLight();
         }
@@ -48,7 +48,7 @@ namespace InEenNotendop
 
         private void ExitButton_OnClick(object sender, RoutedEventArgs e)
         {
-            _data.StopSshTunnel();
+            _sshScript.StopSshTunnel();
             Environment.Exit(0);
         }
 

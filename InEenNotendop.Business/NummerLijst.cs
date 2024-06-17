@@ -5,10 +5,10 @@ namespace InEenNotendop.Business
 {
     public class NummerLijst : INotifyPropertyChanged
     {
-        DataProgram _dataProgram = new DataProgram();
+        DownloadDatabase _downloadDatabase = new DownloadDatabase();
         public int AantalNummers()
         {
-            return _dataProgram.GetNummersAmount();
+            return _downloadDatabase.GetNummersAmount();
         }
         public event PropertyChangedEventHandler? PropertyChanged;
     }

@@ -10,7 +10,8 @@ namespace InEenNotendop.UI
     {
         public Window Owner { get; set; }
         private SongsWindow _songsWindow;
-        DataProgram _dataProgram = new DataProgram();
+        DownloadDatabase _downloadDatabase = new DownloadDatabase();
+        DownloadMidi _downloadMidi = new DownloadMidi();
         string _filePath;
         private int _nummerId;
         private int _currentScore;
@@ -81,12 +82,12 @@ namespace InEenNotendop.UI
         {
             var viewModel = DataContext as NummerDetailsViewModel;
 
-            _dataProgram.DownloadSong(viewModel.Artiest,viewModel.Title);  
+            _downloadMidi.DownloadSong(viewModel.Artiest,viewModel.Title);  
         }
 
         private void FillDataGrid(int nummerId)
         {
-            HighScoresGrid.ItemsSource = _dataProgram.GetDataForGrid(nummerId);
+            HighScoresGrid.ItemsSource = _downloadDatabase.GetDataForGrid(nummerId);
         }
     }
 }

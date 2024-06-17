@@ -28,7 +28,7 @@ namespace InEenNotendop.UI
         private MidiFile _midiFileSong;
         private TimeSpan _endLastNote;
 
-        DataProgram _dataProgram = new DataProgram();
+        private UploadDatabase _uploadDatabase = new UploadDatabase();
         private int _nummerId;
 
         private string? DesiredOutDevice { get; set; }
@@ -237,7 +237,7 @@ namespace InEenNotendop.UI
             _timer.Stop();
             _midiPlayer.Dispose();
             _midiInputScoreCalculator.CalculateScoreAfterSongCompleted();
-            _dataProgram.ChangeHighscore(_nummerId, (int)_midiInputScoreCalculator.Score, _currentScore);
+            _uploadDatabase.ChangeHighscore(_nummerId, (int)_midiInputScoreCalculator.Score, _currentScore);
             MessageBox.Show($"Score : {_midiInputScoreCalculator.Score}");
             SongsWindow.SongIsFinished = true;
             Close();
