@@ -39,8 +39,6 @@ namespace InEenNotendop.UI
         private System.Windows.Media.Brush fallingBlockBrush = Brushes.Red;
         private Dictionary<int, ButtonData> midiNoteToButton = new(); // int = Midi notonumber, Button = button die wordt toegewezen aan die noot.
 
-        private MidiInputProcessor midiInputProcessor; // Klasse nodig om midi noten op te slaan in List en score te berekenen
-        private MidiInputScoreCalculator midiInputScoreCalculator;
         private DateTime _startTime; // Deze hebben we nodog om de tijd te berekenen van wanneer de midi noot is gespeeld, 
         private object value;
         private DispatcherTimer timer;
@@ -68,7 +66,7 @@ namespace InEenNotendop.UI
             this.songsWindow = songsWindow;
             this.playMidiFile = playMidiFile;
             this.currentScore = currentScore;
-            midiInputProcessor = new MidiInputProcessor();
+            midiInputProcessor = new MidiToListConverter();
 
             stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -117,7 +115,7 @@ namespace InEenNotendop.UI
             InitializeComponent();
             InitializeMidi(desiredOutDevice);
 
-            midiInputScoreCalculator = new MidiInputScoreCalculator(midiInputProcessor);
+            midiInputScoreCalculator = new ScoreCalculator(midiInputProcessor);
 
             #region mapping midi notes to the buttons
 
@@ -268,13 +266,9 @@ namespace InEenNotendop.UI
 
         private void InitializeMidi(string desiredOutDevice)
         {
-            midiPlayer = new MidiPlayer(desiredOutDevice);
+            midiPlayer = new MidiPlayer(desiredOutDevice, this);
 
             var numDevices = MidiIn.NumberOfDevices;
-            for (int i = 0; i < numDevices; i++)
-            {
-                Debug.WriteLine($"Midi In Device {i}: {MidiIn.DeviceInfo(i)}");
-            }
             var desiredDeviceIndex = 0; // DEZE KAN VERANDEREN SOMS SPONTAAN
             if (desiredDeviceIndex < numDevices)
             {

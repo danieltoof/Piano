@@ -6,8 +6,9 @@ namespace InEenNotendop.Business;
 public class MidiPlayer 
 {
     private MidiOut midiOut;
+    private object owner;
 
-    public MidiPlayer(string desiredDevice)
+    public MidiPlayer(string desiredDevice, object owner)
     {
         Dispose();
         // Find and initialize the Microsoft GS Wavetable Synth
@@ -20,6 +21,8 @@ public class MidiPlayer
         {
             throw new Exception($"{desiredDevice} not found");
         }
+
+        this.owner = owner;
     }
 
     public void PlayNote(int note)
