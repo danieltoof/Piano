@@ -27,11 +27,6 @@ namespace InEenNotendop.UI
             this._currentScore = currentScore;
         }
 
-        private void OnCloseClicked(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
-
         // Class and constructor for detailed song screen
         public class NummerDetailsViewModel 
         {

@@ -13,7 +13,7 @@ public class DownloadMidi
         // Get the absolute path of the current working directory
         string currentDirectory = Directory.GetCurrentDirectory();
 
-        // Navigate up directories until the target directory "Songs" is found
+        // Navigate up directories until the target directory "Song" is found
         string targetDirectory = "InEenNotendop";
         string localSavePath = "";
         while (!currentDirectory.EndsWith(targetDirectory) && !string.IsNullOrEmpty(currentDirectory))
@@ -32,6 +32,7 @@ public class DownloadMidi
             return;
         }
 
+        // Downloads the .mid file from the ubuntu machine
         try
         {
             using (var sftp = new SftpClient(ConfigClass.Host, ConfigClass.Username, ConfigClass.Password))

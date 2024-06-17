@@ -52,27 +52,8 @@ public class DownloadDatabase
         }
         return nummers;
     }
-    public int GetNummersAmount()
-    {
-        if (!string.IsNullOrEmpty(ConfigClass.ConnectionString))
-        {
-            using (SqlConnection connection = new SqlConnection(ConfigClass.ConnectionString))
-            {
-                connection.Open();
-                string sql = "SELECT COUNT(ID) FROM Nummers";
-                using (SqlCommand command = new SqlCommand(sql, connection))
-                {
-                    return (int)command.ExecuteScalar();
-                }
-            }
-        }
-        else
-        {
-            Console.WriteLine("Connection string is not set.");
-            return -1;
-        }
-    }
 
+    // Gets the score of the selected song in SelectingWindow
     public DataView GetDataForGrid(int nummerId)
     {
         string cmdString = string.Empty;
@@ -88,7 +69,7 @@ public class DownloadDatabase
         }
     }
 
-    // Default list method
+    // Default list method used on startup
     public List<Nummer> MaakLijst()
     {
         return LijstFunc("SELECT Title, Artiest, Lengte, Bpm, Moeilijkheid, ID, Filepath, Score FROM Nummers INNER JOIN Scores ON Nummers.ID = Scores.NummerID;");

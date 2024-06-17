@@ -4,6 +4,7 @@ namespace InEenNotendop.Data;
 
 public class UploadMidi
 {
+    // Uploads the .mid file to the ubuntu machine
     public void UploadSongToServer(string name, string artist, string localPath)
     {
         string remoteFilePath = Path.Combine("/home/student/Music", $"{artist} - {name}.mid");
