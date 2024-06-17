@@ -12,6 +12,10 @@ namespace InEenNotendop.Data
         private Process sshTunnelProcess;
         private bool sshtunnelStarted = false;
 
+        static readonly string host = "145.44.235.225";
+        static readonly string username = "student";
+        static readonly string password = "PianoHero";
+
         // Starts the powershell script to connect to the database
         public void StartSshTunnel()
         {
@@ -79,10 +83,8 @@ namespace InEenNotendop.Data
         // Downloads selected song from the database
         public void DownloadSong(string artist, string title)
         {
-            string host = "145.44.235.225";
-            string username = "student";
-            string password = "PianoHero";
             string remoteFilePath = $"/home/student/Music/{artist} - {title}.mid";
+
 
             // Get the absolute path of the current working directory
             string currentDirectory = Directory.GetCurrentDirectory();
@@ -136,9 +138,6 @@ namespace InEenNotendop.Data
         // Code to handle uploading the midi file to the database
         public void UploadSongToServer(string name, string artist, string localPath) 
         {
-            string host = "145.44.235.225";
-            string username = "student";
-            string password = "PianoHero";
             string remoteFilePath = Path.Combine("/home/student/Music", $"{artist} - {name}.mid");
             string localSavePath = Path.Combine(localPath);
 
