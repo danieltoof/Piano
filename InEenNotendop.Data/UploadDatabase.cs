@@ -4,6 +4,7 @@ namespace InEenNotendop.Data;
 
 public class UploadDatabase
 {
+    // Method to upload information about the song to the database
     public void UploadsongToDataBase(string name, string artiest, int length, int bpm, int diffeculty, string filepath)
     {
         using (SqlConnection connection = new SqlConnection(ConfigClass.ConnectionString))

@@ -2,6 +2,7 @@
 
 public class TimeConverter
 {
+    //Method to convert fulltime int to string
     public string ToMinutesSeconds(int fullTime)
     {
         int minutes = (Convert.ToInt32(fullTime) / 60);
@@ -10,7 +11,7 @@ public class TimeConverter
 
         string secondsString = null;
 
-        // 0 voor de secondes plakken als ze onder 10 zijn
+        // adds a 0 before the seconds if under 10 (otherwise it'd show 1:9 when it should be 1:09)
         if (seconds < 10)
         {
             secondsString = "0" + seconds;
@@ -20,8 +21,7 @@ public class TimeConverter
             secondsString = seconds.ToString();
         }
 
-        // minuten en secondes aan elkaar plakken
+        // Put minutes and seconds together
         return minutesString + ":" + secondsString;
-        //return "aaa";
     }
 }
