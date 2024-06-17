@@ -10,18 +10,18 @@ namespace InEenNotendop.UI
     /// </summary>
     public partial class SongsWindow : Window
     {
-        public SettingsWindow settingsWindow;
-        private DataProgram dataProgram = new DataProgram();
-        private int lightmodeImport;
-        private int Difficulty = 0;
-        public bool songIsFinished;
+        public SettingsWindow SettingsWindow;
+        private DownloadDatabase _downloadDatabase = new DownloadDatabase();
+        private int _lightmodeImport;
+        private int _difficulty = 0;
+        public bool SongIsFinished;
 
         public SongsWindow(SettingsWindow settingsWindow)
         {
             InitializeComponent();
             
-            this.settingsWindow = settingsWindow;
-            this.settingsWindow.ChangeSettingsOwner(this);
+            this.SettingsWindow = settingsWindow;
+            this.SettingsWindow.ChangeSettingsOwner(this);
 
 
             FilterBox.Items.Add("No Filter");
@@ -34,7 +34,7 @@ namespace InEenNotendop.UI
             SortBox.Items.Add("Diff. ascending");
             SortBox.Items.Add("Diff. descending");
 
-            Nummer.ItemsSource = dataProgram.MaakLijst();
+            Nummer.ItemsSource = _downloadDatabase.MaakLijst();
             CheckDarkOrLight();
         }
 
@@ -42,16 +42,16 @@ namespace InEenNotendop.UI
         protected override void OnActivated(EventArgs e)
         {
             base.OnActivated(e);
-            if (songIsFinished)
+            if (SongIsFinished)
             {
-                songIsFinished = false;
-                if (Difficulty != 0)
+                SongIsFinished = false;
+                if (_difficulty != 0)
                 {
-                    Nummer.ItemsSource = dataProgram.MaakFilteredLijst(Difficulty);
+                    Nummer.ItemsSource = _downloadDatabase.MaakFilteredLijst(_difficulty);
                 }
                 else
                 {
-                    Nummer.ItemsSource = dataProgram.MaakLijst();
+                    Nummer.ItemsSource = _downloadDatabase.MaakLijst();
                 }
             }
         }
@@ -71,7 +71,7 @@ namespace InEenNotendop.UI
 
         private void SettingsButton_OnClick(object sender, RoutedEventArgs e)
         {
-            settingsWindow.OpenSettings();
+            SettingsWindow.OpenSettings();
         }
 
         // Creates pop-up window with detailed song information
@@ -83,17 +83,17 @@ namespace InEenNotendop.UI
                 if (nummer != null)
                 {
                     int nummerId = nummer.Id;
-                    String Title = nummer.Title;
-                    String Artiest = nummer.Artiest;
-                    int FullTime = nummer.FullTime;
-                    int Bpm = nummer.Bpm;
-                    String FilePath = nummer.Filepath;
-                    string ConvertedTime = nummer.ConvertedTime;
+                    String title = nummer.Title;
+                    String artiest = nummer.Artiest;
+                    int fullTime = nummer.FullTime;
+                    int bpm = nummer.Bpm;
+                    String filePath = nummer.Filepath;
+                    string convertedTime = nummer.ConvertedTime;
                     MoeilijkheidConverter moeilijkheidConverter = new MoeilijkheidConverter();
                     int currentScore = nummer.Score;
                     string moeilijkheidText = moeilijkheidConverter.Convert(nummer.Moeilijkheid);
 
-                    SelectingWindow detailsWindow = new SelectingWindow(nummerId, moeilijkheidText, Title, Artiest, FullTime, Bpm, FilePath, ConvertedTime, this, currentScore);
+                    SelectingWindow detailsWindow = new SelectingWindow(nummerId, moeilijkheidText, title, artiest, fullTime, bpm, filePath, convertedTime, this, currentScore);
                     detailsWindow.Owner = this;
                     detailsWindow.ShowDialog();
                 }
@@ -103,81 +103,81 @@ namespace InEenNotendop.UI
         // Checks lightmode value and changes between dark- and lightmode
         private void CheckDarkOrLight() 
         {
-            if (settingsWindow.lightmode == 1)
+            if (SettingsWindow.Lightmode == 1)
             {
-                settingsWindow.SetLightMode(this);
+                SettingsWindow.SetLightMode(this);
             }
-            else if (settingsWindow.lightmode == 0)
+            else if (SettingsWindow.Lightmode == 0)
             {
-                settingsWindow.SetDarkMode(this);
+                SettingsWindow.SetDarkMode(this);
             }
         }
 
         // Opens window to import song and refreshes list
         private void ImportButton_OnClick(object sender, RoutedEventArgs e) 
         {
-            lightmodeImport = settingsWindow.lightmode;
-            ImportWindow import = new ImportWindow(lightmodeImport);
+            _lightmodeImport = SettingsWindow.Lightmode;
+            ImportWindow import = new ImportWindow(_lightmodeImport);
             import.ShowDialog();
-            Nummer.ItemsSource = dataProgram.MaakLijst();
+            Nummer.ItemsSource = _downloadDatabase.MaakLijst();
         }
 
         // Changes list to filtered list
         private void FilterBox_SelectionChanged(object sender, SelectionChangedEventArgs e) 
         {
-            string Filter = (sender as System.Windows.Controls.ComboBox).SelectedItem as string;
-            switch (Filter)
+            string filter = (sender as System.Windows.Controls.ComboBox).SelectedItem as string;
+            switch (filter)
             {
                 case "Easy":
-                    Difficulty = 1;
+                    _difficulty = 1;
                     break;
                 case "Medium":
-                    Difficulty = 2;
+                    _difficulty = 2;
                     break;
                 case "Hard":
-                    Difficulty = 3;
+                    _difficulty = 3;
                     break;
                 case "No Filter":
-                    Difficulty = 0;
+                    _difficulty = 0;
                     break;
             }
-            if (Difficulty != 0)
+            if (_difficulty != 0)
             {
-                Nummer.ItemsSource = dataProgram.MaakFilteredLijst(Difficulty);
+                Nummer.ItemsSource = _downloadDatabase.MaakFilteredLijst(_difficulty);
             }
             else
             {
-                Nummer.ItemsSource = dataProgram.MaakLijst();
+                Nummer.ItemsSource = _downloadDatabase.MaakLijst();
             }
         }
 
         // Changes list to be sorted by chosen sorting method
         private void SortBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e) 
         {
-            string Sort = (sender as System.Windows.Controls.ComboBox).SelectedItem as string;
-            string CompleteSort = "";
-            switch (Sort)
+            string sort = (sender as System.Windows.Controls.ComboBox).SelectedItem as string;
+            string completeSort = "";
+            switch (sort)
             {
                 case "A-Z":
-                    CompleteSort = "Title ASC";
+                    completeSort = "Title ASC";
                     break;
                 case "Z-A":
-                    CompleteSort = "Title DESC";
+                    completeSort = "Title DESC";
                     break;
                 case "Diff. ascending":
-                    CompleteSort = "Moeilijkheid ASC";
+                    completeSort = "Moeilijkheid ASC";
                     break;
                 case "Diff. descending":
-                    CompleteSort = "Moeilijkheid DESC";
+                    completeSort = "Moeilijkheid DESC";
                     break;
             }
-            Nummer.ItemsSource = dataProgram.MakeSortedList(Difficulty, CompleteSort);
+            Nummer.ItemsSource = _downloadDatabase.MakeSortedList(_difficulty, completeSort);
         }
 
         // Goes back to main menu
         private void BackButton_Click(object sender, RoutedEventArgs e) 
         {
-            settingsWindow.MainMenu();
+            SettingsWindow.MainMenu();
         }
     }
 }

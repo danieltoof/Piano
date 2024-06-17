@@ -10,13 +10,13 @@ namespace InEenNotendop.UI.Tests
     [TestClass]
     public class MoeilijkheidTests
     {
-        private MoeilijkheidConverter moeilijkheidConverter;
+        private MoeilijkheidConverter _moeilijkheidConverter;
 
         [TestInitialize]
         public void Setup()
         {
             // Arrange: Initialize the MoeilijkheidConverter instance
-            moeilijkheidConverter = new MoeilijkheidConverter();
+            _moeilijkheidConverter = new MoeilijkheidConverter();
         }
 
         [TestMethod]
@@ -37,7 +37,7 @@ namespace InEenNotendop.UI.Tests
             foreach (var (input, expectedOutput) in expectedResults)
             {
                 // Act
-                string result = moeilijkheidConverter.Convert(input);
+                string result = _moeilijkheidConverter.Convert(input);
 
                 // Assert
                 Assert.AreEqual(expectedOutput, result, $"Failed for input {input}");
@@ -58,8 +58,8 @@ namespace InEenNotendop.UI.Tests
                 int lightmode;
 
                 // Act
-                mainWindow.settingsWindow.SetLightMode(mainWindow);
-                lightmode = mainWindow.settingsWindow.GetLightMode();
+                mainWindow.SettingsWindow.SetLightMode(mainWindow);
+                lightmode = mainWindow.SettingsWindow.GetLightMode();
 
                 // Assert
                 Assert.IsTrue(lightmode == 1);
@@ -79,8 +79,8 @@ namespace InEenNotendop.UI.Tests
                 int lightmode;
 
                 // Act
-                mainWindow.settingsWindow.SetDarkMode(mainWindow);
-                lightmode = mainWindow.settingsWindow.GetLightMode();
+                mainWindow.SettingsWindow.SetDarkMode(mainWindow);
+                lightmode = mainWindow.SettingsWindow.GetLightMode();
 
                 // Assert
                 Assert.IsTrue(lightmode == 0);
@@ -97,15 +97,15 @@ namespace InEenNotendop.UI.Tests
             {
                 // Arrange
                 MainWindow mainWindow = new MainWindow();
-                SongsWindow songsWindow = new SongsWindow(mainWindow.settingsWindow);
+                SongsWindow songsWindow = new SongsWindow(mainWindow.SettingsWindow);
 
                 Window expectedNewOwnerWindow = mainWindow;
 
                 // Act
-                mainWindow.settingsWindow.MainMenu();
+                mainWindow.SettingsWindow.MainMenu();
 
                 // Assert
-                Assert.AreEqual(expectedNewOwnerWindow, mainWindow.settingsWindow.Owner);
+                Assert.AreEqual(expectedNewOwnerWindow, mainWindow.SettingsWindow.Owner);
             });
 
             newThread.SetApartmentState(ApartmentState.STA);
@@ -143,14 +143,14 @@ namespace InEenNotendop.UI.Tests
     [TestClass]
     public class MidiInputProcesserTest
     {
-        private List<Note> notes;
-        private MidiFile midiFile;
+        private List<Note> _notes;
+        private MidiFile _midiFile;
 
         [TestInitialize]
         public void Setup()
         {
             MidiInputProcessor midiInputProcessor = new MidiInputProcessor();
-            midiFile = new MidiFile(
+            _midiFile = new MidiFile(
                 @"UnitTestMidi.mid");
         }
 
@@ -159,8 +159,8 @@ namespace InEenNotendop.UI.Tests
         {
             MidiInputProcessor midiInputProcessor = new MidiInputProcessor();
 
-            notes = midiInputProcessor.MidiToList(midiFile);
-            Assert.IsTrue(notes[0] != null);
+            _notes = midiInputProcessor.MidiToList(_midiFile);
+            Assert.IsTrue(_notes[0] != null);
         }
 
         [TestMethod]
@@ -181,11 +181,11 @@ namespace InEenNotendop.UI.Tests
             TimeSpan.TryParseExact("00:00:01.2272714", format, null, out timeNote4Expected);
 
 
-            notes = midiInputProcessor.MidiToList(midiFile);
-            Assert.AreEqual(timeNote1Expected, notes[0].NoteStartTime);
-            Assert.AreEqual(timeNote2Expected, notes[1].NoteStartTime);
-            Assert.AreEqual(timeNote3Expected, notes[2].NoteStartTime);
-            Assert.AreEqual(timeNote4Expected, notes[3].NoteStartTime);
+            _notes = midiInputProcessor.MidiToList(_midiFile);
+            Assert.AreEqual(timeNote1Expected, _notes[0].NoteStartTime);
+            Assert.AreEqual(timeNote2Expected, _notes[1].NoteStartTime);
+            Assert.AreEqual(timeNote3Expected, _notes[2].NoteStartTime);
+            Assert.AreEqual(timeNote4Expected, _notes[3].NoteStartTime);
 
         }
     }
@@ -193,12 +193,12 @@ namespace InEenNotendop.UI.Tests
     [TestClass]
     public class ScoreCalculatorTests
     {
-        private MidiFile midiFile;
+        private MidiFile _midiFile;
 
         [TestInitialize]
         public void Setup()
         {
-            midiFile = new MidiFile(
+            _midiFile = new MidiFile(
                 @"UnitTestMidi.mid");
 
         }
@@ -207,7 +207,7 @@ namespace InEenNotendop.UI.Tests
         public void CalculateScore_CompareMidiFileToCopyOfMidiFile_ScoreShouldBe1000()
         {
             MidiInputProcessor midiInputProcessor = new MidiInputProcessor();
-            midiInputProcessor.MidiToList(midiFile);
+            midiInputProcessor.MidiToList(_midiFile);
 
             midiInputProcessor.ListOfNotesPlayed = new List<Note>(midiInputProcessor.ListOfNotesSong);
             MidiInputScoreCalculator midiInputScoreCalculator = new MidiInputScoreCalculator(midiInputProcessor);
@@ -219,7 +219,7 @@ namespace InEenNotendop.UI.Tests
         public void CalculateScore_ManualNotes_ScoreShouldBe850()
         {
             MidiInputProcessor midiInputProcessor = new MidiInputProcessor();
-            midiInputProcessor.MidiToList(midiFile);
+            midiInputProcessor.MidiToList(_midiFile);
 
             TimeSpan timeNote1Expected = new TimeSpan();
             TimeSpan timeNote2Expected = new TimeSpan();
@@ -254,7 +254,7 @@ namespace InEenNotendop.UI.Tests
         public void CalculateScore_CompareMidiFileShifted10Milliseconds_ScoreShouldBe1000()
         {
             MidiInputProcessor midiInputProcessor = new MidiInputProcessor();
-            midiInputProcessor.MidiToList(midiFile);
+            midiInputProcessor.MidiToList(_midiFile);
 
             List<Note> alteredList = new List<Note>(midiInputProcessor.ListOfNotesSong);
             TimeSpan increment = TimeSpan.FromMilliseconds(10);
@@ -273,7 +273,7 @@ namespace InEenNotendop.UI.Tests
         {
 
             MidiInputProcessor midiInputProcessor = new MidiInputProcessor();
-            midiInputProcessor.MidiToList(midiFile);
+            midiInputProcessor.MidiToList(_midiFile);
 
             foreach(var note in midiInputProcessor.ListOfNotesSong)
             {
@@ -291,7 +291,7 @@ namespace InEenNotendop.UI.Tests
         {
 
             MidiInputProcessor midiInputProcessor = new MidiInputProcessor();
-            midiInputProcessor.MidiToList(midiFile);
+            midiInputProcessor.MidiToList(_midiFile);
 
             foreach (var note in midiInputProcessor.ListOfNotesSong)
             {
@@ -310,7 +310,7 @@ namespace InEenNotendop.UI.Tests
         {
 
             MidiInputProcessor midiInputProcessor = new MidiInputProcessor();
-            midiInputProcessor.MidiToList(midiFile);
+            midiInputProcessor.MidiToList(_midiFile);
 
             foreach (var note in midiInputProcessor.ListOfNotesSong)
             {
@@ -329,7 +329,7 @@ namespace InEenNotendop.UI.Tests
         {
 
             MidiInputProcessor midiInputProcessor = new MidiInputProcessor();
-            midiInputProcessor.MidiToList(midiFile);
+            midiInputProcessor.MidiToList(_midiFile);
 
             foreach (var note in midiInputProcessor.ListOfNotesSong)
             {
@@ -348,7 +348,7 @@ namespace InEenNotendop.UI.Tests
         {
 
             MidiInputProcessor midiInputProcessor = new MidiInputProcessor();
-            midiInputProcessor.MidiToList(midiFile);
+            midiInputProcessor.MidiToList(_midiFile);
 
             foreach (var note in midiInputProcessor.ListOfNotesSong)
             {
@@ -366,7 +366,7 @@ namespace InEenNotendop.UI.Tests
         public void CalculateScore_CalculateOneNoteCorrect_ShouldBe250()
         {
             MidiInputProcessor midiInputProcessor = new MidiInputProcessor();
-            midiInputProcessor.MidiToList(midiFile);
+            midiInputProcessor.MidiToList(_midiFile);
 
             List<Note> notes = new List<Note>();
             notes.Add(midiInputProcessor.ListOfNotesSong[1]);

@@ -14,14 +14,15 @@ namespace InEenNotendop.UI
     /// </summary>
     public partial class ImportWindow : Window
     {
-        private string FilePath;
-        private string FileName;
-        private int lightmode;
-        DataProgram data = new DataProgram();
+        private string _filePath;
+        private string _fileName;
+        private int _lightmode;
+        private UploadDatabase _uploadDatabase = new UploadDatabase();
+        private UploadMidi _uploadMidi = new UploadMidi();
         public ImportWindow(int lightmodeImport)
         {
             InitializeComponent();
-            lightmode = lightmodeImport;
+            _lightmode = lightmodeImport;
             CheckDarkOrLight();
         }
 
@@ -39,8 +40,8 @@ namespace InEenNotendop.UI
             if (result == true)
             {
                 // Get the data from selected file
-                FilePath = dialog.FileName;
-                FileName = dialog.SafeFileName;
+                _filePath = dialog.FileName;
+                _fileName = dialog.SafeFileName;
             }
         }
 
@@ -89,7 +90,7 @@ namespace InEenNotendop.UI
             else { songArtist = ImportArtist.Text; messageArtist = null; }
 
             // Checks if file is selected
-            if (string.IsNullOrEmpty(FilePath) && string.IsNullOrEmpty(FileName)) 
+            if (string.IsNullOrEmpty(_filePath) && string.IsNullOrEmpty(_fileName)) 
             {
                 fileLocation = false;
                 messageFile = "Select a file";
@@ -101,12 +102,12 @@ namespace InEenNotendop.UI
 
             // Final check before uploading
             if (!string.IsNullOrEmpty(songName) && !string.IsNullOrEmpty(songArtist) && fileLocation == true) {
-                int songLength = GetLength(FilePath);
-                int bpm = GetStartTempo(FilePath);
+                int songLength = GetLength(_filePath);
+                int bpm = GetStartTempo(_filePath);
                 string filepath = @"..\..\..\Resources\Song\" + songArtist + " - " + songName + ".mid";
 
-                data.UploadsongToDataBase(songName, songArtist, songLength, bpm, diffecultyCheckbox, filepath);
-                data.UploadSongToServer(songName, songArtist, FilePath);
+                _uploadDatabase.UploadsongToDataBase(songName, songArtist, songLength, bpm, diffecultyCheckbox, filepath);
+                _uploadMidi.UploadSongToServer(songName, songArtist, _filePath);
 
                 MessageBox.Show("Upload success!");
                 await Task.Delay(1000);
@@ -119,19 +120,19 @@ namespace InEenNotendop.UI
             }
         }
 
-        static int GetLength(string MidiFileName)
+        static int GetLength(string midiFileName)
         {
             // check of bestandsnaam opgegeven is
-            if (!MidiFileName.EndsWith(".mid"))
+            if (!midiFileName.EndsWith(".mid"))
             {
                 //voeg bestandsnaam toe aan string
-                MidiFileName = MidiFileName + ".mid";
+                midiFileName = midiFileName + ".mid";
             }
            
             try
             {
                 // inladen midi
-                MidiFile midiFile = new MidiFile(MidiFileName);
+                MidiFile midiFile = new MidiFile(midiFileName);
                
                 return (int)MidiUtilities.GetSongLength(midiFile).TotalSeconds;
 
@@ -143,13 +144,13 @@ namespace InEenNotendop.UI
             return 0;
         }
 
-        static int GetStartTempo(string MidiFileName)
+        static int GetStartTempo(string midiFileName)
         {
             try
             {             
-                MidiFile midiFile = new MidiFile(MidiFileName);
+                MidiFile midiFile = new MidiFile(midiFileName);
 
-                return MidiUtilities.GetMidiBPM(midiFile);
+                return MidiUtilities.GetMidiBpm(midiFile);
             }
             catch (FileNotFoundException)
             {
@@ -166,9 +167,9 @@ namespace InEenNotendop.UI
         {
             if (depObj != null)
             {
-                int NbChild = VisualTreeHelper.GetChildrenCount(depObj);
+                int nbChild = VisualTreeHelper.GetChildrenCount(depObj);
 
-                for (int i = 0; i < NbChild; i++)
+                for (int i = 0; i < nbChild; i++)
                 {
                     DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
 
@@ -187,11 +188,11 @@ namespace InEenNotendop.UI
 
         private void CheckDarkOrLight() // Checks lightmode value and changes between dark- and lightmode
         {
-            if (lightmode == 1)
+            if (_lightmode == 1)
             {
                 SetLightMode();
             }
-            else if (lightmode == 0)
+            else if (_lightmode == 0)
             {
                 SetDarkMode();
             }

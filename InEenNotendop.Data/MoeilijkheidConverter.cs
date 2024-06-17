@@ -2,10 +2,10 @@
 {
     public class MoeilijkheidConverter
     {
-        public string Convert(int Moeilijkheid)
+        public string Convert(int moeilijkheid)
         {
             // Directly convert the moeilijkheid value to readable text
-            switch (Moeilijkheid)
+            switch (moeilijkheid)
             {
                 case 1:
                     return "Easy";
