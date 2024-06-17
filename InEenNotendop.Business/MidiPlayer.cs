@@ -5,7 +5,7 @@ namespace InEenNotendop.Business;
 // Code for handling the Midi device input
 public class MidiPlayer 
 {
-    private MidiOut midiOut;
+    private MidiOut _midiOut;
 
     public MidiPlayer(string desiredDevice)
     {
@@ -14,7 +14,7 @@ public class MidiPlayer
         int deviceIndex = FindMidiDevice("Microsoft GS Wavetable Synth");
         if (deviceIndex != -1)
         {
-            midiOut = new MidiOut(deviceIndex);
+            _midiOut = new MidiOut(deviceIndex);
         }
         else
         {
@@ -24,18 +24,18 @@ public class MidiPlayer
 
     public void PlayNote(int note)
     {
-        midiOut.Send(MidiMessage.StartNote(note, 120, 1).RawData);
+        _midiOut.Send(MidiMessage.StartNote(note, 120, 1).RawData);
     }
 
     public void StopNote(int note)
     {
-        midiOut.Send(MidiMessage.StopNote(note, 127, 1).RawData);
+        _midiOut.Send(MidiMessage.StopNote(note, 127, 1).RawData);
     }
 
     public void Dispose()
     {
-        midiOut?.Dispose();
-        midiOut = null;
+        _midiOut?.Dispose();
+        _midiOut = null;
     }
 
     private int FindMidiDevice(string deviceName)

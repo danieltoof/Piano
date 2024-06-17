@@ -4,7 +4,7 @@ public class MidiInputScoreCalculator
 {
     public MidiInputProcessor MidiInputProcessor { get; set; }
 
-    private const decimal maxScore = 1000;
+    private const decimal MaxScore = 1000;
 
     // Lists omzetten naar dictionary, voor snellere verwerking en bijhouden of note al verwerkt is of niet.
     //public Dictionary<Note, bool> NotesPlayed = new();
@@ -12,20 +12,20 @@ public class MidiInputScoreCalculator
     public List<int> NotesInSong = new();
     public List<Note> HashNotesSong = [];
     public List<Note> HashNotesPlayed = [];
-    private int amountOfNotesInSong;
-    private decimal maxScorePerNote;
+    private int _amountOfNotesInSong;
+    private decimal _maxScorePerNote;
     public decimal Score { get; set; }
 
     public MidiInputScoreCalculator(MidiInputProcessor? midiInputProcessor)
     {
         MidiInputProcessor = midiInputProcessor;
-        amountOfNotesInSong = MidiInputProcessor.ListOfNotesSong.Count;
-        if (amountOfNotesInSong == 0)
+        _amountOfNotesInSong = MidiInputProcessor.ListOfNotesSong.Count;
+        if (_amountOfNotesInSong == 0)
         {
-            amountOfNotesInSong = 1;
+            _amountOfNotesInSong = 1;
         }
 
-        maxScorePerNote = maxScore / amountOfNotesInSong;
+        _maxScorePerNote = MaxScore / _amountOfNotesInSong;
 
         // Elke unieke noot uit het liedje wordt opgeslagen.
         foreach (var note in MidiInputProcessor.ListOfNotesSong) 
@@ -81,16 +81,16 @@ public class MidiInputScoreCalculator
             // tijd hebben we besloten dat dit een 'Nice to have is'. Een optie zou zijn om gelijk bij het spelen
             // van een noot gelijk te checken of de noot in de buurt zit. Dit wordt voor het moment te complex 
             // maar zou in de toekomst wellicht nog toegevoegd kunnen worden.
-            foreach (var SongNote in hashNotesInSongFilteredByNote)
+            foreach (var songNote in hashNotesInSongFilteredByNote)
             {
-                foreach (var PlayedNote in hashNotesPlayedFilteredByNote)
+                foreach (var playedNote in hashNotesPlayedFilteredByNote)
                 {
-                    if (!SongNote.ScoreIsCalculated)
+                    if (!songNote.ScoreIsCalculated)
                     {
-                        decimal noteScore = maxScorePerNote *
-                                            getNoteScoreFactor(SongNote.NoteStartTime, PlayedNote.NoteStartTime);
+                        decimal noteScore = _maxScorePerNote *
+                                            GetNoteScoreFactor(songNote.NoteStartTime, playedNote.NoteStartTime);
                         Score += noteScore;
-                        SongNote.ScoreIsCalculated = true;
+                        songNote.ScoreIsCalculated = true;
                     }
                 }
             }
@@ -99,7 +99,7 @@ public class MidiInputScoreCalculator
         return (int)Score;
     }
 
-    public decimal getNoteScoreFactor(TimeSpan note1TimeSpan, TimeSpan note2TimeSpan)
+    public decimal GetNoteScoreFactor(TimeSpan note1TimeSpan, TimeSpan note2TimeSpan)
     {
         // Berekenen hoe ver de 2 noten van elkaar af zitten
         int deltaTimeMilliseconds = note1TimeSpan.Milliseconds - note2TimeSpan.Milliseconds;

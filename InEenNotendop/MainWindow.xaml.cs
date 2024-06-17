@@ -10,15 +10,15 @@ namespace InEenNotendop
     public partial class MainWindow : Window
     {
         
-        public SettingsWindow settingsWindow;
-        DataProgram data = new DataProgram();
+        public SettingsWindow SettingsWindow;
+        DataProgram _data = new DataProgram();
 
         // Default constructor
         public MainWindow() 
         {
             InitializeComponent();
-            settingsWindow = new SettingsWindow(this);
-            data.StartSshTunnel();
+            SettingsWindow = new SettingsWindow(this);
+            _data.StartSshTunnel();
             CheckLightMode();
             CheckDarkOrLight();
         }
@@ -27,46 +27,46 @@ namespace InEenNotendop
         public MainWindow(SettingsWindow settingsWindow) 
         {
             InitializeComponent();
-            this.settingsWindow = settingsWindow;
+            this.SettingsWindow = settingsWindow;
             settingsWindow.ChangeSettingsOwner(this);
             CheckDarkOrLight();
-            this.settingsWindow.MainMenuButton.Visibility = Visibility.Hidden;
+            this.SettingsWindow.MainMenuButton.Visibility = Visibility.Hidden;
         }
 
         // Checks system setting for lightmode
         public int CheckLightMode() 
         {
-            return settingsWindow.lightmode = (int)Microsoft.Win32.Registry.GetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", "AppsUseLightTheme", 1);
+            return SettingsWindow.Lightmode = (int)Microsoft.Win32.Registry.GetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", "AppsUseLightTheme", 1);
         }
 
         private void StartButton_OnClick(object sender, RoutedEventArgs e)
         {
-            SongsWindow songsWindow = new SongsWindow(settingsWindow);
+            SongsWindow songsWindow = new SongsWindow(SettingsWindow);
             songsWindow.Show();
             Close();
         }
 
         private void ExitButton_OnClick(object sender, RoutedEventArgs e)
         {
-            data.StopSshTunnel();
+            _data.StopSshTunnel();
             Environment.Exit(0);
         }
 
         private void SettingsButton_OnClick(object sender, RoutedEventArgs e)
         {
-            settingsWindow.OpenSettings();
+            SettingsWindow.OpenSettings();
         }
 
         // Checks lightmode value and changes between dark- and lightmode
         private void CheckDarkOrLight() 
         {
-            if (settingsWindow.lightmode == 1)
+            if (SettingsWindow.Lightmode == 1)
             {
-                settingsWindow.SetLightMode(this);
+                SettingsWindow.SetLightMode(this);
             }
-            else if (settingsWindow.lightmode == 0)
+            else if (SettingsWindow.Lightmode == 0)
             {
-                settingsWindow.SetDarkMode(this);
+                SettingsWindow.SetDarkMode(this);
             }
         }
     }

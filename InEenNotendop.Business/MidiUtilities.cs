@@ -16,7 +16,7 @@ namespace InEenNotendop.Business
             return TimeSpan.FromMilliseconds(totalMilliseconds);
         }
 
-        public static int GetMidiBPM(MidiFile midiFile)
+        public static int GetMidiBpm(MidiFile midiFile)
         {
             double tempo = 120; // dit is standaard tempo als er geen tempoEvent is gevonden
             foreach (var track in midiFile.Events)
@@ -43,7 +43,7 @@ namespace InEenNotendop.Business
         public static TimeSpan GetSongLength(MidiFile midiFile)
         {
             // eerst BPM ophalen
-            int bpm = GetMidiBPM(midiFile);
+            int bpm = GetMidiBpm(midiFile);
 
             // init waarde = 0
             long totalTime = 0;

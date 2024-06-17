@@ -10,13 +10,13 @@ namespace InEenNotendop.UI
     /// </summary>
     public partial class SettingsWindow : Window
     {
-        internal int lightmode;
+        internal int Lightmode;
         public Window Owner { get; set; }
-        private MainWindow mainWindow;
-        private SongsWindow songWindow;
-        private MidiPlayWindow midiPlayWindow;
-        private int isOkToClose = 0;
-        private DataProgram data = new DataProgram();
+        private MainWindow _mainWindow;
+        private SongsWindow _songWindow;
+        private MidiPlayWindow _midiPlayWindow;
+        private int _isOkToClose = 0;
+        private DataProgram _data = new DataProgram();
         
         public SettingsWindow(object sender)
         {
@@ -24,16 +24,16 @@ namespace InEenNotendop.UI
             switch (sender)
             {
                 case MainWindow:
-                    mainWindow = (MainWindow)sender;
-                    Owner = mainWindow;
+                    _mainWindow = (MainWindow)sender;
+                    Owner = _mainWindow;
                     break;
                 case SongsWindow:
-                    songWindow = (SongsWindow)sender;
-                    Owner = songWindow;
+                    _songWindow = (SongsWindow)sender;
+                    Owner = _songWindow;
                     break;
                 case MidiPlayWindow:
-                    midiPlayWindow = (MidiPlayWindow)sender;
-                    Owner = midiPlayWindow;
+                    _midiPlayWindow = (MidiPlayWindow)sender;
+                    Owner = _midiPlayWindow;
                     Owner.Closing += Owner_Closing;
                     break;
             }
@@ -45,7 +45,7 @@ namespace InEenNotendop.UI
         {
             if (sender.Equals(Owner))
             {
-                isOkToClose = 1;
+                _isOkToClose = 1;
                 Close();
             }
         }
@@ -53,14 +53,14 @@ namespace InEenNotendop.UI
         // Makes sure settings window is not closed when not needed
         protected override void OnClosing(CancelEventArgs e) 
         {
-            if (isOkToClose != 1)
+            if (_isOkToClose != 1)
             {
                 this.Visibility = Visibility.Hidden;
                 e.Cancel = true;
             }
             else
             {
-                data.StopSshTunnel();
+                _data.StopSshTunnel();
                 e.Cancel = false;
             }
         }
@@ -86,18 +86,18 @@ namespace InEenNotendop.UI
             switch (sender)
             {
                 case MainWindow:
-                    mainWindow = (MainWindow)sender;
-                    Owner = mainWindow;
+                    _mainWindow = (MainWindow)sender;
+                    Owner = _mainWindow;
                     Owner.Closing += Owner_Closing;
                     break;
                 case SongsWindow:
-                    songWindow = (SongsWindow)sender;
-                    Owner = songWindow;
+                    _songWindow = (SongsWindow)sender;
+                    Owner = _songWindow;
                     Owner.Closing += Owner_Closing;
                     break;
                 case MidiPlayWindow:
-                    midiPlayWindow = (MidiPlayWindow)sender;
-                    Owner = midiPlayWindow;
+                    _midiPlayWindow = (MidiPlayWindow)sender;
+                    Owner = _midiPlayWindow;
                     Owner.Closing += Owner_Closing;
                     break;
             }
@@ -112,11 +112,11 @@ namespace InEenNotendop.UI
         // Checks lightmode value, and switches between dark- and lightmode
         private void CheckDarkOrLight(object sender) 
         {
-            if (lightmode == 0)
+            if (Lightmode == 0)
             {
                 SetLightMode(sender);
             }
-            else if (lightmode == 1)
+            else if (Lightmode == 1)
             {
                 SetDarkMode(sender);
             }
@@ -129,11 +129,11 @@ namespace InEenNotendop.UI
             switch (sender) 
             {
                 case MainWindow:
-                    mainWindow.MainGrid.Background = Brushes.White;
+                    _mainWindow.MainGrid.Background = Brushes.White;
                     break;
                 case SongsWindow:
-                    songWindow.SongsGrid.Background = Brushes.White;
-                    songWindow.MenuPanelGrid.Background = Brushes.White;
+                    _songWindow.SongsGrid.Background = Brushes.White;
+                    _songWindow.MenuPanelGrid.Background = Brushes.White;
                     break;
             }
 
@@ -141,7 +141,7 @@ namespace InEenNotendop.UI
             SettingsGrid.Background = Brushes.White;
             SettingsText.Foreground = Brushes.Black;
 
-            lightmode = 1;
+            Lightmode = 1;
         }
 
         public void SetDarkMode(object sender)
@@ -150,11 +150,11 @@ namespace InEenNotendop.UI
             switch (sender) 
             {
                 case MainWindow:
-                    mainWindow.MainGrid.Background = new SolidColorBrush(Color.FromRgb(25, 44, 49));
+                    _mainWindow.MainGrid.Background = new SolidColorBrush(Color.FromRgb(25, 44, 49));
                     break;
                 case SongsWindow:
-                    songWindow.SongsGrid.Background = new SolidColorBrush(Color.FromRgb(25, 44, 49));
-                    songWindow.MenuPanelGrid.Background = new SolidColorBrush(Color.FromRgb(25, 44, 49));
+                    _songWindow.SongsGrid.Background = new SolidColorBrush(Color.FromRgb(25, 44, 49));
+                    _songWindow.MenuPanelGrid.Background = new SolidColorBrush(Color.FromRgb(25, 44, 49));
                     break;
             }
 
@@ -162,11 +162,11 @@ namespace InEenNotendop.UI
             SettingsGrid.Background = new SolidColorBrush(Color.FromRgb(25, 44, 49));
             SettingsText.Foreground = Brushes.White;
 
-            lightmode = 0;
+            Lightmode = 0;
         }
         public int GetLightMode()
         {
-            return lightmode;
+            return Lightmode;
         }
 
         // Closes entire application when exit button is pressed

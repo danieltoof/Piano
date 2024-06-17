@@ -9,17 +9,17 @@ namespace InEenNotendop.Data
     public class DataProgram
     {
         public string ConnectionString = "Data Source=127.0.0.1,1433;Initial Catalog=PianoHeroDB;User ID=Newlogin;Password=VeryStr0ngP@ssw0rd;Encrypt=False;";
-        private Process sshTunnelProcess;
-        private bool sshtunnelStarted = false;
+        private Process _sshTunnelProcess;
+        private bool _sshtunnelStarted = false;
 
-        static readonly string host = "145.44.235.225";
-        static readonly string username = "student";
-        static readonly string password = "PianoHero";
+        static readonly string Host = "145.44.235.225";
+        static readonly string Username = "student";
+        static readonly string Password = "PianoHero";
 
         // Starts the powershell script to connect to the database
         public void StartSshTunnel()
         {
-            if (!sshtunnelStarted)
+            if (!_sshtunnelStarted)
             {
                 string currentDirectory = Directory.GetCurrentDirectory();
                 string targetDirectory = "InEenNotendop";
@@ -44,8 +44,8 @@ namespace InEenNotendop.Data
                     CreateNoWindow = true
                 };
 
-                sshTunnelProcess = Process.Start(psi);
-                sshtunnelStarted = true;
+                _sshTunnelProcess = Process.Start(psi);
+                _sshtunnelStarted = true;
                  
             }
         }
@@ -76,8 +76,8 @@ namespace InEenNotendop.Data
                 CreateNoWindow = true
             };
 
-            sshTunnelProcess = Process.Start(psi);
-            sshtunnelStarted = true;
+            _sshTunnelProcess = Process.Start(psi);
+            _sshtunnelStarted = true;
         }
 
         // Downloads selected song from the database
@@ -110,7 +110,7 @@ namespace InEenNotendop.Data
 
             try
             {
-                using (var sftp = new SftpClient(host, username, password))
+                using (var sftp = new SftpClient(Host, Username, Password))
                 {
                     sftp.Connect();
 
@@ -141,7 +141,7 @@ namespace InEenNotendop.Data
             string remoteFilePath = Path.Combine("/home/student/Music", $"{artist} - {name}.mid");
             string localSavePath = Path.Combine(localPath);
 
-            using (var sftp = new SftpClient(host, username, password))
+            using (var sftp = new SftpClient(Host, Username, Password))
             {
                 sftp.Connect();
 
@@ -203,11 +203,11 @@ namespace InEenNotendop.Data
         // Gets the score for the song
         public DataView GetDataForGrid(int nummerId)
         {
-            string CmdString = string.Empty;
+            string cmdString = string.Empty;
             using (SqlConnection con = new SqlConnection(ConnectionString))
             {
-                CmdString = $"SELECT Score FROM Scores WHERE NummerID = '{nummerId}'";
-                SqlCommand cmd = new SqlCommand(CmdString, con);
+                cmdString = $"SELECT Score FROM Scores WHERE NummerID = '{nummerId}'";
+                SqlCommand cmd = new SqlCommand(cmdString, con);
                 SqlDataAdapter sda = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 sda.Fill(dt);
@@ -237,7 +237,7 @@ namespace InEenNotendop.Data
                             int bpm = reader.GetInt32(reader.GetOrdinal("Bpm"));
                             int moeilijkheid = reader.GetInt32(reader.GetOrdinal("Moeilijkheid"));
                             MoeilijkheidConverter converter = new MoeilijkheidConverter();
-                            string ConvertedMoeilijkheid = converter.Convert(moeilijkheid);
+                            string convertedMoeilijkheid = converter.Convert(moeilijkheid);
                             int id = reader.GetInt32(reader.GetOrdinal("Id"));
                             string filepath;
                             int filepathOrdinal = reader.GetOrdinal("Filepath");
@@ -251,8 +251,8 @@ namespace InEenNotendop.Data
                             }
                             int score = reader.GetInt32(reader.GetOrdinal("Score"));
 
-                            string ConvertedTime = ToMinutesSeconds(lengte);
-                            Nummer nummer = new Nummer(title, artiest, lengte, bpm, moeilijkheid, id, filepath, score, ConvertedTime, ConvertedMoeilijkheid);
+                            string convertedTime = ToMinutesSeconds(lengte);
+                            Nummer nummer = new Nummer(title, artiest, lengte, bpm, moeilijkheid, id, filepath, score, convertedTime, convertedMoeilijkheid);
                             nummers.Add(nummer);
                         }
                         connection.Close();
@@ -261,7 +261,7 @@ namespace InEenNotendop.Data
             }
             return nummers;
         }
-        public int getNummersAmount()
+        public int GetNummersAmount()
         {
             if (!string.IsNullOrEmpty(ConnectionString))
             {
@@ -289,34 +289,34 @@ namespace InEenNotendop.Data
         }
 
         // Gets sorted list from database
-        public List<Nummer> MakeSortedList(int Difficulty, string Sort)
+        public List<Nummer> MakeSortedList(int difficulty, string sort)
         {
-            if (Difficulty != 0)
+            if (difficulty != 0)
             {
-                return LijstFunc($"SELECT Title, Artiest, Lengte, Bpm, Moeilijkheid, ID, Filepath, Score FROM Nummers INNER JOIN Scores ON Nummers.ID = Scores.NummerID WHERE Moeilijkheid = {Difficulty} ORDER BY {Sort}");
+                return LijstFunc($"SELECT Title, Artiest, Lengte, Bpm, Moeilijkheid, ID, Filepath, Score FROM Nummers INNER JOIN Scores ON Nummers.ID = Scores.NummerID WHERE Moeilijkheid = {difficulty} ORDER BY {sort}");
             }
             else
             {
-                return LijstFunc($"SELECT Title, Artiest, Lengte, Bpm, Moeilijkheid, ID, Filepath, Score FROM Nummers INNER JOIN Scores ON Nummers.ID = Scores.NummerID ORDER BY {Sort}");
+                return LijstFunc($"SELECT Title, Artiest, Lengte, Bpm, Moeilijkheid, ID, Filepath, Score FROM Nummers INNER JOIN Scores ON Nummers.ID = Scores.NummerID ORDER BY {sort}");
             }
         }
          
         // Gets filtered list from database
-        public List<Nummer> MaakFilteredLijst(int Difficulty)
+        public List<Nummer> MaakFilteredLijst(int difficulty)
         {
-            return LijstFunc($"SELECT Title, Artiest, Lengte, Bpm, Moeilijkheid, ID, Filepath, Score FROM Nummers INNER JOIN Scores ON Nummers.ID = Scores.NummerID WHERE Moeilijkheid = {Difficulty}");
+            return LijstFunc($"SELECT Title, Artiest, Lengte, Bpm, Moeilijkheid, ID, Filepath, Score FROM Nummers INNER JOIN Scores ON Nummers.ID = Scores.NummerID WHERE Moeilijkheid = {difficulty}");
         }
 
         // Code to change high-score after song completion
-        public void ChangeHighscore(int ID, int Score, int currentScore)
+        public void ChangeHighscore(int id, int score, int currentScore)
         {
-            if (Score > currentScore)
+            if (score > currentScore)
             {
                 using (SqlConnection connection = new SqlConnection(ConnectionString))
                 {
                     using (var command = connection.CreateCommand())
                     {
-                        command.CommandText = $"UPDATE Scores SET Score = {Score} WHERE NummerID = {ID}";
+                        command.CommandText = $"UPDATE Scores SET Score = {score} WHERE NummerID = {id}";
                         connection.Open();
                         command.ExecuteNonQuery();
                         connection.Close();
@@ -325,11 +325,11 @@ namespace InEenNotendop.Data
             }
         }
 
-        public string ToMinutesSeconds(int FullTime)
+        public string ToMinutesSeconds(int fullTime)
         {
-            int minutes = (Convert.ToInt32(FullTime) / 60);
+            int minutes = (Convert.ToInt32(fullTime) / 60);
             string minutesString = Convert.ToString(minutes);
-            int seconds = (Convert.ToInt32(FullTime) % 60);
+            int seconds = (Convert.ToInt32(fullTime) % 60);
 
             string secondsString = null;
 
