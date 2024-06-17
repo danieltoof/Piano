@@ -17,8 +17,8 @@ namespace InEenNotendop.UI
         private string _filePath;
         private string _fileName;
         private int _lightmode;
-        private UploadDatabase _uploadDatabase = new UploadDatabase();
-        private UploadMidi _uploadMidi = new UploadMidi();
+        private SqlDataAccess _sqlDataAccess = new();
+        private MidiDataAccess _midiDataAccess = new();
         public ImportWindow(int lightmodeImport)
         {
             InitializeComponent();
@@ -106,8 +106,8 @@ namespace InEenNotendop.UI
                 int bpm = GetStartTempo(_filePath);
                 string filepath = @"..\..\..\Resources\Song\" + songArtist + " - " + songName + ".mid";
 
-                _uploadDatabase.UploadsongToDataBase(songName, songArtist, songLength, bpm, diffecultyCheckbox, filepath);
-                _uploadMidi.UploadSongToServer(songName, songArtist, _filePath);
+                _sqlDataAccess.UploadsongToDataBase(songName, songArtist, songLength, bpm, diffecultyCheckbox, filepath);
+                _midiDataAccess.UploadSongToServer(songName, songArtist, _filePath);
 
                 MessageBox.Show("Upload success!");
                 await Task.Delay(1000);
