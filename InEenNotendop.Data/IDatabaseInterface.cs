@@ -1,6 +1,4 @@
 ﻿using System.Data;
-using System.Diagnostics;
-
 namespace InEenNotendop.Data;
 
 public interface IDatabaseInterface
