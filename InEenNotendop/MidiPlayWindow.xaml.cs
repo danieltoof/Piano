@@ -23,7 +23,6 @@ namespace InEenNotendop.UI
         private bool songFinished = false;
         private int currentScore;
 
-        private MidiIn midiIn;
         private MidiPlayer midiPlayer;
         private MidiFile midiFileSong;
         private TimeSpan endLastNote;
@@ -37,12 +36,11 @@ namespace InEenNotendop.UI
         private System.Windows.Media.Brush whiteKeysBrush = Brushes.WhiteSmoke; // Witte toetsen
         private System.Windows.Media.Brush blackKeyBrush = Brushes.Black; // Zwartse toetsen
         private System.Windows.Media.Brush fallingBlockBrush = Brushes.Red;
-        private Dictionary<int, ButtonData> midiNoteToButton = new(); // int = Midi notonumber, Button = button die wordt toegewezen aan die noot.
+        public Dictionary<int, ButtonData> MidiNoteToButton { get; set; } // int = Midi notonumber, Button = button die wordt toegewezen aan die noot.
 
         private DateTime _startTime; // Deze hebben we nodog om de tijd te berekenen van wanneer de midi noot is gespeeld, 
         private object value;
         private DispatcherTimer timer;
-        private Stopwatch stopwatch; // Acurater dan DateTime.Now
         private const double NoteHeightPerSecond = 200; // Eenheid voor hoogte blok per seconde
         //private const double FallingDuration = 1.5; // Duration of the falling animation for all notes (in seconds)
         private const double FallingSpeed = 200.0; // Speed of falling blocks in units per second
@@ -66,10 +64,10 @@ namespace InEenNotendop.UI
             this.songsWindow = songsWindow;
             this.playMidiFile = playMidiFile;
             this.currentScore = currentScore;
+            MidiNoteToButton = [];
+
             midiInputProcessor = new MidiToListConverter();
 
-            stopwatch = new Stopwatch();
-            stopwatch.Start();
             try
             {
 
@@ -120,59 +118,59 @@ namespace InEenNotendop.UI
             #region mapping midi notes to the buttons
 
 
-            midiNoteToButton.Add(36, new ButtonData(C1Button, whiteKeysBrush));
-            midiNoteToButton.Add(37, new ButtonData(Cs1Button, blackKeyBrush));
-            midiNoteToButton.Add(38, new ButtonData(D1Button, whiteKeysBrush));
-            midiNoteToButton.Add(39, new ButtonData(Ds1Button, blackKeyBrush));
-            midiNoteToButton.Add(40, new ButtonData(E1Button, whiteKeysBrush));
-            midiNoteToButton.Add(41, new ButtonData(F1Button, whiteKeysBrush));
-            midiNoteToButton.Add(42, new ButtonData(Fs1Button, blackKeyBrush));
-            midiNoteToButton.Add(43, new ButtonData(G1Button, whiteKeysBrush));
-            midiNoteToButton.Add(44, new ButtonData(Gs1Button, blackKeyBrush));
-            midiNoteToButton.Add(45, new ButtonData(A1Button, whiteKeysBrush));
-            midiNoteToButton.Add(46, new ButtonData(As1Button, blackKeyBrush));
-            midiNoteToButton.Add(47, new ButtonData(B1Button, whiteKeysBrush));
+            MidiNoteToButton.Add(36, new ButtonData(C1Button, whiteKeysBrush));
+            MidiNoteToButton.Add(37, new ButtonData(Cs1Button, blackKeyBrush));
+            MidiNoteToButton.Add(38, new ButtonData(D1Button, whiteKeysBrush));
+            MidiNoteToButton.Add(39, new ButtonData(Ds1Button, blackKeyBrush));
+            MidiNoteToButton.Add(40, new ButtonData(E1Button, whiteKeysBrush));
+            MidiNoteToButton.Add(41, new ButtonData(F1Button, whiteKeysBrush));
+            MidiNoteToButton.Add(42, new ButtonData(Fs1Button, blackKeyBrush));
+            MidiNoteToButton.Add(43, new ButtonData(G1Button, whiteKeysBrush));
+            MidiNoteToButton.Add(44, new ButtonData(Gs1Button, blackKeyBrush));
+            MidiNoteToButton.Add(45, new ButtonData(A1Button, whiteKeysBrush));
+            MidiNoteToButton.Add(46, new ButtonData(As1Button, blackKeyBrush));
+            MidiNoteToButton.Add(47, new ButtonData(B1Button, whiteKeysBrush));
 
-            midiNoteToButton.Add(48, new ButtonData(C2Button, whiteKeysBrush));
-            midiNoteToButton.Add(49, new ButtonData(Cs2Button, blackKeyBrush));
-            midiNoteToButton.Add(50, new ButtonData(D2Button, whiteKeysBrush));
-            midiNoteToButton.Add(51, new ButtonData(Ds2Button, blackKeyBrush));
-            midiNoteToButton.Add(52, new ButtonData(E2Button, whiteKeysBrush));
-            midiNoteToButton.Add(53, new ButtonData(F2Button, whiteKeysBrush));
-            midiNoteToButton.Add(54, new ButtonData(Fs2Button, blackKeyBrush));
-            midiNoteToButton.Add(55, new ButtonData(G2Button, whiteKeysBrush));
-            midiNoteToButton.Add(56, new ButtonData(Gs2Button, blackKeyBrush));
-            midiNoteToButton.Add(57, new ButtonData(A2Button, whiteKeysBrush));
-            midiNoteToButton.Add(58, new ButtonData(As2Button, blackKeyBrush));
-            midiNoteToButton.Add(59, new ButtonData(B2Button, whiteKeysBrush));
+            MidiNoteToButton.Add(48, new ButtonData(C2Button, whiteKeysBrush));
+            MidiNoteToButton.Add(49, new ButtonData(Cs2Button, blackKeyBrush));
+            MidiNoteToButton.Add(50, new ButtonData(D2Button, whiteKeysBrush));
+            MidiNoteToButton.Add(51, new ButtonData(Ds2Button, blackKeyBrush));
+            MidiNoteToButton.Add(52, new ButtonData(E2Button, whiteKeysBrush));
+            MidiNoteToButton.Add(53, new ButtonData(F2Button, whiteKeysBrush));
+            MidiNoteToButton.Add(54, new ButtonData(Fs2Button, blackKeyBrush));
+            MidiNoteToButton.Add(55, new ButtonData(G2Button, whiteKeysBrush));
+            MidiNoteToButton.Add(56, new ButtonData(Gs2Button, blackKeyBrush));
+            MidiNoteToButton.Add(57, new ButtonData(A2Button, whiteKeysBrush));
+            MidiNoteToButton.Add(58, new ButtonData(As2Button, blackKeyBrush));
+            MidiNoteToButton.Add(59, new ButtonData(B2Button, whiteKeysBrush));
 
-            midiNoteToButton.Add(60, new ButtonData(C3Button, whiteKeysBrush));
-            midiNoteToButton.Add(61, new ButtonData(Cs3Button, blackKeyBrush));
-            midiNoteToButton.Add(62, new ButtonData(D3Button, whiteKeysBrush));
-            midiNoteToButton.Add(63, new ButtonData(Ds3Button, blackKeyBrush));
-            midiNoteToButton.Add(64, new ButtonData(E3Button, whiteKeysBrush));
-            midiNoteToButton.Add(65, new ButtonData(F3Button, whiteKeysBrush));
-            midiNoteToButton.Add(66, new ButtonData(Fs3Button, blackKeyBrush));
-            midiNoteToButton.Add(67, new ButtonData(G3Button, whiteKeysBrush));
-            midiNoteToButton.Add(68, new ButtonData(Gs3Button, blackKeyBrush));
-            midiNoteToButton.Add(69, new ButtonData(A3Button, whiteKeysBrush));
-            midiNoteToButton.Add(70, new ButtonData(As3Button, blackKeyBrush));
-            midiNoteToButton.Add(71, new ButtonData(B3Button, whiteKeysBrush));
+            MidiNoteToButton.Add(60, new ButtonData(C3Button, whiteKeysBrush));
+            MidiNoteToButton.Add(61, new ButtonData(Cs3Button, blackKeyBrush));
+            MidiNoteToButton.Add(62, new ButtonData(D3Button, whiteKeysBrush));
+            MidiNoteToButton.Add(63, new ButtonData(Ds3Button, blackKeyBrush));
+            MidiNoteToButton.Add(64, new ButtonData(E3Button, whiteKeysBrush));
+            MidiNoteToButton.Add(65, new ButtonData(F3Button, whiteKeysBrush));
+            MidiNoteToButton.Add(66, new ButtonData(Fs3Button, blackKeyBrush));
+            MidiNoteToButton.Add(67, new ButtonData(G3Button, whiteKeysBrush));
+            MidiNoteToButton.Add(68, new ButtonData(Gs3Button, blackKeyBrush));
+            MidiNoteToButton.Add(69, new ButtonData(A3Button, whiteKeysBrush));
+            MidiNoteToButton.Add(70, new ButtonData(As3Button, blackKeyBrush));
+            MidiNoteToButton.Add(71, new ButtonData(B3Button, whiteKeysBrush));
 
-            midiNoteToButton.Add(72, new ButtonData(C4Button, whiteKeysBrush));
-            midiNoteToButton.Add(73, new ButtonData(Cs4Button, blackKeyBrush));
-            midiNoteToButton.Add(74, new ButtonData(D4Button, whiteKeysBrush));
-            midiNoteToButton.Add(75, new ButtonData(Ds4Button, blackKeyBrush));
-            midiNoteToButton.Add(76, new ButtonData(E4Button, whiteKeysBrush));
-            midiNoteToButton.Add(77, new ButtonData(F4Button, whiteKeysBrush));
-            midiNoteToButton.Add(78, new ButtonData(Fs4Button, blackKeyBrush));
-            midiNoteToButton.Add(79, new ButtonData(G4Button, whiteKeysBrush));
-            midiNoteToButton.Add(80, new ButtonData(Gs4Button, blackKeyBrush));
-            midiNoteToButton.Add(81, new ButtonData(A4Button, whiteKeysBrush));
-            midiNoteToButton.Add(82, new ButtonData(As4Button, blackKeyBrush));
-            midiNoteToButton.Add(83, new ButtonData(B4Button, whiteKeysBrush));
+            MidiNoteToButton.Add(72, new ButtonData(C4Button, whiteKeysBrush));
+            MidiNoteToButton.Add(73, new ButtonData(Cs4Button, blackKeyBrush));
+            MidiNoteToButton.Add(74, new ButtonData(D4Button, whiteKeysBrush));
+            MidiNoteToButton.Add(75, new ButtonData(Ds4Button, blackKeyBrush));
+            MidiNoteToButton.Add(76, new ButtonData(E4Button, whiteKeysBrush));
+            MidiNoteToButton.Add(77, new ButtonData(F4Button, whiteKeysBrush));
+            MidiNoteToButton.Add(78, new ButtonData(Fs4Button, blackKeyBrush));
+            MidiNoteToButton.Add(79, new ButtonData(G4Button, whiteKeysBrush));
+            MidiNoteToButton.Add(80, new ButtonData(Gs4Button, blackKeyBrush));
+            MidiNoteToButton.Add(81, new ButtonData(A4Button, whiteKeysBrush));
+            MidiNoteToButton.Add(82, new ButtonData(As4Button, blackKeyBrush));
+            MidiNoteToButton.Add(83, new ButtonData(B4Button, whiteKeysBrush));
 
-            midiNoteToButton.Add(84, new ButtonData(C5Button, whiteKeysBrush));
+            MidiNoteToButton.Add(84, new ButtonData(C5Button, whiteKeysBrush));
 
 
 
@@ -264,59 +262,6 @@ namespace InEenNotendop.UI
             }
         }
 
-        private void InitializeMidi(string desiredOutDevice)
-        {
-            midiPlayer = new MidiPlayer(desiredOutDevice, this);
-
-            var numDevices = MidiIn.NumberOfDevices;
-            var desiredDeviceIndex = 0; // DEZE KAN VERANDEREN SOMS SPONTAAN
-            if (desiredDeviceIndex < numDevices)
-            {
-                midiIn = new MidiIn(desiredDeviceIndex);
-                midiIn.MessageReceived += MidiIn_MessageReceived;
-                midiIn.Start();
-            }
-            else
-            {
-                MessageBox.Show("Invalid MIDI device index or no devices found.");
-            }
-        }
-
-        private void MidiIn_MessageReceived(object? sender, MidiInMessageEventArgs e)
-        {
-            if (e.MidiEvent is NoteOnEvent noteOnEvent)
-            {
-                if (midiNoteToButton.ContainsKey(noteOnEvent.NoteNumber))
-                {
-                    midiNoteToButton[noteOnEvent.NoteNumber].Button.Dispatcher.Invoke(() =>
-                    {
-                        // kleur toets veranderen
-                        midiNoteToButton[noteOnEvent.NoteNumber].Button.Background = noteHitBrush;
-                        // noot beginnnen met spelen
-                        midiPlayer.PlayNote(noteOnEvent.NoteNumber);
-
-                        // Tijd berekenen sinds start spelen
-                        TimeSpan startTimeNotePlayed = stopwatch.Elapsed;
-                        // Noot toevoegen aan list in midiInputProcessor's list voor score berekening
-                        midiInputProcessor.ListOfNotesPlayed.Add(new Note(noteOnEvent, startTimeNotePlayed));
-                    });
-                }
-            }
-            else if (e.MidiEvent is NoteEvent noteEvent) // een noteevent wat geen noteonevent is is in dit geval altijd een event die een noot eindigt.
-            {
-                if (midiNoteToButton.ContainsKey(noteEvent.NoteNumber))
-                {
-                    //noot stoppen met spelen
-                    midiPlayer.StopNote(noteEvent.NoteNumber);
-                    // toets terugveranderen naar originele kleur
-                    midiNoteToButton[noteEvent.NoteNumber].Button.Dispatcher.Invoke(() =>
-                    {
-                        midiNoteToButton[noteEvent.NoteNumber].Button.Background = midiNoteToButton[noteEvent.NoteNumber].ButtonColor;
-                    });
-                }
-            }
-        }
-        
         private void GenerateFallingBlock(Note note)
         {
             // het zal wellicht opvallen dat soms bij een notenummer +36 of -35 staat. Dat komt omdat de nootnummer niet direct correspondeerd aan het grid nummer.

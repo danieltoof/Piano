@@ -6,7 +6,7 @@ namespace InEenNotendop.Business;
 public class MidiPlayer 
 {
     private MidiOut midiOut;
-    private object owner;
+    private readonly object owner;
 
     public MidiPlayer(string desiredDevice, object owner)
     {
