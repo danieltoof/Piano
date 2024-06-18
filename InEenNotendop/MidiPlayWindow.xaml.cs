@@ -17,6 +17,15 @@ namespace InEenNotendop.UI
     /// </summary>
     public partial class MidiPlayWindow : Window
     {
+        //
+        public delegate WrongMidiDeviceHandler
+
+        // Event handler
+        public event 
+
+
+
+        //
         public SongsWindow songsWindow { get; set; }
 
         private bool playMidiFile = false;
@@ -66,7 +75,6 @@ namespace InEenNotendop.UI
             this.currentScore = currentScore;
             MidiNoteToButton = [];
 
-            midiInputProcessor = new MidiToListConverter();
 
             try
             {

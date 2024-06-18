@@ -13,48 +13,44 @@ namespace InEenNotendop.Business
         private object Owner;
         private MidiPlayer midiPlayer;
         private MidiIn midiIn;
-        private Stopwatch stopwatch; // Acurater dan DateTime.Now
+        public Stopwatch Stopwatch { get; set; } // Acurater dan DateTime.Now
+
+        private Song songPlayed;
 
 
         public MidiProcessor(object Owner)
         {
             this.Owner = Owner;
             InitializeMidi("Microsoft GS Wavetable Synth");
-            stopwatch = new Stopwatch();
-            stopwatch.Start();
+            Stopwatch = new Stopwatch();
+            Stopwatch.Start();
+            songPlayed = new Song();
         }
 
-
+        
         private void MidiInMessageReceived(object? sender, MidiInMessageEventArgs e)
         {
             if (e.MidiEvent is NoteOnEvent noteOnEvent)
             {
-                midiNoteToButton[noteOnEvent.NoteNumber].Button.Dispatcher.Invoke(() =>
-                {
-                    // kleur toets veranderen
-                    midiNoteToButton[noteOnEvent.NoteNumber].Button.Background = noteHitBrush;
-                    // noot beginnnen met spelen
-                    midiPlayer.PlayNote(noteOnEvent.NoteNumber);
-
-                    // Tijd berekenen sinds start spelen
-                    TimeSpan startTimeNotePlayed = stopwatch.Elapsed;
-                    // Noot toevoegen aan list in midiInputProcessor's list voor score berekening
-                    midiInputProcessor.ListOfNotesPlayed.Add(new Note(noteOnEvent, startTimeNotePlayed));
-                });
-
+                midiPlayer.PlayNote(noteOnEvent.NoteNumber);
+                songPlayed.AddNote(new Note(noteOnEvent, Stopwatch.Elapsed));
+                SendChangeSignalToUI(noteOnEvent.NoteNumber, true);
             }
             else if (e.MidiEvent is NoteEvent noteEvent) // een noteevent wat geen noteonevent is is in dit geval altijd een event die een noot eindigt.
             {
-                if (midiNoteToButton.ContainsKey(noteEvent.NoteNumber))
-                {
-                    //noot stoppen met spelen
-                    midiPlayer.StopNote(noteEvent.NoteNumber);
-                    // toets terugveranderen naar originele kleur
-                    midiNoteToButton[noteEvent.NoteNumber].Button.Dispatcher.Invoke(() =>
-                    {
-                        midiNoteToButton[noteEvent.NoteNumber].Button.Background = midiNoteToButton[noteEvent.NoteNumber].ButtonColor;
-                    });
-                }
+                midiPlayer.StopNote(noteEvent.NoteNumber);
+                SendChangeSignalToUI(noteEvent.NoteNumber, false);
+            }
+        }
+
+        public UIChangeMessage SendChangeSignalToUI(int NoteNumber, bool isNoteOnMessage)
+        {
+            if (isNoteOnMessage)
+            {
+                return new UIChangeMessage(NoteNumber, true);
+            } else
+            {
+                return new UIChangeMessage(NoteNumber, false);
             }
         }
 
@@ -67,7 +63,7 @@ namespace InEenNotendop.Business
             if (desiredDeviceIndex < numDevices)
             {
                 midiIn = new MidiIn(desiredDeviceIndex);
-                midiIn.MessageReceived += MidiIn_MessageReceived;
+                midiIn.MessageReceived += MidiInMessageReceived;
                 midiIn.Start();
             }
             else
