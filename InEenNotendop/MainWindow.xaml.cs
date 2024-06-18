@@ -11,7 +11,7 @@ namespace InEenNotendop
     {
         
         public SettingsWindow SettingsWindow;
-        private SshScript _sshScript = new SshScript();
+        private SqlDataAccess _sshScript = new();
 
         // Default constructor
         public MainWindow() 

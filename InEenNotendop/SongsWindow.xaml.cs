@@ -11,7 +11,7 @@ namespace InEenNotendop.UI
     public partial class SongsWindow : Window
     {
         public SettingsWindow SettingsWindow;
-        private DownloadDatabase _downloadDatabase = new DownloadDatabase();
+        SqlDataAccess _sqlDataAccess = new();
         private int _lightmodeImport;
         private int _difficulty = 0;
         public bool SongIsFinished;
@@ -34,7 +34,7 @@ namespace InEenNotendop.UI
             SortBox.Items.Add("Diff. ascending");
             SortBox.Items.Add("Diff. descending");
 
-            Nummer.ItemsSource = _downloadDatabase.MaakLijst();
+            Nummer.ItemsSource = _sqlDataAccess.MaakLijst();
             CheckDarkOrLight();
         }
 
@@ -47,11 +47,11 @@ namespace InEenNotendop.UI
                 SongIsFinished = false;
                 if (_difficulty != 0)
                 {
-                    Nummer.ItemsSource = _downloadDatabase.MaakFilteredLijst(_difficulty);
+                    Nummer.ItemsSource = _sqlDataAccess.MaakFilteredLijst(_difficulty);
                 }
                 else
                 {
-                    Nummer.ItemsSource = _downloadDatabase.MaakLijst();
+                    Nummer.ItemsSource = _sqlDataAccess.MaakLijst();
                 }
             }
         }
@@ -119,7 +119,7 @@ namespace InEenNotendop.UI
             _lightmodeImport = SettingsWindow.Lightmode;
             ImportWindow import = new ImportWindow(_lightmodeImport);
             import.ShowDialog();
-            Nummer.ItemsSource = _downloadDatabase.MaakLijst();
+            Nummer.ItemsSource = _sqlDataAccess.MaakLijst();
         }
 
         // Changes list to filtered list
@@ -143,11 +143,11 @@ namespace InEenNotendop.UI
             }
             if (_difficulty != 0)
             {
-                Nummer.ItemsSource = _downloadDatabase.MaakFilteredLijst(_difficulty);
+                Nummer.ItemsSource = _sqlDataAccess.MaakFilteredLijst(_difficulty);
             }
             else
             {
-                Nummer.ItemsSource = _downloadDatabase.MaakLijst();
+                Nummer.ItemsSource = _sqlDataAccess.MaakLijst();
             }
         }
 
@@ -171,7 +171,7 @@ namespace InEenNotendop.UI
                     completeSort = "Moeilijkheid DESC";
                     break;
             }
-            Nummer.ItemsSource = _downloadDatabase.MakeSortedList(_difficulty, completeSort);
+            Nummer.ItemsSource = _sqlDataAccess.MakeSortedList(_difficulty, completeSort);
         }
 
         // Goes back to main menu

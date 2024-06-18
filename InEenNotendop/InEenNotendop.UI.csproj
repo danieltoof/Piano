@@ -39,4 +39,8 @@
     <Folder Include="Resources\Song\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Page Include="App.xaml" />
+  </ItemGroup>
+
 </Project>
