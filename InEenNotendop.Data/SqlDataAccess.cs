@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace InEenNotendop.Data;
 
-public class SqlDataAccess
+public class SqlDataAccess : IDatabaseInterface
 {
     private Process _sshTunnelProcess;
     private bool _sshTunnelStarted = false;
@@ -109,6 +109,22 @@ public class SqlDataAccess
         }
     }
 
+    // Gets the score of the selected song in SelectingWindow
+    public DataView GetDataForGrid(int nummerId)
+    {
+        string cmdString = string.Empty;
+        using (SqlConnection con = new SqlConnection(ConfigClass.ConnectionString))
+        {
+            cmdString = $"SELECT Score FROM Scores WHERE NummerID = '{nummerId}'";
+            SqlCommand cmd = new SqlCommand(cmdString, con);
+            SqlDataAdapter sda = new SqlDataAdapter(cmd);
+            DataTable dt = new DataTable();
+            sda.Fill(dt);
+
+            return dt.DefaultView;
+        }
+    }
+
     // Generic function used to prevent double code with filtering and sorting
     public List<Nummer> LijstFunc(string sqlcommand)
     {
@@ -153,22 +169,6 @@ public class SqlDataAccess
             }
         }
         return nummers;
-    }
-
-    // Gets the score of the selected song in SelectingWindow
-    public DataView GetDataForGrid(int nummerId)
-    {
-        string cmdString = string.Empty;
-        using (SqlConnection con = new SqlConnection(ConfigClass.ConnectionString))
-        {
-            cmdString = $"SELECT Score FROM Scores WHERE NummerID = '{nummerId}'";
-            SqlCommand cmd = new SqlCommand(cmdString, con);
-            SqlDataAdapter sda = new SqlDataAdapter(cmd);
-            DataTable dt = new DataTable();
-            sda.Fill(dt);
-
-            return dt.DefaultView;
-        }
     }
 
     // Default list method used on startup

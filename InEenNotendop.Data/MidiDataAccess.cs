@@ -2,7 +2,7 @@
 
 namespace InEenNotendop.Data;
 
-public class MidiDataAccess
+public class MidiDataAccess : IMidiInterface
 {
     // Uploads the .mid file to the ubuntu machine
     public void UploadSongToServer(string name, string artist, string localPath)

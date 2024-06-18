@@ -2,6 +2,7 @@
 using System.Windows;
 using InEenNotendop.Business;
 using NAudio.Midi;
+using Moq;
 
 
 namespace InEenNotendop.UI.Tests
@@ -112,34 +113,6 @@ namespace InEenNotendop.UI.Tests
             newThread.Start();
         }
     }
-    //testen van afspeelscherm functionaliteit
-    [TestClass]
-    public class AfspeelSchermTesten
-    {
-        [TestMethod]
-        public void PlayMidi_CheckError()
-        {
-            //Arrange
-
-            //Act
-            var thread = new Thread(() =>
-            {
-                try
-                {
-                    
-                }
-                catch { }
-            });
-
-            thread.SetApartmentState(ApartmentState.STA);
-            thread.Start();
-            thread.Join();
-
-            //Assert
-
-        }
-    }
-
     [TestClass]
     public class MidiInputProcesserTest
     {
