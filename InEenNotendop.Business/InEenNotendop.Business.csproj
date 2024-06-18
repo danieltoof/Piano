@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="EcoCore" Version="7.0.0.15731" />
     <PackageReference Include="NAudio.Midi" Version="2.2.1" />
   </ItemGroup>
 

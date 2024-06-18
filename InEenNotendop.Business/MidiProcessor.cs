@@ -1,62 +1,79 @@
 ﻿using NAudio.Midi;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace InEenNotendop.Business
 {
     public class MidiProcessor
     {
+        public int Score;
+
+        private Song song;
+        private Song songPlayed;
+        public Song SongForNoteFalling;
+        public Song SongForNotePlayback;
+
+
         private object Owner;
-        private MidiPlayer midiPlayer;
+        public MidiPlayer MidiPlayer;
         private MidiIn midiIn;
         public Stopwatch Stopwatch { get; set; } // Acurater dan DateTime.Now
+        private DateTime startTime;
 
-        private Song songPlayed;
 
+        //Event voor wanneer noot gespeeld wordt
+        public delegate void NotePlayedEventHandler(object sender, NotePlayedEventArgs e);
+        public event NotePlayedEventHandler NotePlayed;
 
-        public MidiProcessor(object Owner)
+        public delegate void SongFinishedEventHandler(object sender);
+        public event SongFinishedEventHandler SongFinished;
+
+        //Constructor
+        public MidiProcessor(object Owner, MidiFile midiFile)
         {
             this.Owner = Owner;
             InitializeMidi("Microsoft GS Wavetable Synth");
             Stopwatch = new Stopwatch();
             Stopwatch.Start();
             songPlayed = new Song();
+            startTime = DateTime.Now;
+
         }
 
-        
+        //Voor event wanneer midi input gedetecteerd wordt
         private void MidiInMessageReceived(object? sender, MidiInMessageEventArgs e)
         {
             if (e.MidiEvent is NoteOnEvent noteOnEvent)
             {
-                midiPlayer.PlayNote(noteOnEvent.NoteNumber);
+                MidiPlayer.PlayNote(noteOnEvent.NoteNumber);
                 songPlayed.AddNote(new Note(noteOnEvent, Stopwatch.Elapsed));
-                SendChangeSignalToUI(noteOnEvent.NoteNumber, true);
+                OnMidiInMessageReceived(new NotePlayedEventArgs(noteOnEvent.NoteNumber, true));
             }
             else if (e.MidiEvent is NoteEvent noteEvent) // een noteevent wat geen noteonevent is is in dit geval altijd een event die een noot eindigt.
             {
-                midiPlayer.StopNote(noteEvent.NoteNumber);
-                SendChangeSignalToUI(noteEvent.NoteNumber, false);
+                MidiPlayer.StopNote(noteEvent.NoteNumber);
+                OnMidiInMessageReceived(new NotePlayedEventArgs(noteEvent.NoteNumber, false));
             }
         }
 
-        public UIChangeMessage SendChangeSignalToUI(int NoteNumber, bool isNoteOnMessage)
+        protected virtual void OnMidiInMessageReceived(NotePlayedEventArgs e)
         {
-            if (isNoteOnMessage)
-            {
-                return new UIChangeMessage(NoteNumber, true);
-            } else
-            {
-                return new UIChangeMessage(NoteNumber, false);
-            }
+            NotePlayed?.Invoke(this, e);
+        }
+
+        //Voor event wanneer nummer klaar is
+        public void OnSongFinished()
+        {
+
+            Score = ScoreCalculator.CalculateScore(song, songPlayed);
+
+        }
+        public void LastNoteOfSongElapsed(object? sender)
+        {
+            SongFinished?.Invoke(this);
         }
 
         private void InitializeMidi(string desiredOutDevice)
         {
-            midiPlayer = new MidiPlayer(desiredOutDevice, this);
+            MidiPlayer = new MidiPlayer(desiredOutDevice, this);
 
             var numDevices = MidiIn.NumberOfDevices;
             var desiredDeviceIndex = 0; // DEZE KAN VERANDEREN SOMS SPONTAAN
@@ -68,7 +85,7 @@ namespace InEenNotendop.Business
             }
             else
             {
-                MessageBox.Show("Invalid MIDI device index or no devices found.");
+                  //  (MidiPlayWindow)Owner.MessageBox.Show("Invalid MIDI device index or no devices found.");
             }
         }
     }

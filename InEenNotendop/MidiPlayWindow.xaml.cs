@@ -17,11 +17,11 @@ namespace InEenNotendop.UI
     /// </summary>
     public partial class MidiPlayWindow : Window
     {
-        //
-        public delegate WrongMidiDeviceHandler
+        // Delegate
+        public delegate NotePlayedEventArgs UIChangeMessageHandler(object sender, int NoteNumber, bool IsNoteOnEvent);
 
-        // Event handler
-        public event 
+        // Event
+        public event UIChangeMessageHandler UIChangeMessageReceived;
 
 
 
@@ -32,8 +32,8 @@ namespace InEenNotendop.UI
         private bool songFinished = false;
         private int currentScore;
 
-        private MidiPlayer midiPlayer;
-        private MidiFile midiFileSong;
+        private MidiProcessor midiProcessor;
+        //private MidiFile midiFileSong;
         private TimeSpan endLastNote;
 
         DataProgram dataProgram = new DataProgram();
@@ -44,16 +44,14 @@ namespace InEenNotendop.UI
         private System.Windows.Media.Brush noteHitBrush = Brushes.IndianRed; // Wanneer key wordt aangeslagen
         private System.Windows.Media.Brush whiteKeysBrush = Brushes.WhiteSmoke; // Witte toetsen
         private System.Windows.Media.Brush blackKeyBrush = Brushes.Black; // Zwartse toetsen
-        private System.Windows.Media.Brush fallingBlockBrush = Brushes.Red;
+        private System.Windows.Media.Brush fallingBlockBrush;
         public Dictionary<int, ButtonData> MidiNoteToButton { get; set; } // int = Midi notonumber, Button = button die wordt toegewezen aan die noot.
 
-        private DateTime _startTime; // Deze hebben we nodog om de tijd te berekenen van wanneer de midi noot is gespeeld, 
+        private DateTime startTime; // Deze hebben we nodog om de tijd te berekenen van wanneer de midi noot is gespeeld, 
         private object value;
         private DispatcherTimer timer;
         private const double NoteHeightPerSecond = 200; // Eenheid voor hoogte blok per seconde
-        //private const double FallingDuration = 1.5; // Duration of the falling animation for all notes (in seconds)
         private const double FallingSpeed = 200.0; // Speed of falling blocks in units per second
-
         private const double TimerInterval = 10; // in MS, hoe lager des te accurater de de code checkt wanneer een blok gegenereerd een een note gespeeld moet worden, maar kan meer performance kosten
 
         private double fallingDuration;
@@ -75,40 +73,37 @@ namespace InEenNotendop.UI
             this.currentScore = currentScore;
             MidiNoteToButton = [];
 
-
             try
             {
 
-                midiFileSong = new MidiFile(FilePath);
+                MidiFile midiFileSong = new MidiFile(FilePath);
+                midiProcessor = new MidiProcessor(this, midiFileSong);
+                midiProcessor.NotePlayed += MidiProcessor_NotePlayed;
 
-            } catch (FileNotFoundException e)
+            }
+            catch (FileNotFoundException e)
             {
                 MessageBox.Show(e.Message);
+                Close();
             }
+
+
+
+
+     
             
-            TimeSpan increment = TimeSpan.FromMilliseconds(2000); // Dit voegt een delay toe aan noten genereren. Ander hebben we een bug met teveel noten weergeven aan het begin
-            TimeSpan increment2 = TimeSpan.FromMilliseconds(7800); // Dit voegt een delay toe aan get afspelen van midi noten, correspondeerd met vanaf waar de noten gegenereerd worden tot aan pianotoetsen op scherm
+            //notesOfSongList = MidiToListConverter.MidiToList(midiFileSong);
 
-            notesOfSongList = midiInputProcessor.MidiToList(midiFileSong);
 
-            for (int i = 0; i < notesOfSongList.Count; i++) // Een delay toegevoegd aan de midi, omdat anders de eerste paar blokken niet goed gerenderd worden.
-            {
-                notesOfSongList[i].NoteStartTime = notesOfSongList[i].NoteStartTime.Add(increment);
-            }
-
-            notesOfSongToBePlayed = [.. midiInputProcessor.MidiToList(midiFileSong)]; // shallow koepie
 
             if(playMidiFile) { 
-                for (int i = 0; i < notesOfSongToBePlayed.Count; i++) // Nog een keer delay toevoegen op de liste met noten die gebruikt worden voor de midi playback
-                {
-                    notesOfSongToBePlayed[i].NoteStartTime = notesOfSongToBePlayed[i].NoteStartTime.Add(increment2);
-                }
+
             }
 
             try
             {
                 endLastNote = notesOfSongToBePlayed[notesOfSongToBePlayed.Count - 1].NoteStartTime + notesOfSongToBePlayed[notesOfSongToBePlayed.Count - 1].NoteDuration;
-                endLastNote = endLastNote + TimeSpan.FromSeconds(10);
+                endLastNote = endLastNote + TimeSpan.FromSeconds(3);
             } 
             catch (Exception e)
             {
@@ -116,12 +111,9 @@ namespace InEenNotendop.UI
                 Close();
             }
 
-            desiredOutDevice = "Microsoft GS Wavetable Synth";
 
             InitializeComponent();
-            InitializeMidi(desiredOutDevice);
 
-            midiInputScoreCalculator = new ScoreCalculator(midiInputProcessor);
 
             #region mapping midi notes to the buttons
 
@@ -184,7 +176,7 @@ namespace InEenNotendop.UI
 
             #endregion
 
-            _startTime = DateTime.Now;
+            startTime = DateTime.Now;
             timer = new DispatcherTimer
             {
                 Interval = TimeSpan.FromMilliseconds(TimerInterval)
@@ -193,9 +185,14 @@ namespace InEenNotendop.UI
             timer.Start();
         }
 
+        private void MidiProcessor_NotePlayed(object sender, NotePlayedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
         private void Timer_Tick(object sender, EventArgs e)
         {
-            var currentTime = stopwatch.Elapsed;
+            var currentTime = midiProcessor.Stopwatch.Elapsed;
             foreach (var note in notesOfSongList)
             {
                 if (!note.IsBlockGenerated && currentTime >= note.NoteStartTime && currentTime < note.NoteStartTime + note.NoteDuration)
@@ -211,13 +208,13 @@ namespace InEenNotendop.UI
                     if (!note.IsPlaying && currentTime >= note.NoteStartTime &&
                         currentTime < note.NoteStartTime + note.NoteDuration)
                     {
-                        midiPlayer.PlayNote(note.NoteNumber);
+                        midiProcessor.MidiPlayer.PlayNote(note.NoteNumber);
                         note.IsPlaying = true;
                     }
 
                     if (note.IsPlaying && currentTime >= note.NoteStartTime + note.NoteDuration)
                     {
-                        midiPlayer.StopNote(note.NoteNumber);
+                        midiProcessor.MidiPlayer.StopNote(note.NoteNumber);
                         note.IsPlaying = false;
                     }
                 }
@@ -249,6 +246,23 @@ namespace InEenNotendop.UI
         }
 
         //Checks if midi device is connected so the application doesn't crash
+
+        private void OnMidiInputReceived(object sender, NotePlayedEventArgs e)
+        {
+            if(MidiNoteToButton.ContainsKey(e.noteNumber))
+            {
+                if(e.isOnMessage)
+                {
+                    // kleur toets veranderen naar gedefinieerde kleur voor wanneer note gespeeld wordt
+                    MidiNoteToButton[e.noteNumber].Button.Background = noteHitBrush;
+                }
+                else
+                {
+                    // als noot uit gaat dan terugveranderen naar originele kleur
+                    MidiNoteToButton[e.noteNumber].Button.Background = MidiNoteToButton[e.noteNumber].ButtonColor;
+                }
+            }
+        }
         protected override void OnClosed(EventArgs e)
         {
             if (!songFinished)

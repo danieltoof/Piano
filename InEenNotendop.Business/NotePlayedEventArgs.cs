@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace InEenNotendop.Business
 {
-    public class UIChangeMessage
+    public class NotePlayedEventArgs : EventArgs
     {
         public int noteNumber { get; private set; } // int van midi event (nootnummer)
         public bool isOnMessage { get; private set; } // als false dan is note uit message
 
-        public UIChangeMessage(int NoteNumber, bool IsNoteOnMessage) 
+        public NotePlayedEventArgs(int NoteNumber, bool IsNoteOnMessage) 
         {
             noteNumber = NoteNumber;
             isOnMessage = IsNoteOnMessage;
