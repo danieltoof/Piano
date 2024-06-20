@@ -38,7 +38,10 @@ namespace InEenNotendop.Business
 
             song = new Song(midiFile);
             songPlayed = new Song();
-
+            SongForNoteFalling = new();
+            SongForNotePlayback = new();
+            SongForNoteFalling.Notes = NoteTimeManipulator.AddDelayToStartSong(song.Notes);
+            SongForNotePlayback.Notes = NoteTimeManipulator.AddDelayToSongPlayback(song.Notes);
 
         }
 
