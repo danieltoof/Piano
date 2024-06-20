@@ -3,27 +3,56 @@
 public static class ScoreCalculator
 {
     private const float maxScore = 1000;
+    static float maxScorePerNote = 0;
 
     public static int CalculateScore(Song song, Song songPlayed)
     {
         float score = 0;
-        float maxScorePerNote = maxScore / song.Notes.Count;
 
-        // Per noot die in het nummer voorkomt gaan we de score berekenen van alle instances
 
-        foreach (var SongNote in song.Notes)
+        if (song == null) {
+            song = new Song();
+        }
+        if (song.Notes.Count == 0)
         {
-            foreach (var PlayedNote in songPlayed.Notes)
+            song.Notes.Add(new Note(1, TimeSpan.FromDays(1)));
+        }
+
+        if (songPlayed != null)
+        {
+            maxScorePerNote = maxScore / song.Notes.Count;
+        } else
+        {
+            maxScorePerNote = 0;
+        }
+
+
+        // Per noot die in het nummer voorkomt gaan we de score berekenen van alle instance
+        // 
+
+        try
+        {
+            foreach (var SongNote in song.Notes)
             {
-                if (!SongNote.ScoreIsCalculated && SongNote.NoteNumber == PlayedNote.NoteNumber)
+                song.Notes.Add(new Note(1, TimeSpan.FromDays(1)));
+
+                foreach (var PlayedNote in songPlayed.Notes)
                 {
-                    float noteScore = maxScorePerNote *
-                                        getNoteScoreFactor(SongNote.NoteStartTime, PlayedNote.NoteStartTime);
-                    score += noteScore;
-                    SongNote.ScoreIsCalculated = true;
+                    if (!SongNote.ScoreIsCalculated && SongNote.NoteNumber == PlayedNote.NoteNumber)
+                    {
+                        float noteScore = maxScorePerNote *
+                                            getNoteScoreFactor(SongNote.NoteStartTime, PlayedNote.NoteStartTime);
+                        score += noteScore;
+                        SongNote.ScoreIsCalculated = true;
+                    }
                 }
             }
         }
+        catch (Exception ex)
+        {
+        }
+
+
         
         return (int)score;
     }

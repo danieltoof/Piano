@@ -12,7 +12,6 @@ namespace InEenNotendop.Business
         public Song SongForNotePlayback;
 
 
-        private object Owner;
         public MidiPlayer MidiPlayer;
         private MidiIn midiIn;
         public Stopwatch Stopwatch { get; set; } // Acurater dan DateTime.Now
@@ -26,10 +25,12 @@ namespace InEenNotendop.Business
         public delegate void SongFinishedEventHandler(object sender);
         public event SongFinishedEventHandler SongFinished;
 
+        public delegate void MidiDeviceNotFoundHandler(object sender);
+        public event MidiDeviceNotFoundHandler MidiDeviceNotFound;
+
         //Constructor
         public MidiProcessor(object Owner, MidiFile midiFile)
         {
-            this.Owner = Owner;
             InitializeMidi("Microsoft GS Wavetable Synth");
             Stopwatch = new Stopwatch();
             Stopwatch.Start();
@@ -59,10 +60,23 @@ namespace InEenNotendop.Business
             NotePlayed?.Invoke(this, e);
         }
 
+        public void Dispose()
+        {
+            try {
+                midiIn?.Dispose();
+                MidiPlayer.Dispose();
+                Stopwatch.Stop();
+                Stopwatch.Reset();
+            } catch (NullReferenceException e) 
+            { 
+            }
+            
+        }
+
         //Voor event wanneer nummer klaar is
         public void OnSongFinished()
         {
-
+            this.Dispose();
             Score = ScoreCalculator.CalculateScore(song, songPlayed);
 
         }
@@ -76,7 +90,12 @@ namespace InEenNotendop.Business
             MidiPlayer = new MidiPlayer(desiredOutDevice, this);
 
             var numDevices = MidiIn.NumberOfDevices;
+            Debug.WriteLine($"numDevices: {numDevices}");
             var desiredDeviceIndex = 0; // DEZE KAN VERANDEREN SOMS SPONTAAN
+            if(numDevices < 0)
+            {
+                numDevices = 0;
+            }
             if (desiredDeviceIndex < numDevices)
             {
                 midiIn = new MidiIn(desiredDeviceIndex);
@@ -85,7 +104,7 @@ namespace InEenNotendop.Business
             }
             else
             {
-                  //  (MidiPlayWindow)Owner.MessageBox.Show("Invalid MIDI device index or no devices found.");
+                MidiDeviceNotFound?.Invoke(this);
             }
         }
     }

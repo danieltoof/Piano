@@ -60,20 +60,37 @@ namespace InEenNotendop.UI
         {
 
             MidiPlayWindow midiPlayWindow = new MidiPlayWindow(FilePath, this, false, nummerID, songsWindow, currentScore);
-            Owner.Hide();
 
-            midiPlayWindow.Show();
-            Close();
+            Owner.Hide();
+            try
+            {
+                midiPlayWindow.Show();
+                Close();
+
+            }
+            catch (InvalidOperationException invalidOperationException)
+            {
+                Close();
+                Owner.Show();
+            }
         }
         private void AUTOPLAY_Button_Click(object sender, RoutedEventArgs e)
         {
 
             MidiPlayWindow midiPlayWindow = new MidiPlayWindow(FilePath, this, true, nummerID, songsWindow, currentScore);
 
-            //SongsWindow songsWindow = SongsWindow();
             Owner.Hide();
-            midiPlayWindow.Show();
-            Close();
+            try
+            {
+                midiPlayWindow.Show();
+                Close();
+
+            }
+            catch (InvalidOperationException invalidOperationException)
+            {
+                Close();
+                Owner.Show();
+            }
 
         }
 

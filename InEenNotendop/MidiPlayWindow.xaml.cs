@@ -87,7 +87,7 @@ namespace InEenNotendop.UI
                 Close();
             }
 
-
+            midiProcessor.MidiDeviceNotFound += MidiProcessor_MidiDeviceNotFound    ;
 
 
      
@@ -185,9 +185,26 @@ namespace InEenNotendop.UI
             timer.Start();
         }
 
+        private void MidiProcessor_MidiDeviceNotFound(object sender)
+        {
+            MessageBox.Show("Invalid MIDI device index or no devices found.");
+        }
+
         private void MidiProcessor_NotePlayed(object sender, NotePlayedEventArgs e)
         {
-            throw new NotImplementedException();
+            if (MidiNoteToButton.ContainsKey(e.noteNumber))
+            {
+                if (e.isOnMessage)
+                {
+                    // kleur toets veranderen naar gedefinieerde kleur voor wanneer note gespeeld wordt
+                    MidiNoteToButton[e.noteNumber].Button.Background = noteHitBrush;
+                }
+                else
+                {
+                    // als noot uit gaat dan terugveranderen naar originele kleur
+                    MidiNoteToButton[e.noteNumber].Button.Background = MidiNoteToButton[e.noteNumber].ButtonColor;
+                }
+            }
         }
 
         private void Timer_Tick(object sender, EventArgs e)
@@ -230,16 +247,14 @@ namespace InEenNotendop.UI
         // (Important) Dispose of the MidiIn object when the app closes
         private void ReturnToSongList()
         {
-            if (midiIn != null)
+            if (midiProcessor != null)
             {
-                midiIn.Stop();
-                midiIn.Dispose();
+                // deze functie doet dispose en score berekenen
+                midiProcessor.OnSongFinished();
             }
             timer.Stop();
-            midiPlayer.Dispose();
-            midiInputScoreCalculator.CalculateScoreAfterSongCompleted();
-            dataProgram.ChangeHighscore(nummerID, (int)midiInputScoreCalculator.Score, currentScore);
-            MessageBox.Show($"Score : {midiInputScoreCalculator.Score}");
+            dataProgram.ChangeHighscore(nummerID, (int)midiProcessor.Score, currentScore);
+            MessageBox.Show($"Score : {midiProcessor.Score}");
             songsWindow.songIsFinished = true;
             Close();
             songsWindow.Show();
@@ -247,38 +262,34 @@ namespace InEenNotendop.UI
 
         //Checks if midi device is connected so the application doesn't crash
 
-        private void OnMidiInputReceived(object sender, NotePlayedEventArgs e)
-        {
-            if(MidiNoteToButton.ContainsKey(e.noteNumber))
-            {
-                if(e.isOnMessage)
-                {
-                    // kleur toets veranderen naar gedefinieerde kleur voor wanneer note gespeeld wordt
-                    MidiNoteToButton[e.noteNumber].Button.Background = noteHitBrush;
-                }
-                else
-                {
-                    // als noot uit gaat dan terugveranderen naar originele kleur
-                    MidiNoteToButton[e.noteNumber].Button.Background = MidiNoteToButton[e.noteNumber].ButtonColor;
-                }
-            }
-        }
+        //private void OnMidiInputReceived(object sender, NotePlayedEventArgs e)
+        //{
+        //    if(MidiNoteToButton.ContainsKey(e.noteNumber))
+        //    {
+        //        if(e.isOnMessage)
+        //        {
+        //            // kleur toets veranderen naar gedefinieerde kleur voor wanneer note gespeeld wordt
+        //            MidiNoteToButton[e.noteNumber].Button.Background = noteHitBrush;
+        //        }
+        //        else
+        //        {
+        //            // als noot uit gaat dan terugveranderen naar originele kleur
+        //            MidiNoteToButton[e.noteNumber].Button.Background = MidiNoteToButton[e.noteNumber].ButtonColor;
+        //        }
+        //    }
+        //}
         protected override void OnClosed(EventArgs e)
         {
             if (!songFinished)
             {
-                if (midiIn != null)
+                try
                 {
-                    midiIn.Stop();
-                    midiIn.Dispose();
+                    midiProcessor.Dispose();
+
                 }
-                if(timer != null)
+                catch (NullReferenceException ex)
                 {
-                    timer.Stop();
-                }
-                if(midiPlayer != null)
-                {
-                    midiPlayer.Dispose();
+                    // niks om te disposen dus hoeft niks te doen
                 }
                 songsWindow.Show();
             }
