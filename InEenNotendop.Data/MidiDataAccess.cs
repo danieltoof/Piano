@@ -10,7 +10,7 @@ public class MidiDataAccess : IMidiInterface
         string remoteFilePath = Path.Combine("/home/student/Music", $"{artist} - {name}.mid");
         string localSavePath = Path.Combine(localPath);
 
-        using (var sftp = new SftpClient(ConfigClass.Host, ConfigClass.Username, ConfigClass.Password))
+        using (var sftp = new SftpClient(ConfigClass.s_Host, ConfigClass.s_Username, ConfigClass.s_Password))
         {
             sftp.Connect();
 
@@ -70,7 +70,7 @@ public class MidiDataAccess : IMidiInterface
         // Downloads the .mid file from the ubuntu machine
         try
         {
-            using (var sftp = new SftpClient(ConfigClass.Host, ConfigClass.Username, ConfigClass.Password))
+            using (var sftp = new SftpClient(ConfigClass.s_Host, ConfigClass.s_Username, ConfigClass.s_Password))
             {
                 sftp.Connect();
 
