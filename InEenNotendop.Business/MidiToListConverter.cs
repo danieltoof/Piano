@@ -1,4 +1,5 @@
 ﻿using NAudio.Midi;
+using System.Diagnostics;
 
 namespace InEenNotendop.Business
 {
@@ -45,6 +46,13 @@ namespace InEenNotendop.Business
                             {
                                 note.EndNote(endTimeSpan);
                             }
+                            else
+                            {
+                                // Add logging here to capture the issue
+                                Debug.WriteLine($"Note not found for NoteNumber: {noteOffEvent.NoteNumber}, List size: {ListOfNotesSong.Count}");
+                            }
+
+
                         }
                     }
                 }

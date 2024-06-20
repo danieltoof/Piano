@@ -102,7 +102,7 @@ namespace InEenNotendop.UI
 
             try
             {
-                endLastNote = notesOfSongToBePlayed[notesOfSongToBePlayed.Count - 1].NoteStartTime + notesOfSongToBePlayed[notesOfSongToBePlayed.Count - 1].NoteDuration;
+                endLastNote = midiProcessor.SongForNotePlayback.Notes[midiProcessor.SongForNotePlayback.Notes.Count - 1].NoteStartTime + midiProcessor.SongForNotePlayback.Notes[midiProcessor.SongForNotePlayback.Notes.Count - 1].NoteDuration;
                 endLastNote = endLastNote + TimeSpan.FromSeconds(3);
             } 
             catch (Exception e)
@@ -210,7 +210,7 @@ namespace InEenNotendop.UI
         private void Timer_Tick(object sender, EventArgs e)
         {
             var currentTime = midiProcessor.Stopwatch.Elapsed;
-            foreach (var note in notesOfSongList)
+            foreach (var note in midiProcessor.SongForNoteFalling.Notes)
             {
                 if (!note.IsBlockGenerated && currentTime >= note.NoteStartTime && currentTime < note.NoteStartTime + note.NoteDuration)
                 {
@@ -220,7 +220,7 @@ namespace InEenNotendop.UI
             }
 
             if(playMidiFile) { 
-                foreach (var note in notesOfSongToBePlayed)
+                foreach (var note in midiProcessor.SongForNotePlayback.Notes)
                 {
                     if (!note.IsPlaying && currentTime >= note.NoteStartTime &&
                         currentTime < note.NoteStartTime + note.NoteDuration)

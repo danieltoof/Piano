@@ -34,8 +34,11 @@ namespace InEenNotendop.Business
             InitializeMidi("Microsoft GS Wavetable Synth");
             Stopwatch = new Stopwatch();
             Stopwatch.Start();
-            songPlayed = new Song();
             startTime = DateTime.Now;
+
+            song = new Song(midiFile);
+            songPlayed = new Song();
+
 
         }
 

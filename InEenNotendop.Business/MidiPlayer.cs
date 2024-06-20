@@ -15,7 +15,7 @@ public class MidiPlayer
         int deviceIndex = FindMidiDevice("Microsoft GS Wavetable Synth");
         if (deviceIndex != -1)
         {
-            midiOut = new MidiOut(deviceIndex);
+            //midiOut = new MidiOut(deviceIndex);
         }
         else
         {
