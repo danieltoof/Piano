@@ -31,7 +31,7 @@ namespace InEenNotendop.UI
         private SqlDataAccess _sqlDataAccess = new();
         private int _nummerId;
 
-        private string? DesiredOutDevice { get; set; }
+        private string? _desiredOutDevice { get; set; }
         //Kleurtjes van keys
         private System.Windows.Media.Brush _noteHitBrush = Brushes.IndianRed; // Wanneer key wordt aangeslagen
         private System.Windows.Media.Brush _whiteKeysBrush = Brushes.WhiteSmoke; // Witte toetsen
@@ -112,10 +112,10 @@ namespace InEenNotendop.UI
                 Close();
             }
 
-            DesiredOutDevice = "Microsoft GS Wavetable Synth";
+            _desiredOutDevice = "Microsoft GS Wavetable Synth";
 
             InitializeComponent();
-            InitializeMidi(DesiredOutDevice);
+            InitializeMidi(_desiredOutDevice);
 
             _midiInputScoreCalculator = new MidiInputScoreCalculator(_midiInputProcessor);
 

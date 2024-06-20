@@ -64,7 +64,7 @@ public class SqlDataAccess : IDatabaseInterface
     // Method to upload information about the song to the database
     public void UploadsongToDataBase(string name, string artiest, int length, int bpm, int diffeculty, string filepath)
     {
-        using (SqlConnection connection = new SqlConnection(ConfigClass.ConnectionString))
+        using (SqlConnection connection = new SqlConnection(ConfigClass.s_ConnectionString))
         {
             connection.Open();
 
@@ -96,7 +96,7 @@ public class SqlDataAccess : IDatabaseInterface
     {
         if (score > currentScore)
         {
-            using (SqlConnection connection = new SqlConnection(ConfigClass.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(ConfigClass.s_ConnectionString))
             {
                 using (var command = connection.CreateCommand())
                 {
@@ -113,7 +113,7 @@ public class SqlDataAccess : IDatabaseInterface
     public DataView GetDataForGrid(int nummerId)
     {
         string cmdString = string.Empty;
-        using (SqlConnection con = new SqlConnection(ConfigClass.ConnectionString))
+        using (SqlConnection con = new SqlConnection(ConfigClass.s_ConnectionString))
         {
             cmdString = $"SELECT Score, Naam FROM Scores WHERE NummerID = '{nummerId}' order by Score desc";
             SqlCommand cmd = new SqlCommand(cmdString, con);
@@ -130,7 +130,7 @@ public class SqlDataAccess : IDatabaseInterface
     {
         List<Nummer> nummers = new List<Nummer>();
 
-        using (SqlConnection connection = new SqlConnection(ConfigClass.ConnectionString))
+        using (SqlConnection connection = new SqlConnection(ConfigClass.s_ConnectionString))
         {
             using (var command = connection.CreateCommand())
             {
