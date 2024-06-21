@@ -7,16 +7,16 @@ namespace InEenNotendop.Business
     {
         public int Score;
 
-        private Song song;
-        private Song songPlayed;
-        public Song SongForNoteFalling { get;  set; }
-        public Song SongForNotePlayback { get; set; }
+        private NoteCollection _song;
+        private NoteCollection _songPlayed;
+        public NoteCollection SongForNoteFalling { get;  set; }
+        public NoteCollection SongForNotePlayback { get; set; }
 
 
         public MidiPlayer MidiPlayer;
-        private MidiIn midiIn;
+        private MidiIn _midiIn;
         public Stopwatch Stopwatch { get; set; } // Acurater dan DateTime.Now
-        private DateTime startTime;
+        private DateTime _startTime;
 
 
         //Event voor wanneer noot gespeeld wordt
@@ -35,12 +35,12 @@ namespace InEenNotendop.Business
             InitializeMidi("Microsoft GS Wavetable Synth");
             Stopwatch = new Stopwatch();
             Stopwatch.Start();
-            startTime = DateTime.Now;
+            _startTime = DateTime.Now;
 
-            song = new Song(midiFile);
-            songPlayed = new Song();
-            SongForNoteFalling = new Song(midiFile);
-            SongForNotePlayback = new Song(midiFile);
+            _song = new NoteCollection(midiFile);
+            _songPlayed = new NoteCollection();
+            SongForNoteFalling = new NoteCollection(midiFile);
+            SongForNotePlayback = new NoteCollection(midiFile);
 
             SongForNoteFalling = NoteTimeManipulator.GenerateDelayedSong(SongForNoteFalling, 2200);
             SongForNotePlayback = NoteTimeManipulator.GenerateDelayedSong(SongForNotePlayback, 7900);
@@ -53,7 +53,7 @@ namespace InEenNotendop.Business
             if (e.MidiEvent is NoteOnEvent noteOnEvent)
             {
                 MidiPlayer.PlayNote(noteOnEvent.NoteNumber);
-                songPlayed.AddNote(new Note(noteOnEvent, Stopwatch.Elapsed));
+                _songPlayed.AddNote(new Note(noteOnEvent, Stopwatch.Elapsed));
                 OnMidiInMessageReceived(new NotePlayedEventArgs(noteOnEvent.NoteNumber, true));
             }
             else if (e.MidiEvent is NoteEvent noteEvent) // een noteevent wat geen noteonevent is is in dit geval altijd een event die een noot eindigt.
@@ -71,7 +71,7 @@ namespace InEenNotendop.Business
         public void Dispose()
         {
             try {
-                midiIn?.Dispose();
+                _midiIn?.Dispose();
                 MidiPlayer.Dispose();
                 Stopwatch.Stop();
                 Stopwatch.Reset();
@@ -85,7 +85,7 @@ namespace InEenNotendop.Business
         public void OnSongFinished()
         {
             this.Dispose();
-            Score = ScoreCalculator.CalculateScore(SongForNotePlayback, songPlayed);
+            Score = ScoreCalculator.CalculateScore(SongForNotePlayback, _songPlayed);
 
         }
         public void LastNoteOfSongElapsed(object? sender)
@@ -106,9 +106,9 @@ namespace InEenNotendop.Business
             }
             if (desiredDeviceIndex < numDevices)
             {
-                midiIn = new MidiIn(desiredDeviceIndex);
-                midiIn.MessageReceived += MidiInMessageReceived;
-                midiIn.Start();
+                _midiIn = new MidiIn(desiredDeviceIndex);
+                _midiIn.MessageReceived += MidiInMessageReceived;
+                _midiIn.Start();
             }
             else
             {

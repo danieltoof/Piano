@@ -32,12 +32,13 @@ namespace InEenNotendop.UI
         private bool _songFinished = false;
         private int _currentScore;
 
-        private MidiProcessor midiProcessor;
+        private MidiProcessor _midiProcessor;
         //private MidiFile midiFileSong;
-        private TimeSpan endLastNote;
+        private TimeSpan _endLastNote;
 
         private SqlDataAccess _sqlDataAccess = new();
-        private int _nummerId;
+        DataProgram dataProgram = new DataProgram();
+        private int _nummerID;
 
         private string? _desiredOutDevice { get; set; }
         //Kleurtjes van keys
@@ -49,7 +50,7 @@ namespace InEenNotendop.UI
 
         private DateTime startTime; // Deze hebben we nodog om de tijd te berekenen van wanneer de midi noot is gespeeld, 
         private object value;
-        private DispatcherTimer timer;
+        private DispatcherTimer _timer;
         private const double NoteHeightPerSecond = 200; // Eenheid voor hoogte blok per seconde
         private const double FallingSpeed = 200.0; // Speed of falling blocks in units per second
         private const double TimerInterval = 10; // in MS, hoe lager des te accurater de de code checkt wanneer een blok gegenereerd een een note gespeeld moet worden, maar kan meer performance kosten
@@ -65,20 +66,20 @@ namespace InEenNotendop.UI
             public System.Windows.Media.Brush ButtonColor { get; set; } = brush;
         }
 
-        public MidiPlayWindow(string filePath, object sender, bool playMidiFile, int nummerId, SongsWindow? songsWindow, int currentScore)
+        public MidiPlayWindow(string filePath, object sender, bool playMidiFile, int nummerID, SongsWindow? songsWindow, int currentScore)
         {
-            this.nummerID = nummerID;
+            _nummerID = nummerID;
             this.songsWindow = songsWindow;
-            this.playMidiFile = playMidiFile;
-            this.currentScore = currentScore;
+            _playMidiFile = playMidiFile;
+            _currentScore = currentScore;
             MidiNoteToButton = [];
 
             try
             {
 
-                MidiFile midiFileSong = new MidiFile(FilePath);
-                midiProcessor = new MidiProcessor(this, midiFileSong);
-                midiProcessor.NotePlayed += MidiProcessor_NotePlayed;
+                MidiFile midiFileSong = new MidiFile(filePath);
+                _midiProcessor = new MidiProcessor(this, midiFileSong);
+                _midiProcessor.NotePlayed += MidiProcessor_NotePlayed;
 
             }
             catch (FileNotFoundException e)
@@ -87,7 +88,7 @@ namespace InEenNotendop.UI
                 Close();
             }
 
-            midiProcessor.MidiDeviceNotFound += MidiProcessor_MidiDeviceNotFound    ;
+            _midiProcessor.MidiDeviceNotFound += MidiProcessor_MidiDeviceNotFound    ;
 
 
      
@@ -102,8 +103,8 @@ namespace InEenNotendop.UI
 
             try
             {
-                endLastNote = midiProcessor.SongForNotePlayback.Notes[midiProcessor.SongForNotePlayback.Notes.Count - 1].NoteStartTime + midiProcessor.SongForNotePlayback.Notes[midiProcessor.SongForNotePlayback.Notes.Count - 1].NoteDuration;
-                endLastNote += TimeSpan.FromSeconds(3);
+                _endLastNote = _midiProcessor.SongForNotePlayback.Notes[_midiProcessor.SongForNotePlayback.Notes.Count - 1].NoteStartTime + _midiProcessor.SongForNotePlayback.Notes[_midiProcessor.SongForNotePlayback.Notes.Count - 1].NoteDuration;
+                _endLastNote += TimeSpan.FromSeconds(3);
             } 
             catch (Exception e)
             {
@@ -177,7 +178,7 @@ namespace InEenNotendop.UI
             #endregion
 
             startTime = DateTime.Now;
-            timer = new DispatcherTimer
+            _timer = new DispatcherTimer
             {
                 Interval = TimeSpan.FromMilliseconds(TimerInterval)
             };
@@ -209,8 +210,8 @@ namespace InEenNotendop.UI
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            var currentTime = midiProcessor.Stopwatch.Elapsed;
-            foreach (var note in midiProcessor.SongForNoteFalling.Notes)
+            var currentTime = _midiProcessor.Stopwatch.Elapsed;
+            foreach (var note in _midiProcessor.SongForNoteFalling.Notes)
             {
                 if (!note.IsBlockGenerated && currentTime >= note.NoteStartTime && currentTime < note.NoteStartTime + note.NoteDuration)
                 {
@@ -219,19 +220,19 @@ namespace InEenNotendop.UI
                 }
             }
 
-            if(playMidiFile) { 
-                foreach (var note in midiProcessor.SongForNotePlayback.Notes)
+            if(_playMidiFile) { 
+                foreach (var note in _midiProcessor.SongForNotePlayback.Notes)
                 {
                     if (!note.IsPlaying && currentTime >= note.NoteStartTime &&
                         currentTime < note.NoteStartTime + note.NoteDuration)
                     {
-                        midiProcessor.MidiPlayer.PlayNote(note.NoteNumber);
+                        _midiProcessor.MidiPlayer.PlayNote(note.NoteNumber);
                         note.IsPlaying = true;
                     }
 
                     if (note.IsPlaying && currentTime >= note.NoteStartTime + note.NoteDuration)
                     {
-                        midiProcessor.MidiPlayer.StopNote(note.NoteNumber);
+                        _midiProcessor.MidiPlayer.StopNote(note.NoteNumber);
                         note.IsPlaying = false;
                     }
                 }
@@ -247,17 +248,17 @@ namespace InEenNotendop.UI
         // (Important) Dispose of the MidiIn object when the app closes
         private void ReturnToSongList()
         {
-            if (midiProcessor != null)
+            if (_midiProcessor != null)
             {
                 // deze functie doet dispose en score berekenen
-                midiProcessor.OnSongFinished();
+                _midiProcessor.OnSongFinished();
             }
-            timer.Stop();
-            dataProgram.ChangeHighscore(nummerID, (int)midiProcessor.Score, currentScore);
-            MessageBox.Show($"Score : {midiProcessor.Score}");
+            _timer.Stop();
+            _dataProgram.ChangeHighscore(_nummerID, (int)_midiProcessor.Score, _currentScore);
+            MessageBox.Show($"Score : {_midiProcessor.Score}");
             songsWindow.songIsFinished = true;
             Close();
-            SongsWindow.Show();
+            songsWindow.Show();
         }
 
         //Checks if midi device is connected so the application doesn't crash
@@ -284,7 +285,7 @@ namespace InEenNotendop.UI
             {
                 try
                 {
-                    midiProcessor.Dispose();
+                    _midiProcessor.Dispose();
 
                 }
                 catch (NullReferenceException ex)

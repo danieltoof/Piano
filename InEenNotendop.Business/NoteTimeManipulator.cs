@@ -2,9 +2,9 @@
 {
     public static class NoteTimeManipulator
     {
-        public static Song GenerateDelayedSong(Song song, int milliSecondsDelay)
+        public static NoteCollection GenerateDelayedSong(NoteCollection song, int milliSecondsDelay)
         {
-            Song delayedSong = new();
+            NoteCollection delayedSong = new();
             foreach (Note n in song.Notes)
             {
                 delayedSong.Notes.Add(AddDelayToNote(n, milliSecondsDelay));

@@ -2,24 +2,24 @@
 
 namespace InEenNotendop.Business
 {
-    public class Song
+    public class NoteCollection
     {
         public List<Note> Notes { get; set; }
         
         //Constructor voor object die input van user opslaat
-        public Song()
+        public NoteCollection()
         {
             Notes = [];
         }
 
-        public Song (List<Note> notes)
+        public NoteCollection (List<Note> notes)
         {
             Notes = notes;
         }
 
 
         //Constructor voor object aangemaakt met een midi-bestand
-        public Song(MidiFile midiFile) 
+        public NoteCollection(MidiFile midiFile) 
         {
             Notes = MidiToListConverter.MidiToList(midiFile);
         }

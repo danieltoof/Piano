@@ -5,13 +5,13 @@ public static class ScoreCalculator
     private const float maxScore = 1000;
     static float maxScorePerNote = 0;
 
-    public static int CalculateScore(Song song, Song songPlayed)
+    public static int CalculateScore(NoteCollection song, NoteCollection songPlayed)
     {
         float score = 0;
 
 
         if (song == null) {
-            song = new Song();
+            song = new NoteCollection();
         }
         if (song.Notes.Count == 0)
         {
