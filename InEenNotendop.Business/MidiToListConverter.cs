@@ -53,11 +53,38 @@ namespace InEenNotendop.Business
                             }
 
 
-                        }
-                    }
-                }
-            }
-            return ListOfNotesSong;
+        public Note(NoteOnEvent noteOnEvent, TimeSpan startTime) // voor midi input
+        {
+            NoteNumber = noteOnEvent.NoteNumber;
+            NoteStartTime = startTime;
+            IsPlaying = true;
+            
+        }
+
+        public Note(int noteNumber, TimeSpan noteStartTime) // voor noot aanmaken zonder midi event
+        {
+            NoteNumber = noteNumber;
+            NoteStartTime = noteStartTime;
+        }
+
+        public void EndNote(TimeSpan endTime)
+        {
+            NoteDuration = endTime - NoteStartTime;
+            IsPlaying = false;
         }
     }
 }
+
+
+#region ThisRegionCanBeIgnored
+public class Program
+{
+    public static void Main()
+    {
+        // NIET VERWIJDEREN, HET MOET EEN MAIN HEBBEN
+        // WAAROM? VRAAG NIET AAN MIJ
+        // NEGEER DIT DUS
+    }
+}
+
+#endregion

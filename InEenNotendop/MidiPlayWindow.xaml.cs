@@ -28,18 +28,18 @@ namespace InEenNotendop.UI
         //
         public SongsWindow songsWindow { get; set; }
 
-        private bool playMidiFile = false;
-        private bool songFinished = false;
-        private int currentScore;
+        private bool _playMidiFile = false;
+        private bool _songFinished = false;
+        private int _currentScore;
 
         private MidiProcessor midiProcessor;
         //private MidiFile midiFileSong;
         private TimeSpan endLastNote;
 
-        DataProgram dataProgram = new DataProgram();
-        private int nummerID;
+        private SqlDataAccess _sqlDataAccess = new();
+        private int _nummerId;
 
-        private string? desiredOutDevice { get; set; }
+        private string? _desiredOutDevice { get; set; }
         //Kleurtjes van keys
         private System.Windows.Media.Brush noteHitBrush = Brushes.IndianRed; // Wanneer key wordt aangeslagen
         private System.Windows.Media.Brush whiteKeysBrush = Brushes.WhiteSmoke; // Witte toetsen
@@ -54,10 +54,10 @@ namespace InEenNotendop.UI
         private const double FallingSpeed = 200.0; // Speed of falling blocks in units per second
         private const double TimerInterval = 10; // in MS, hoe lager des te accurater de de code checkt wanneer een blok gegenereerd een een note gespeeld moet worden, maar kan meer performance kosten
 
-        private double fallingDuration;
+        private double _fallingDuration;
 
-        private List<Note> notesOfSongList = [];
-        private List<Note> notesOfSongToBePlayed = [];
+        private List<Note> _notesOfSongList = [];
+        private List<Note> _notesOfSongToBePlayed = [];
 
         public class ButtonData(Button button, Brush brush)
         {
@@ -65,7 +65,7 @@ namespace InEenNotendop.UI
             public System.Windows.Media.Brush ButtonColor { get; set; } = brush;
         }
 
-        public MidiPlayWindow(string FilePath, object sender, bool playMidiFile, int nummerID, SongsWindow? songsWindow, int currentScore)
+        public MidiPlayWindow(string filePath, object sender, bool playMidiFile, int nummerId, SongsWindow? songsWindow, int currentScore)
         {
             this.nummerID = nummerID;
             this.songsWindow = songsWindow;
@@ -181,8 +181,8 @@ namespace InEenNotendop.UI
             {
                 Interval = TimeSpan.FromMilliseconds(TimerInterval)
             };
-            timer.Tick += Timer_Tick;
-            timer.Start();
+            _timer.Tick += Timer_Tick;
+            _timer.Start();
         }
 
         private void MidiProcessor_MidiDeviceNotFound(object sender)
@@ -237,9 +237,9 @@ namespace InEenNotendop.UI
                 }
             }
 
-            if(currentTime >= endLastNote)
+            if(currentTime >= _endLastNote)
             {
-                songFinished = true;
+                _songFinished = true;
                 ReturnToSongList();
             }
         }
@@ -257,7 +257,7 @@ namespace InEenNotendop.UI
             MessageBox.Show($"Score : {midiProcessor.Score}");
             songsWindow.songIsFinished = true;
             Close();
-            songsWindow.Show();
+            SongsWindow.Show();
         }
 
         //Checks if midi device is connected so the application doesn't crash
@@ -280,7 +280,7 @@ namespace InEenNotendop.UI
         //}
         protected override void OnClosed(EventArgs e)
         {
-            if (!songFinished)
+            if (!_songFinished)
             {
                 try
                 {
@@ -306,18 +306,18 @@ namespace InEenNotendop.UI
 
                 if (actualWidthGrid > 20) // Als noot witte toets is, bruin blokje
                 {
-                    fallingBlockBrush = Brushes.SaddleBrown;
+                    _fallingBlockBrush = Brushes.SaddleBrown;
                 }
                 else // anders zwarte toets, zwart blokje
                 {
-                    fallingBlockBrush = Brushes.Black;
+                    _fallingBlockBrush = Brushes.Black;
                 }
 
                 Rectangle rect = new Rectangle
                 {
                     Width = actualWidthGrid,  
                     Height = NoteHeightPerSecond * note.NoteDuration.TotalSeconds,  // hoogte van noot is varierend, om het accuraat te maken gebruiken we deze formule
-                    Fill = fallingBlockBrush // kleurtje
+                    Fill = _fallingBlockBrush // kleurtje
                 };
 
                 // horizontale positie bepalen van noot op basis van het kolomnummer
@@ -334,7 +334,7 @@ namespace InEenNotendop.UI
                 double fallingDistance = AnimationCanvas.ActualHeight + (rect.Height);
 
                 // hoe lang duur thet voordat blokje de piano moet bereiken?
-                fallingDuration = fallingDistance / FallingSpeed;
+                _fallingDuration = fallingDistance / FallingSpeed;
 
                 // eindpositie van het blokkje zodat het onder de pianotoetsen terecht komt en niet meer zichtbaar is.
                 double endTopPosition = startTopPosition + rect.Height + 10; 
@@ -344,7 +344,7 @@ namespace InEenNotendop.UI
                 {
                     From = -rect.Height,  // net boven het canvas beginnen
                     To = AnimationCanvas.ActualHeight,  // eindigen op de bodem van canvas
-                    Duration = TimeSpan.FromSeconds(fallingDuration)  // Constant duration for the animation
+                    Duration = TimeSpan.FromSeconds(_fallingDuration)  // Constant duration for the animation
                 };
 
                 // starten van de animatie              

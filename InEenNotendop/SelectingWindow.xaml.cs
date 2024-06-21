@@ -9,26 +9,22 @@ namespace InEenNotendop.UI
     public partial class SelectingWindow : Window
     {
         public Window Owner { get; set; }
-        private SongsWindow songsWindow;
-        DataProgram dataProgram = new DataProgram();
-        string FilePath;
-        private int nummerID;
-        private int currentScore;
-        public SelectingWindow(int nummerId, string moeilijkheidText, string Title, string Artiest, int Lengte, int Bpm, string FilePath, string ConvertedTime, object sender, int currentScore)
+        private SongsWindow _songsWindow;
+        SqlDataAccess _sqlDataAccess = new();
+        private MidiDataAccess _midiDataAccess = new();
+        string _filePath;
+        private int _nummerId;
+        private int _currentScore;
+        public SelectingWindow(int nummerId, string moeilijkheidText, string title, string artiest, int lengte, int bpm, string filePath, string convertedTime, object sender, int currentScore)
         {
             InitializeComponent();
-            songsWindow = (SongsWindow)sender;
-            Owner = songsWindow;
-            this.FilePath = FilePath;
-            DataContext = new NummerDetailsViewModel(nummerId, moeilijkheidText, Title, Artiest, Lengte, Bpm, ConvertedTime, currentScore);
+            _songsWindow = (SongsWindow)sender;
+            Owner = _songsWindow;
+            this._filePath = filePath;
+            DataContext = new NummerDetailsViewModel(nummerId, moeilijkheidText, title, artiest, lengte, bpm, convertedTime, currentScore);
             FillDataGrid(nummerId);
-            this.nummerID = nummerId;
-            this.currentScore = currentScore;
-        }
-
-        private void OnCloseClicked(object sender, RoutedEventArgs e)
-        {
-            Close();
+            this._nummerId = nummerId;
+            this._currentScore = currentScore;
         }
 
         // Class and constructor for detailed song screen
@@ -59,8 +55,7 @@ namespace InEenNotendop.UI
         private void PLAY_Button_Click(object sender, RoutedEventArgs e)
         {
 
-            MidiPlayWindow midiPlayWindow = new MidiPlayWindow(FilePath, this, false, nummerID, songsWindow, currentScore);
-
+            MidiPlayWindow midiPlayWindow = new MidiPlayWindow(_filePath, this, false, _nummerId, _songsWindow, _currentScore);
             Owner.Hide();
             try
             {
@@ -77,7 +72,7 @@ namespace InEenNotendop.UI
         private void AUTOPLAY_Button_Click(object sender, RoutedEventArgs e)
         {
 
-            MidiPlayWindow midiPlayWindow = new MidiPlayWindow(FilePath, this, true, nummerID, songsWindow, currentScore);
+            MidiPlayWindow midiPlayWindow = new MidiPlayWindow(_filePath, this, true, _nummerId, _songsWindow, _currentScore);
 
             Owner.Hide();
             try
@@ -98,12 +93,12 @@ namespace InEenNotendop.UI
         {
             var viewModel = DataContext as NummerDetailsViewModel;
 
-            dataProgram.DownloadSong(viewModel.Artiest,viewModel.Title);  
+            _midiDataAccess.DownloadSong(viewModel.Artiest,viewModel.Title);  
         }
 
         private void FillDataGrid(int nummerId)
         {
-            HighScoresGrid.ItemsSource = dataProgram.GetDataForGrid(nummerId);
+            HighScoresGrid.ItemsSource = _sqlDataAccess.GetDataForGrid(nummerId);
         }
     }
 }
