@@ -8,25 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="IntroSong.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="EcoCore" Version="7.0.0.15731" />
     <PackageReference Include="NAudio.Midi" Version="2.2.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\InEenNotendop.Data\InEenNotendop.Data.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="IntroMidi.mid">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="IntroSong.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 
 </Project>
