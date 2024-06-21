@@ -12,6 +12,11 @@ namespace InEenNotendop.Business
             Notes = [];
         }
 
+        public Song (List<Note> notes)
+        {
+            Notes = notes;
+        }
+
 
         //Constructor voor object aangemaakt met een midi-bestand
         public Song(MidiFile midiFile) 

@@ -1,5 +1,6 @@
 ﻿using NAudio.Midi;
 using System.Diagnostics;
+using System.Runtime.Versioning;
 namespace InEenNotendop.Business
 {
     public class MidiProcessor
@@ -8,8 +9,8 @@ namespace InEenNotendop.Business
 
         private Song song;
         private Song songPlayed;
-        public Song SongForNoteFalling;
-        public Song SongForNotePlayback;
+        public Song SongForNoteFalling { get;  set; }
+        public Song SongForNotePlayback { get; set; }
 
 
         public MidiPlayer MidiPlayer;
@@ -38,10 +39,11 @@ namespace InEenNotendop.Business
 
             song = new Song(midiFile);
             songPlayed = new Song();
-            SongForNoteFalling = new();
-            SongForNotePlayback = new();
-            SongForNoteFalling.Notes = NoteTimeManipulator.AddDelayToStartSong(song.Notes);
-            SongForNotePlayback.Notes = NoteTimeManipulator.AddDelayToSongPlayback(song.Notes);
+            SongForNoteFalling = new Song(midiFile);
+            SongForNotePlayback = new Song(midiFile);
+
+            SongForNoteFalling = NoteTimeManipulator.GenerateDelayedSong(SongForNoteFalling, 2200);
+            SongForNotePlayback = NoteTimeManipulator.GenerateDelayedSong(SongForNotePlayback, 7900);
 
         }
 
@@ -83,7 +85,7 @@ namespace InEenNotendop.Business
         public void OnSongFinished()
         {
             this.Dispose();
-            Score = ScoreCalculator.CalculateScore(song, songPlayed);
+            Score = ScoreCalculator.CalculateScore(SongForNotePlayback, songPlayed);
 
         }
         public void LastNoteOfSongElapsed(object? sender)
@@ -97,7 +99,7 @@ namespace InEenNotendop.Business
 
             var numDevices = MidiIn.NumberOfDevices;
             Debug.WriteLine($"numDevices: {numDevices}");
-            var desiredDeviceIndex = 0; // DEZE KAN VERANDEREN SOMS SPONTAAN
+            var desiredDeviceIndex = 1; // DEZE KAN VERANDEREN SOMS SPONTAAN
             if(numDevices < 0)
             {
                 numDevices = 0;

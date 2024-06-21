@@ -103,7 +103,7 @@ namespace InEenNotendop.UI
             try
             {
                 endLastNote = midiProcessor.SongForNotePlayback.Notes[midiProcessor.SongForNotePlayback.Notes.Count - 1].NoteStartTime + midiProcessor.SongForNotePlayback.Notes[midiProcessor.SongForNotePlayback.Notes.Count - 1].NoteDuration;
-                endLastNote = endLastNote + TimeSpan.FromSeconds(3);
+                endLastNote += TimeSpan.FromSeconds(3);
             } 
             catch (Exception e)
             {
@@ -197,12 +197,12 @@ namespace InEenNotendop.UI
                 if (e.isOnMessage)
                 {
                     // kleur toets veranderen naar gedefinieerde kleur voor wanneer note gespeeld wordt
-                    MidiNoteToButton[e.noteNumber].Button.Background = noteHitBrush;
+                    this.Dispatcher.Invoke(() => MidiNoteToButton[e.noteNumber].Button.Background = noteHitBrush);
                 }
                 else
                 {
                     // als noot uit gaat dan terugveranderen naar originele kleur
-                    MidiNoteToButton[e.noteNumber].Button.Background = MidiNoteToButton[e.noteNumber].ButtonColor;
+                    this.Dispatcher.Invoke(() => MidiNoteToButton[e.noteNumber].Button.Background = MidiNoteToButton[e.noteNumber].ButtonColor);
                 }
             }
         }

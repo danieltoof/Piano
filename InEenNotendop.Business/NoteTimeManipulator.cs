@@ -2,27 +2,20 @@
 {
     public static class NoteTimeManipulator
     {
-        private static TimeSpan incrementStartSong = TimeSpan.FromMilliseconds(2000);
-        private static TimeSpan incrementMidiPlayback = TimeSpan.FromMilliseconds(7000);
-
-
-        public static List<Note> AddDelayToStartSong(List<Note> ListOfNotes)
+        public static Song GenerateDelayedSong(Song song, int milliSecondsDelay)
         {
-            foreach (var note in ListOfNotes)
+            Song delayedSong = new();
+            foreach (Note n in song.Notes)
             {
-                note.NoteStartTime = note.NoteStartTime.Add(incrementStartSong);
+                delayedSong.Notes.Add(AddDelayToNote(n, milliSecondsDelay));
             }
-            return ListOfNotes;
+            return delayedSong;
         }
 
-
-        public static List<Note> AddDelayToSongPlayback(List<Note> ListOfNotes)
+        public static Note AddDelayToNote(Note n, int milliSecondsDelay)
         {
-            foreach (var note in ListOfNotes)
-            {
-                note.NoteStartTime = note.NoteStartTime.Add(incrementStartSong).Add(incrementMidiPlayback);
-            }
-            return ListOfNotes;
+            Note delayedNote = new(n.NoteNumber, n.NoteStartTime.Add(TimeSpan.FromMilliseconds(milliSecondsDelay)), n.NoteDuration);
+            return delayedNote;
         }
     }
 }

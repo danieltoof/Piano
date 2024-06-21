@@ -26,6 +26,13 @@ namespace InEenNotendop.Business
             NoteStartTime = noteStartTime;
         }
 
+        public Note(int noteNumber, TimeSpan noteStartTime, TimeSpan noteDuration)
+        {
+            NoteNumber = noteNumber;
+            NoteStartTime = noteStartTime;
+            NoteDuration = noteDuration;
+        }
+
         public void EndNote(TimeSpan endTime)
         {
             NoteDuration = endTime - NoteStartTime;
