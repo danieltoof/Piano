@@ -23,7 +23,7 @@ namespace InEenNotendop.Business
                         absoluteTime += midiEvent.DeltaTime;
 
                         //Als er wel een tempo event is dan wordt deze aangepast
-                        if (midiEvent is TempoEvent tempoEvent) 
+                        if (midiEvent is TempoEvent tempoEvent)
                         {
                             tempo = tempoEvent.MicrosecondsPerQuarterNote;
                         }
@@ -51,40 +51,11 @@ namespace InEenNotendop.Business
                                 // Add logging here to capture the issue
                                 Debug.WriteLine($"Note not found for NoteNumber: {noteOffEvent.NoteNumber}, List size: {ListOfNotesSong.Count}");
                             }
-
-
-        public Note(NoteOnEvent noteOnEvent, TimeSpan startTime) // voor midi input
-        {
-            NoteNumber = noteOnEvent.NoteNumber;
-            NoteStartTime = startTime;
-            IsPlaying = true;
-            
-        }
-
-        public Note(int noteNumber, TimeSpan noteStartTime) // voor noot aanmaken zonder midi event
-        {
-            NoteNumber = noteNumber;
-            NoteStartTime = noteStartTime;
-        }
-
-        public void EndNote(TimeSpan endTime)
-        {
-            NoteDuration = endTime - NoteStartTime;
-            IsPlaying = false;
+                        }
+                    }
+                }
+            }
+            return ListOfNotesSong;
         }
     }
 }
-
-
-#region ThisRegionCanBeIgnored
-public class Program
-{
-    public static void Main()
-    {
-        // NIET VERWIJDEREN, HET MOET EEN MAIN HEBBEN
-        // WAAROM? VRAAG NIET AAN MIJ
-        // NEGEER DIT DUS
-    }
-}
-
-#endregion
