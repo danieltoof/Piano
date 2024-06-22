@@ -34,19 +34,19 @@ namespace InEenNotendop.UI
 
         private string? _desiredOutDevice { get; set; }
         //Kleurtjes van keys
-        private System.Windows.Media.Brush _noteHitBrush = Brushes.IndianRed; // Wanneer key wordt aangeslagen
-        private System.Windows.Media.Brush _whiteKeysBrush = Brushes.WhiteSmoke; // Witte toetsen
-        private System.Windows.Media.Brush _blackKeyBrush = Brushes.Black; // Zwartse toetsen
-        private System.Windows.Media.Brush _fallingBlockBrush = Brushes.Red;
+        private Brush _noteHitBrush = Brushes.IndianRed; // Wanneer key wordt aangeslagen
+        private Brush _whiteKeysBrush = Brushes.WhiteSmoke; // Witte toetsen
+        private Brush _blackKeyBrush = Brushes.Black; // Zwartse toetsen
+        private Brush _fallingBlockBrush = Brushes.Red;
         private Dictionary<int, ButtonData> _midiNoteToButton = new(); // int = Midi notonumber, Button = button die wordt toegewezen aan die noot.
 
         private DateTime _startTime; // Deze hebben we nodog om de tijd te berekenen van wanneer de midi noot is gespeeld, 
         private object _value;
         private DispatcherTimer _timer;
-        private const double NoteHeightPerSecond = 200; // Eenheid voor hoogte blok per seconde
-        private const double FallingSpeed = 200.0; // Speed of falling blocks in units per second
+        private const double _noteHeightPerSecond = 200; // Eenheid voor hoogte blok per seconde
+        private const double _fallingSpeed = 200.0; // Speed of falling blocks in units per second
 
-        private const double TimerInterval = 10; // in MS, hoe lager des te accurater de de code checkt wanneer een blok gegenereerd een een note gespeeld moet worden, maar kan meer performance kosten
+        private const double _timerInterval = 10; // in MS, hoe lager des te accurater de de code checkt wanneer een blok gegenereerd een een note gespeeld moet worden, maar kan meer performance kosten
 
         private double _fallingDuration;
 
@@ -174,7 +174,7 @@ namespace InEenNotendop.UI
             _startTime = DateTime.Now;
             _timer = new DispatcherTimer
             {
-                Interval = TimeSpan.FromMilliseconds(TimerInterval)
+                Interval = TimeSpan.FromMilliseconds(_timerInterval)
             };
             _timer.Tick += Timer_Tick;
             _timer.Start();
@@ -311,7 +311,7 @@ namespace InEenNotendop.UI
                 Rectangle rect = new Rectangle
                 {
                     Width = actualWidthGrid,
-                    Height = NoteHeightPerSecond * note.NoteDuration.TotalSeconds,  // hoogte van noot is varierend, om het accuraat te maken gebruiken we deze formule
+                    Height = _noteHeightPerSecond * note.NoteDuration.TotalSeconds,  // hoogte van noot is varierend, om het accuraat te maken gebruiken we deze formule
                     Fill = _fallingBlockBrush // kleurtje
                 };
 
@@ -329,7 +329,7 @@ namespace InEenNotendop.UI
                 double fallingDistance = AnimationCanvas.ActualHeight + (rect.Height);
 
                 // hoe lang duur thet voordat blokje de piano moet bereiken?
-                _fallingDuration = fallingDistance / FallingSpeed;
+                _fallingDuration = fallingDistance / _fallingSpeed;
 
                 // eindpositie van het blokkje zodat het onder de pianotoetsen terecht komt en niet meer zichtbaar is.
                 double endTopPosition = startTopPosition + rect.Height + 10;
