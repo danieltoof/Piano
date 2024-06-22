@@ -6,7 +6,7 @@ namespace InEenNotendop.Business;
 public class MidiPlayer 
 {
     private MidiOut _midiOut;
-    private readonly object _owner;
+    private object _owner;
 
     public MidiPlayer(string desiredDevice, object owner)
     {
@@ -15,7 +15,14 @@ public class MidiPlayer
         int deviceIndex = FindMidiDevice("Microsoft GS Wavetable Synth");
         if (deviceIndex != -1)
         {
-            _midiOut = new MidiOut(deviceIndex);
+            try
+            {
+                _midiOut = new MidiOut(deviceIndex);
+            }
+            catch (Exception ex)
+            {
+            }
+
         }
         else
         {
