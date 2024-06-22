@@ -1,20 +1,15 @@
 ﻿using NAudio.Midi;
+using System.Diagnostics;
 
 namespace InEenNotendop.Business
 {
-    public class MidiInputProcessor
+    public static class MidiToListConverter
     {
-        public List<Note> ListOfNotesSong { get; set; }
-        public List<Note> ListOfNotesPlayed { get; set; }
-
-        public MidiInputProcessor() {
-            ListOfNotesPlayed = [];
-            ListOfNotesSong = [];
-        }
-
-        public List<Note> MidiToList(MidiFile? midiFile)
+        //Deze functie zet een midi-bestand om naar een List.
+        //Voor makkelijkere score berekening
+        public static List<Note> MidiToList(MidiFile? midiFile)
         {
-            ListOfNotesSong = new List<Note>();
+            List<Note> ListOfNotesSong = new List<Note>();
             if (midiFile != null)
             {
                 int ticksPerQuarterNote = midiFile.DeltaTicksPerQuarterNote;
@@ -27,11 +22,13 @@ namespace InEenNotendop.Business
                     {
                         absoluteTime += midiEvent.DeltaTime;
 
-                        if (midiEvent is TempoEvent tempoEvent)
+                        //Als er wel een tempo event is dan wordt deze aangepast
+                        if (midiEvent is TempoEvent tempoEvent) 
                         {
                             tempo = tempoEvent.MicrosecondsPerQuarterNote;
                         }
 
+                        //Als midi event een NoteOnEvent is, wordt er een nieuwe noot aangemaakt
                         if (midiEvent.CommandCode == MidiCommandCode.NoteOn)
                         {
                             var noteOnEvent = (NoteOnEvent)midiEvent;
@@ -39,6 +36,7 @@ namespace InEenNotendop.Business
                             ListOfNotesSong.Add(new Note(noteOnEvent, startTimeSpan));
                         }
 
+                        //Als midi event een NoteOff event is dan wordt de eindtijd toegevoegd aan corresponderente Note die bij NoteOnEvent is aangemaakt
                         if (midiEvent.CommandCode == MidiCommandCode.NoteOff)
                         {
                             var noteOffEvent = (NoteEvent)midiEvent;
@@ -48,22 +46,12 @@ namespace InEenNotendop.Business
                             {
                                 note.EndNote(endTimeSpan);
                             }
-                        }
-                    }
-                }
-            }
-            return ListOfNotesSong;
-        }
-    }
+                            else
+                            {
+                                // Add logging here to capture the issue
+                                Debug.WriteLine($"Note not found for NoteNumber: {noteOffEvent.NoteNumber}, List size: {ListOfNotesSong.Count}");
+                            }
 
-    public class Note
-    {
-        public int NoteNumber { get; set; }
-        public TimeSpan NoteStartTime { get; set; }
-        public TimeSpan NoteDuration { get; set; } 
-        public bool IsPlaying { get; set; }
-        public bool IsBlockGenerated { get; set; } = false;
-        public bool ScoreIsCalculated = false;
 
         public Note(NoteOnEvent noteOnEvent, TimeSpan startTime) // voor midi input
         {
@@ -86,3 +74,17 @@ namespace InEenNotendop.Business
         }
     }
 }
+
+
+#region ThisRegionCanBeIgnored
+public class Program
+{
+    public static void Main()
+    {
+        // NIET VERWIJDEREN, HET MOET EEN MAIN HEBBEN
+        // WAAROM? VRAAG NIET AAN MIJ
+        // NEGEER DIT DUS
+    }
+}
+
+#endregion

@@ -24,9 +24,10 @@ namespace InEenNotendop.UI
         private int _currentScore;
 
         private MidiIn _midiIn;
-        private MidiPlayer _midiPlayer;
+        private MidiProcessor _midiProcessor;
         private MidiFile _midiFileSong;
         private TimeSpan _endLastNote;
+
 
         private SqlDataAccess _sqlDataAccess = new();
         private int _nummerId;
@@ -39,8 +40,6 @@ namespace InEenNotendop.UI
         private System.Windows.Media.Brush _fallingBlockBrush = Brushes.Red;
         private Dictionary<int, ButtonData> _midiNoteToButton = new(); // int = Midi notonumber, Button = button die wordt toegewezen aan die noot.
 
-        private MidiInputProcessor _midiInputProcessor; // Klasse nodig om midi noten op te slaan in List en score te berekenen
-        private MidiInputScoreCalculator _midiInputScoreCalculator;
         private DateTime _startTime; // Deze hebben we nodog om de tijd te berekenen van wanneer de midi noot is gespeeld, 
         private object _value;
         private DispatcherTimer _timer;
@@ -64,10 +63,10 @@ namespace InEenNotendop.UI
 
         public MidiPlayWindow(string filePath, object sender, bool playMidiFile, int nummerId, SongsWindow? songsWindow, int currentScore)
         {
-            this._nummerId = nummerId;
-            this.SongsWindow = songsWindow;
-            this._playMidiFile = playMidiFile;
-            this._currentScore = currentScore;
+            _nummerId = nummerId;
+            SongsWindow = songsWindow;
+            _playMidiFile = playMidiFile;
+            _currentScore = currentScore;
             _midiInputProcessor = new MidiInputProcessor();
 
             _stopwatch = new Stopwatch();
