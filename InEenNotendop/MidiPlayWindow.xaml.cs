@@ -43,9 +43,7 @@ namespace InEenNotendop.UI
         private DateTime _startTime; // Deze hebben we nodog om de tijd te berekenen van wanneer de midi noot is gespeeld, 
         private object _value;
         private DispatcherTimer _timer;
-        private Stopwatch _stopwatch; // Acurater dan DateTime.Now
         private const double NoteHeightPerSecond = 200; // Eenheid voor hoogte blok per seconde
-        //private const double FallingDuration = 1.5; // Duration of the falling animation for all notes (in seconds)
         private const double FallingSpeed = 200.0; // Speed of falling blocks in units per second
 
         private const double TimerInterval = 10; // in MS, hoe lager des te accurater de de code checkt wanneer een blok gegenereerd een een note gespeeld moet worden, maar kan meer performance kosten
@@ -67,56 +65,50 @@ namespace InEenNotendop.UI
             SongsWindow = songsWindow;
             _playMidiFile = playMidiFile;
             _currentScore = currentScore;
-            _midiInputProcessor = new MidiInputProcessor();
+            _midiProcessor = new MidiProcessor(this, new MidiFile(filePath));
 
-            _stopwatch = new Stopwatch();
-            _stopwatch.Start();
             try
             {
 
-                _midiFileSong = new MidiFile(filePath);
+                MidiFile midiFileSong = new MidiFile(filePath);
+                _midiProcessor = new MidiProcessor(this, midiFileSong);
+                _midiProcessor.NotePlayed += MidiProcessor_NotePlayed;
 
-            } catch (FileNotFoundException e)
+            }
+            catch (FileNotFoundException e)
             {
                 MessageBox.Show(e.Message);
+                Close();
             }
-            
-            TimeSpan increment = TimeSpan.FromMilliseconds(2000); // Dit voegt een delay toe aan noten genereren. Ander hebben we een bug met teveel noten weergeven aan het begin
-            TimeSpan increment2 = TimeSpan.FromMilliseconds(7800); // Dit voegt een delay toe aan get afspelen van midi noten, correspondeerd met vanaf waar de noten gegenereerd worden tot aan pianotoetsen op scherm
 
-            _notesOfSongList = _midiInputProcessor.MidiToList(_midiFileSong);
+            _midiProcessor.MidiDeviceNotFound += MidiProcessor_MidiDeviceNotFound;
 
-            for (int i = 0; i < _notesOfSongList.Count; i++) // Een delay toegevoegd aan de midi, omdat anders de eerste paar blokken niet goed gerenderd worden.
+
+
+
+            //notesOfSongList = MidiToListConverter.MidiToList(midiFileSong);
+
+
+
+            if (playMidiFile)
             {
-                _notesOfSongList[i].NoteStartTime = _notesOfSongList[i].NoteStartTime.Add(increment);
-            }
 
-            _notesOfSongToBePlayed = [.. _midiInputProcessor.MidiToList(_midiFileSong)]; // shallow koepie
-
-            if(playMidiFile) { 
-                for (int i = 0; i < _notesOfSongToBePlayed.Count; i++) // Nog een keer delay toevoegen op de liste met noten die gebruikt worden voor de midi playback
-                {
-                    _notesOfSongToBePlayed[i].NoteStartTime = _notesOfSongToBePlayed[i].NoteStartTime.Add(increment2);
-                }
             }
 
             try
             {
-                _endLastNote = _notesOfSongToBePlayed[_notesOfSongToBePlayed.Count - 1].NoteStartTime + _notesOfSongToBePlayed[_notesOfSongToBePlayed.Count - 1].NoteDuration;
-                _endLastNote = _endLastNote + TimeSpan.FromSeconds(10);
-            } 
+                _endLastNote = _midiProcessor.SongForNotePlayback.Notes[_midiProcessor.SongForNotePlayback.Notes.Count - 1].NoteStartTime + _midiProcessor.SongForNotePlayback.Notes[_midiProcessor.SongForNotePlayback.Notes.Count - 1].NoteDuration;
+                _endLastNote += TimeSpan.FromSeconds(3);
+            }
             catch (Exception e)
             {
                 MessageBox.Show(e.Message);
                 Close();
             }
 
-            _desiredOutDevice = "Microsoft GS Wavetable Synth";
 
             InitializeComponent();
-            InitializeMidi(_desiredOutDevice);
 
-            _midiInputScoreCalculator = new MidiInputScoreCalculator(_midiInputProcessor);
 
             #region mapping midi notes to the buttons
 
@@ -188,10 +180,50 @@ namespace InEenNotendop.UI
             _timer.Start();
         }
 
+        // (Important) Dispose of the MidiIn object when the app closes
+        //private void ReturnToSongList()
+        //{
+        //    if (_midiIn != null)
+        //    {
+        //        _midiIn.Stop();
+        //        _midiIn.Dispose();
+        //    }
+        //    _timer.Stop();
+        //    _midiPlayer.Dispose();
+        //    _midiInputScoreCalculator.CalculateScoreAfterSongCompleted();
+        //    _sqlDataAccess.ChangeHighscore(_nummerId, (int)_midiInputScoreCalculator.Score, _currentScore);
+        //    MessageBox.Show($"Score : {_midiInputScoreCalculator.Score}");
+        //    SongsWindow.SongIsFinished = true;
+        //    Close();
+        //    SongsWindow.Show();
+        //}
+
+        private void MidiProcessor_MidiDeviceNotFound(object sender)
+        {
+            MessageBox.Show("Invalid MIDI device index or no devices found.");
+        }
+
+        private void MidiProcessor_NotePlayed(object sender, NotePlayedEventArgs e)
+        {
+            if (_midiNoteToButton.ContainsKey(e.noteNumber))
+            {
+                if (e.isOnMessage)
+                {
+                    // kleur toets veranderen naar gedefinieerde kleur voor wanneer note gespeeld wordt
+                    this.Dispatcher.Invoke(() => _midiNoteToButton[e.noteNumber].Button.Background = _noteHitBrush);
+                }
+                else
+                {
+                    // als noot uit gaat dan terugveranderen naar originele kleur
+                    this.Dispatcher.Invoke(() => _midiNoteToButton[e.noteNumber].Button.Background = _midiNoteToButton[e.noteNumber].ButtonColor);
+                }
+            }
+        }
+
         private void Timer_Tick(object sender, EventArgs e)
         {
-            var currentTime = _stopwatch.Elapsed;
-            foreach (var note in _notesOfSongList)
+            var currentTime = _midiProcessor.Stopwatch.Elapsed;
+            foreach (var note in _midiProcessor.SongForNoteFalling.Notes)
             {
                 if (!note.IsBlockGenerated && currentTime >= note.NoteStartTime && currentTime < note.NoteStartTime + note.NoteDuration)
                 {
@@ -200,25 +232,26 @@ namespace InEenNotendop.UI
                 }
             }
 
-            if(_playMidiFile) { 
-                foreach (var note in _notesOfSongToBePlayed)
+            if (_playMidiFile)
+            {
+                foreach (var note in _midiProcessor.SongForNotePlayback.Notes)
                 {
                     if (!note.IsPlaying && currentTime >= note.NoteStartTime &&
                         currentTime < note.NoteStartTime + note.NoteDuration)
                     {
-                        _midiPlayer.PlayNote(note.NoteNumber);
+                        _midiProcessor.MidiPlayer.PlayNote(note.NoteNumber);
                         note.IsPlaying = true;
                     }
 
                     if (note.IsPlaying && currentTime >= note.NoteStartTime + note.NoteDuration)
                     {
-                        _midiPlayer.StopNote(note.NoteNumber);
+                        _midiProcessor.MidiPlayer.StopNote(note.NoteNumber);
                         note.IsPlaying = false;
                     }
                 }
             }
 
-            if(currentTime >= _endLastNote)
+            if (currentTime >= _endLastNote)
             {
                 _songFinished = true;
                 ReturnToSongList();
@@ -228,100 +261,35 @@ namespace InEenNotendop.UI
         // (Important) Dispose of the MidiIn object when the app closes
         private void ReturnToSongList()
         {
-            if (_midiIn != null)
+            if (_midiProcessor != null)
             {
-                _midiIn.Stop();
-                _midiIn.Dispose();
+                // deze functie doet dispose en score berekenen
+                _midiProcessor.OnSongFinished();
             }
             _timer.Stop();
-            _midiPlayer.Dispose();
-            _midiInputScoreCalculator.CalculateScoreAfterSongCompleted();
-            _sqlDataAccess.ChangeHighscore(_nummerId, (int)_midiInputScoreCalculator.Score, _currentScore);
-            MessageBox.Show($"Score : {_midiInputScoreCalculator.Score}");
-            SongsWindow.SongIsFinished = true;
+            _sqlDataAccess.ChangeHighscore(_nummerId, (int)_midiProcessor.Score, _currentScore);
+            MessageBox.Show($"Score : {_midiProcessor.Score}");
+            SongsWindow.songIsFinished = true;
             Close();
             SongsWindow.Show();
         }
-
-        //Checks if midi device is connected so the application doesn't crash
         protected override void OnClosed(EventArgs e)
         {
             if (!_songFinished)
             {
-                if (_midiIn != null)
+                try
                 {
-                    _midiIn.Stop();
-                    _midiIn.Dispose();
+                    _midiProcessor.Dispose();
+
                 }
-                if(_timer != null)
+                catch (NullReferenceException ex)
                 {
-                    _timer.Stop();
-                }
-                if(_midiPlayer != null)
-                {
-                    _midiPlayer.Dispose();
+                    // niks om te disposen dus hoeft niks te doen
                 }
                 SongsWindow.Show();
             }
         }
 
-        private void InitializeMidi(string desiredOutDevice)
-        {
-            _midiPlayer = new MidiPlayer(desiredOutDevice);
-
-            var numDevices = MidiIn.NumberOfDevices;
-            for (int i = 0; i < numDevices; i++)
-            {
-                Debug.WriteLine($"Midi In Device {i}: {MidiIn.DeviceInfo(i)}");
-            }
-            var desiredDeviceIndex = 0; // DEZE KAN VERANDEREN SOMS SPONTAAN
-            if (desiredDeviceIndex < numDevices)
-            {
-                _midiIn = new MidiIn(desiredDeviceIndex);
-                _midiIn.MessageReceived += MidiIn_MessageReceived;
-                _midiIn.Start();
-            }
-            else
-            {
-                MessageBox.Show("Invalid MIDI device index or no devices found.");
-            }
-        }
-
-        private void MidiIn_MessageReceived(object? sender, MidiInMessageEventArgs e)
-        {
-            if (e.MidiEvent is NoteOnEvent noteOnEvent)
-            {
-                if (_midiNoteToButton.ContainsKey(noteOnEvent.NoteNumber))
-                {
-                    _midiNoteToButton[noteOnEvent.NoteNumber].Button.Dispatcher.Invoke(() =>
-                    {
-                        // kleur toets veranderen
-                        _midiNoteToButton[noteOnEvent.NoteNumber].Button.Background = _noteHitBrush;
-                        // noot beginnnen met spelen
-                        _midiPlayer.PlayNote(noteOnEvent.NoteNumber);
-
-                        // Tijd berekenen sinds start spelen
-                        TimeSpan startTimeNotePlayed = _stopwatch.Elapsed;
-                        // Noot toevoegen aan list in midiInputProcessor's list voor score berekening
-                        _midiInputProcessor.ListOfNotesPlayed.Add(new Note(noteOnEvent, startTimeNotePlayed));
-                    });
-                }
-            }
-            else if (e.MidiEvent is NoteEvent noteEvent) // een noteevent wat geen noteonevent is is in dit geval altijd een event die een noot eindigt.
-            {
-                if (_midiNoteToButton.ContainsKey(noteEvent.NoteNumber))
-                {
-                    //noot stoppen met spelen
-                    _midiPlayer.StopNote(noteEvent.NoteNumber);
-                    // toets terugveranderen naar originele kleur
-                    _midiNoteToButton[noteEvent.NoteNumber].Button.Dispatcher.Invoke(() =>
-                    {
-                        _midiNoteToButton[noteEvent.NoteNumber].Button.Background = _midiNoteToButton[noteEvent.NoteNumber].ButtonColor;
-                    });
-                }
-            }
-        }
-        
         private void GenerateFallingBlock(Note note)
         {
             // het zal wellicht opvallen dat soms bij een notenummer +36 of -35 staat. Dat komt omdat de nootnummer niet direct correspondeerd aan het grid nummer.
@@ -342,7 +310,7 @@ namespace InEenNotendop.UI
 
                 Rectangle rect = new Rectangle
                 {
-                    Width = actualWidthGrid,  
+                    Width = actualWidthGrid,
                     Height = NoteHeightPerSecond * note.NoteDuration.TotalSeconds,  // hoogte van noot is varierend, om het accuraat te maken gebruiken we deze formule
                     Fill = _fallingBlockBrush // kleurtje
                 };
@@ -364,7 +332,7 @@ namespace InEenNotendop.UI
                 _fallingDuration = fallingDistance / FallingSpeed;
 
                 // eindpositie van het blokkje zodat het onder de pianotoetsen terecht komt en niet meer zichtbaar is.
-                double endTopPosition = startTopPosition + rect.Height + 10; 
+                double endTopPosition = startTopPosition + rect.Height + 10;
 
                 // animatie aanmekn
                 DoubleAnimation animation = new DoubleAnimation
