@@ -71,12 +71,12 @@ namespace InEenNotendop.Business
         public void Dispose()
         {
             try {
-                _midiIn?.Dispose();
-                MidiPlayer.Dispose();
-                Stopwatch.Stop();
-                Stopwatch.Reset();
-            } catch (NullReferenceException e) 
-            { 
+                MidiPlayer?.Dispose();
+                Stopwatch?.Stop();
+                Stopwatch?.Reset();
+            } catch (Exception e) 
+            {
+                Debug.WriteLine($"Error during disposal: {e.Message}");
             }
             
         }
@@ -84,8 +84,8 @@ namespace InEenNotendop.Business
         //Voor event wanneer nummer klaar is
         public void OnSongFinished()
         {
-            this.Dispose();
             Score = ScoreCalculator.CalculateScore(SongForNotePlayback, _songPlayed);
+            this.Dispose();
 
         }
         public void LastNoteOfSongElapsed(object? sender)
@@ -99,16 +99,24 @@ namespace InEenNotendop.Business
 
             var numDevices = MidiIn.NumberOfDevices;
             Debug.WriteLine($"numDevices: {numDevices}");
-            var desiredDeviceIndex = 1; // DEZE KAN VERANDEREN SOMS SPONTAAN
+            var desiredDeviceIndex = 0; // DEZE KAN VERANDEREN SOMS SPONTAAN
             if(numDevices < 0)
             {
                 numDevices = 0;
             }
             if (desiredDeviceIndex < numDevices)
             {
-                _midiIn = new MidiIn(desiredDeviceIndex);
-                _midiIn.MessageReceived += MidiInMessageReceived;
-                _midiIn.Start();
+                try
+                {
+                    _midiIn?.Dispose();
+                    _midiIn = new MidiIn(desiredDeviceIndex);
+                    _midiIn.MessageReceived += MidiInMessageReceived;
+                    _midiIn.Start();
+                } catch (NAudio.MmException e)
+                {
+                    Debug.WriteLine($"Error: {e.Message}");
+                }
+
             }
             else
             {

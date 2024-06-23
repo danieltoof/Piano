@@ -23,7 +23,6 @@ namespace InEenNotendop.UI
         private bool _songFinished = false;
         private int _currentScore;
 
-        private MidiIn _midiIn;
         private MidiProcessor _midiProcessor;
         private MidiFile _midiFileSong;
         private TimeSpan _endLastNote;
@@ -65,13 +64,10 @@ namespace InEenNotendop.UI
             SongsWindow = songsWindow;
             _playMidiFile = playMidiFile;
             _currentScore = currentScore;
-            _midiProcessor = new MidiProcessor(this, new MidiFile(filePath));
 
             try
             {
-
-                MidiFile midiFileSong = new MidiFile(filePath);
-                _midiProcessor = new MidiProcessor(this, midiFileSong);
+                _midiProcessor = new MidiProcessor(this, new MidiFile(filePath));
                 _midiProcessor.NotePlayed += MidiProcessor_NotePlayed;
 
             }
@@ -180,24 +176,6 @@ namespace InEenNotendop.UI
             _timer.Start();
         }
 
-        // (Important) Dispose of the MidiIn object when the app closes
-        //private void ReturnToSongList()
-        //{
-        //    if (_midiIn != null)
-        //    {
-        //        _midiIn.Stop();
-        //        _midiIn.Dispose();
-        //    }
-        //    _timer.Stop();
-        //    _midiPlayer.Dispose();
-        //    _midiInputScoreCalculator.CalculateScoreAfterSongCompleted();
-        //    _sqlDataAccess.ChangeHighscore(_nummerId, (int)_midiInputScoreCalculator.Score, _currentScore);
-        //    MessageBox.Show($"Score : {_midiInputScoreCalculator.Score}");
-        //    SongsWindow.SongIsFinished = true;
-        //    Close();
-        //    SongsWindow.Show();
-        //}
-
         private void MidiProcessor_MidiDeviceNotFound(object sender)
         {
             MessageBox.Show("Invalid MIDI device index or no devices found.");
@@ -263,7 +241,6 @@ namespace InEenNotendop.UI
         {
             if (_midiProcessor != null)
             {
-                // deze functie doet dispose en score berekenen
                 _midiProcessor.OnSongFinished();
             }
             _timer.Stop();
