@@ -1,4 +1,4 @@
-﻿using System.Windows;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using InEenNotendop.Data;
@@ -35,7 +35,8 @@ namespace InEenNotendop.UI
             SortBox.Items.Add("Diff. descending");
 
             Nummer.ItemsSource = _sqlDataAccess.MakeDefaultList();
-            CheckDarkOrLight();
+            SettingsWindow.CheckDarkOrLight(this);
+
         }
 
         // Updates the song list so the new score is shown, also keeps the selected filter
@@ -100,18 +101,6 @@ namespace InEenNotendop.UI
             }
         }
 
-        // Checks lightmode value and changes between dark- and lightmode
-        private void CheckDarkOrLight() 
-        {
-            if (SettingsWindow.Lightmode == 1)
-            {
-                SettingsWindow.SetLightMode(this);
-            }
-            else if (SettingsWindow.Lightmode == 0)
-            {
-                SettingsWindow.SetDarkMode(this);
-            }
-        }
 
         // Opens window to import song and refreshes list
         private void ImportButton_OnClick(object sender, RoutedEventArgs e) 
