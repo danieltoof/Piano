@@ -62,7 +62,7 @@ public class SqlDataAccess : IDatabaseInterface
     }
 
     // Method to upload information about the song to the database
-    public void UploadsongToDataBase(string name, string artiest, int length, int bpm, int diffeculty, string filepath)
+    public void UploadSongToDataBase(string name, string artiest, int length, int bpm, int diffeculty, string filepath)
     {
         using (SqlConnection connection = new SqlConnection(ConfigClass.s_ConnectionString))
         {
@@ -126,7 +126,7 @@ public class SqlDataAccess : IDatabaseInterface
     }
 
     // Generic function used to prevent double code with filtering and sorting
-    public List<Nummer> LijstFunc(string sqlcommand)
+    public List<Nummer> ListFunction(string sqlcommand)
     {
         List<Nummer> nummers = new List<Nummer>();
 
@@ -172,9 +172,9 @@ public class SqlDataAccess : IDatabaseInterface
     }
 
     // Default list method used on startup
-    public List<Nummer> MaakLijst()
+    public List<Nummer> MakeDefaultList()
     {
-        return LijstFunc("SELECT N.Title, N.Artiest, N.Lengte, N.Bpm, N.Moeilijkheid, N.ID, N.Filepath, Score FROM Nummers N INNER JOIN (SELECT NummerID, MAX(Score) AS Score FROM Scores GROUP BY NummerID) S ON N.ID = S.NummerID");
+        return ListFunction("SELECT N.Title, N.Artiest, N.Lengte, N.Bpm, N.Moeilijkheid, N.ID, N.Filepath, Score FROM Nummers N INNER JOIN (SELECT NummerID, MAX(Score) AS Score FROM Scores GROUP BY NummerID) S ON N.ID = S.NummerID");
     }
 
     // Gets sorted list from database
@@ -182,17 +182,17 @@ public class SqlDataAccess : IDatabaseInterface
     {
         if (difficulty != 0)
         {
-            return LijstFunc($"SELECT N.Title, N.Artiest, N.Lengte, N.Bpm, N.Moeilijkheid, N.ID, N.Filepath, Score FROM Nummers N INNER JOIN (SELECT NummerID, MAX(Score) as Score from Scores group by NummerID) as S on N.ID = S.NummerID WHERE Moeilijkheid = {difficulty} order by {sort};");
+            return ListFunction($"SELECT N.Title, N.Artiest, N.Lengte, N.Bpm, N.Moeilijkheid, N.ID, N.Filepath, Score FROM Nummers N INNER JOIN (SELECT NummerID, MAX(Score) as Score from Scores group by NummerID) as S on N.ID = S.NummerID WHERE Moeilijkheid = {difficulty} order by {sort};");
         }
         else
         {
-            return LijstFunc($"SELECT N.Title, N.Artiest, N.Lengte, N.Bpm, N.Moeilijkheid, N.ID, N.Filepath, Score FROM Nummers N INNER JOIN (SELECT NummerID, MAX(Score) as Score from Scores group by NummerID) as S on N.ID = S.NummerID order by {sort};");
+            return ListFunction($"SELECT N.Title, N.Artiest, N.Lengte, N.Bpm, N.Moeilijkheid, N.ID, N.Filepath, Score FROM Nummers N INNER JOIN (SELECT NummerID, MAX(Score) as Score from Scores group by NummerID) as S on N.ID = S.NummerID order by {sort};");
         }
     }
 
     // Gets filtered list from database
-    public List<Nummer> MaakFilteredLijst(int difficulty)
+    public List<Nummer> MakeFilteredList(int difficulty)
     {
-        return LijstFunc($"SELECT N.Title, N.Artiest, N.Lengte, N.Bpm, N.Moeilijkheid, N.ID, N.Filepath, Score FROM Nummers N INNER JOIN (SELECT NummerID, MAX(Score) as Score from Scores group by NummerID) as S on N.ID = S.NummerID WHERE Moeilijkheid = {difficulty}");
+        return ListFunction($"SELECT N.Title, N.Artiest, N.Lengte, N.Bpm, N.Moeilijkheid, N.ID, N.Filepath, Score FROM Nummers N INNER JOIN (SELECT NummerID, MAX(Score) as Score from Scores group by NummerID) as S on N.ID = S.NummerID WHERE Moeilijkheid = {difficulty}");
     }
 }
