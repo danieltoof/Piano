@@ -79,7 +79,7 @@
             </StackPanel>
 
             <!-- Upload Knop -->
-            <Button Style="{DynamicResource ButtonStyle}" x:Name="selectFileButton" Content="Select file" Click="selectFile_Click" FontSize="24" Grid.Column="2" Margin="148,150,53,37"></Button>
+            <Button Style="{DynamicResource ButtonStyle}" x:Name="selectFileButton" Content="Select file" Click="SelectFile_Click" FontSize="24" Grid.Column="2" Margin="148,150,53,37"></Button>
         </Grid>
         <!-- Second Row-->
         <Grid Grid.Row="2" Margin="0,54,0,0">
@@ -89,7 +89,7 @@
                 <ColumnDefinition Width="59*"/>
             </Grid.ColumnDefinitions>
 
-            <Button Style="{DynamicResource ButtonStyle}" Name="SaveButton" Content="Upload" Click="saveButton_Click" FontSize="24" Margin="531,-28,23,10" Grid.ColumnSpan="3"></Button>
+            <Button Style="{DynamicResource ButtonStyle}" Name="SaveButton" Content="Upload" Click="SaveButton_Click" FontSize="24" Margin="531,-28,23,10" Grid.ColumnSpan="3"></Button>
         </Grid>
     </Grid>
 </Window>
