@@ -10,9 +10,9 @@ namespace InEenNotendop.UI
     {
         public Window Owner { get; set; }
         private SongsWindow _songsWindow;
-        SqlDataAccess _sqlDataAccess = new();
+        private SqlDataAccess _sqlDataAccess = new();
         private MidiDataAccess _midiDataAccess = new();
-        string _filePath;
+        private string _filePath;
         private int _nummerId;
         private int _currentScore;
         public SelectingWindow(int nummerId, string moeilijkheidText, string title, string artiest, int lengte, int bpm, string filePath, string convertedTime, object sender, int currentScore)
@@ -52,7 +52,7 @@ namespace InEenNotendop.UI
 
             }
         }
-        private void PLAY_Button_Click(object sender, RoutedEventArgs e)
+        private void PLAY_Button_OnClick(object sender, RoutedEventArgs e)
         {
 
             MidiPlayWindow midiPlayWindow = new MidiPlayWindow(_filePath, this, false, _nummerId, _songsWindow, _currentScore);
@@ -61,7 +61,7 @@ namespace InEenNotendop.UI
             midiPlayWindow.Show();
             Close();
         }
-        private void AUTOPLAY_Button_Click(object sender, RoutedEventArgs e)
+        private void AUTOPLAY_Button_OnClick(object sender, RoutedEventArgs e)
         {
 
             MidiPlayWindow midiPlayWindow = new MidiPlayWindow(_filePath, this, true, _nummerId, _songsWindow, _currentScore);
@@ -73,7 +73,7 @@ namespace InEenNotendop.UI
 
         }
 
-        private void OnDownloadClicked(object sender, RoutedEventArgs e)
+        private void Download_Button_OnClick(object sender, RoutedEventArgs e)
         {
             var viewModel = DataContext as NummerDetailsViewModel;
 

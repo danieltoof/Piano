@@ -27,7 +27,7 @@ namespace InEenNotendop.UI
         }
 
         // Code to process selecting file
-        private void selectFile_Click(object sender, RoutedEventArgs e) 
+        private void SelectFile_Click(object sender, RoutedEventArgs e) 
         {
             var dialog = new Microsoft.Win32.OpenFileDialog();
             dialog.DefaultExt = ".midi"; // Default file extension
@@ -46,7 +46,7 @@ namespace InEenNotendop.UI
         }
 
         // Code to process save button
-        private async void saveButton_Click(object sender, RoutedEventArgs e) 
+        private async void SaveButton_Click(object sender, RoutedEventArgs e) 
         {
             int diffecultyCheckbox = 1;
             string myText = ImportName.Text;

@@ -96,20 +96,20 @@
                 Width="150"
                 Height="41"
                 Margin="0,0,20,5"
-                Click="PLAY_Button_Click"
+                Click="PLAY_Button_OnClick"
                 Content="PLAY" />
             <!--  AUTOPLAY Button  -->
             <Button
                 Width="150"
                 Height="41"
                 Margin="0,0,20,5"
-                Click="AUTOPLAY_Button_Click"
+                Click="AUTOPLAY_Button_OnClick"
                 Content="AUTOPLAY" />
             <Button
                 Width="150"
                 Height="41"
                 Margin="0,0,20,05"
-                Click="OnDownloadClicked"
+                Click="Download_Button_OnClick"
                 Content="DOWNLOAD" />
         </StackPanel>
     </Grid>

@@ -10,18 +10,18 @@ namespace InEenNotendop.UI
     /// </summary>
     public partial class SongsWindow : Window
     {
-        public SettingsWindow SettingsWindow;
-        SqlDataAccess _sqlDataAccess = new();
+        public SettingsWindow settingsWindow;
+        private SqlDataAccess _sqlDataAccess = new();
         private int _lightmodeImport;
         private int _difficulty = 0;
-        public bool SongIsFinished { get; set; }
+        public bool songIsFInished { get; set; }
 
         public SongsWindow(SettingsWindow settingsWindow)
         {
             InitializeComponent();
             
-            this.SettingsWindow = settingsWindow;
-            this.SettingsWindow.ChangeSettingsOwner(this);
+            this.settingsWindow = settingsWindow;
+            this.settingsWindow.ChangeSettingsOwner(this);
 
 
             FilterBox.Items.Add("No Filter");
@@ -42,9 +42,9 @@ namespace InEenNotendop.UI
         protected override void OnActivated(EventArgs e)
         {
             base.OnActivated(e);
-            if (SongIsFinished)
+            if (songIsFInished)
             {
-                SongIsFinished = false;
+                songIsFInished = false;
                 if (_difficulty != 0)
                 {
                     Nummer.ItemsSource = _sqlDataAccess.MakeFilteredList(_difficulty);
@@ -56,7 +56,7 @@ namespace InEenNotendop.UI
             }
         }
 
-        private void MenuToggleButton_Click(object sender, RoutedEventArgs e)
+        private void MenuToggleButton_OnClick(object sender, RoutedEventArgs e)
         {
             // Toggle visibility of the MenuPanel
             if (MenuPanel.Visibility == Visibility.Visible)
@@ -71,7 +71,7 @@ namespace InEenNotendop.UI
 
         private void SettingsButton_OnClick(object sender, RoutedEventArgs e)
         {
-            SettingsWindow.OpenSettings();
+            settingsWindow.OpenSettings();
         }
 
         // Creates pop-up window with detailed song information
@@ -103,27 +103,27 @@ namespace InEenNotendop.UI
         // Checks lightmode value and changes between dark- and lightmode
         private void CheckDarkOrLight() 
         {
-            if (SettingsWindow.Lightmode == 1)
+            if (settingsWindow.Lightmode == 1)
             {
-                SettingsWindow.SetLightMode(this);
+                settingsWindow.SetLightMode(this);
             }
-            else if (SettingsWindow.Lightmode == 0)
+            else if (settingsWindow.Lightmode == 0)
             {
-                SettingsWindow.SetDarkMode(this);
+                settingsWindow.SetDarkMode(this);
             }
         }
 
         // Opens window to import song and refreshes list
         private void ImportButton_OnClick(object sender, RoutedEventArgs e) 
         {
-            _lightmodeImport = SettingsWindow.Lightmode;
+            _lightmodeImport = settingsWindow.Lightmode;
             ImportWindow import = new ImportWindow(_lightmodeImport);
             import.ShowDialog();
             Nummer.ItemsSource = _sqlDataAccess.MakeDefaultList();
         }
 
         // Changes list to filtered list
-        private void FilterBox_SelectionChanged(object sender, SelectionChangedEventArgs e) 
+        private void FilterBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e) 
         {
             string filter = (sender as System.Windows.Controls.ComboBox).SelectedItem as string;
             switch (filter)
@@ -175,9 +175,9 @@ namespace InEenNotendop.UI
         }
 
         // Goes back to main menu
-        private void BackButton_Click(object sender, RoutedEventArgs e) 
+        private void BackButton_OnClick(object sender, RoutedEventArgs e) 
         {
-            SettingsWindow.MainMenu();
+            settingsWindow.MainMenu();
         }
     }
 }

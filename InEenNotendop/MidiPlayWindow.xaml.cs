@@ -246,7 +246,7 @@ namespace InEenNotendop.UI
             _timer.Stop();
             _sqlDataAccess.ChangeHighscore(_nummerId, (int)_midiProcessor.Score, _currentScore);
             MessageBox.Show($"Score : {_midiProcessor.Score}");
-            SongsWindow.SongIsFinished = true;
+            SongsWindow.songIsFInished = true;
             Close();
             SongsWindow.Show();
         }
