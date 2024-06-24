@@ -34,7 +34,7 @@ namespace InEenNotendop.UI
             SortBox.Items.Add("Diff. ascending");
             SortBox.Items.Add("Diff. descending");
 
-            Nummer.ItemsSource = _sqlDataAccess.MaakLijst();
+            Nummer.ItemsSource = _sqlDataAccess.MakeDefaultList();
             SettingsWindow.CheckDarkOrLight(this);
 
         }
