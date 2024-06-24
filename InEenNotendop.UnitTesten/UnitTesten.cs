@@ -118,7 +118,7 @@ namespace InEenNotendop.UI.Tests
     [TestClass]
     public class DatabaseTests
     {
-        MoqDataAccess dataAccess = new();
+        MoqDataAccess _dataAccess = new();
 
         [TestMethod]
         public void FindDirectory_FindCorrectFile_UnitTestFile()
@@ -130,7 +130,7 @@ namespace InEenNotendop.UI.Tests
             string expectedDirectory = Path.Combine(threeFoldersUp, wantedDocument);
 
             // Act
-            string foundDirectory = dataAccess.FindDirectory(wantedDocument);
+            string foundDirectory = _dataAccess.FindDirectory(wantedDocument);
 
             // Assert
             Assert.AreEqual(expectedDirectory, foundDirectory);
