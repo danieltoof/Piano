@@ -13,7 +13,7 @@ namespace InEenNotendop.UI
         internal int Lightmode;
         public Window Owner { get; set; }
         private MainWindow _mainWindow;
-        private SongsWindow _songWindow;
+        private SongsWindow _songsWindow;
         private HighscoreList _highscoreList;
 
         private MidiPlayWindow _midiPlayWindow;
