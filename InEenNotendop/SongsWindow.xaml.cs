@@ -34,7 +34,7 @@ namespace InEenNotendop.UI
             SortBox.Items.Add("Diff. ascending");
             SortBox.Items.Add("Diff. descending");
 
-            Nummer.ItemsSource = _sqlDataAccess.MaakLijst();
+            Nummer.ItemsSource = _sqlDataAccess.MakeDefaultList();
             CheckDarkOrLight();
         }
 
@@ -47,11 +47,11 @@ namespace InEenNotendop.UI
                 SongIsFinished = false;
                 if (_difficulty != 0)
                 {
-                    Nummer.ItemsSource = _sqlDataAccess.MaakFilteredLijst(_difficulty);
+                    Nummer.ItemsSource = _sqlDataAccess.MakeFilteredList(_difficulty);
                 }
                 else
                 {
-                    Nummer.ItemsSource = _sqlDataAccess.MaakLijst();
+                    Nummer.ItemsSource = _sqlDataAccess.MakeDefaultList();
                 }
             }
         }
@@ -119,7 +119,7 @@ namespace InEenNotendop.UI
             _lightmodeImport = SettingsWindow.Lightmode;
             ImportWindow import = new ImportWindow(_lightmodeImport);
             import.ShowDialog();
-            Nummer.ItemsSource = _sqlDataAccess.MaakLijst();
+            Nummer.ItemsSource = _sqlDataAccess.MakeDefaultList();
         }
 
         // Changes list to filtered list
@@ -143,11 +143,11 @@ namespace InEenNotendop.UI
             }
             if (_difficulty != 0)
             {
-                Nummer.ItemsSource = _sqlDataAccess.MaakFilteredLijst(_difficulty);
+                Nummer.ItemsSource = _sqlDataAccess.MakeFilteredList(_difficulty);
             }
             else
             {
-                Nummer.ItemsSource = _sqlDataAccess.MaakLijst();
+                Nummer.ItemsSource = _sqlDataAccess.MakeDefaultList();
             }
         }
 

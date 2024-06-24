@@ -7,11 +7,11 @@ public interface IDatabaseInterface
     void StopSshTunnel();
     string FindDirectory(string scriptFileName);
     void StartProcess(string sshTunnelFile);
-    void UploadsongToDataBase(string name, string artiest, int length, int bpm, int diffeculty, string filepath);
+    void UploadSongToDataBase(string name, string artiest, int length, int bpm, int diffeculty, string filepath);
     void ChangeHighscore(int id, int score, int currentScore);
     DataView GetDataForGrid(int nummerId);
-    List<Nummer> LijstFunc(string sqlcommand);
-    List<Nummer> MaakLijst();
+    List<Nummer> ListFunction(string sqlcommand);
+    List<Nummer> MakeDefaultList();
     List<Nummer> MakeSortedList(int difficulty, string sort);
-    List<Nummer> MaakFilteredLijst(int difficulty);
+    List<Nummer> MakeFilteredList(int difficulty);
 }

@@ -3,6 +3,7 @@ using System.Windows;
 using InEenNotendop.Business;
 using NAudio.Midi;
 using Moq;
+using System.Windows.Controls;
 
 
 namespace InEenNotendop.UI.Tests
@@ -113,5 +114,42 @@ namespace InEenNotendop.UI.Tests
             newThread.Start();
         }
     }
-    
+
+    [TestClass]
+    public class DatabaseTests
+    {
+        MoqDataAccess dataAccess = new();
+
+        [TestMethod]
+        public void FindDirectory_FindCorrectFile_UnitTestFile()
+        {
+            // Arrange
+            string wantedDocument = "UnitTestFile.txt";
+
+            string threeFoldersUp = Path.GetFullPath(Path.Combine("..", "..", ".."));
+            string expectedDirectory = Path.Combine(threeFoldersUp, wantedDocument);
+
+            // Act
+            string foundDirectory = dataAccess.FindDirectory(wantedDocument);
+
+            // Assert
+            Assert.AreEqual(expectedDirectory, foundDirectory);
+        }
+
+        //[TestMethod]
+        //public void UploadSongToDatabase_CorrectlyAddedToList_SongObjectsMatch()
+        //{
+        //    var nummersList = new List<Nummer>();
+        //    nummersList.Add(new Nummer("Song 1", "Real Artist", 125, 100, 3, 1, "N/A", 100, "2:05", "Hard"));
+        //    nummersList.Add(new Nummer("Song 2", "Fake Artist", 125, 100, 2, 2, "N/A", 100, "2:05", "Medium"));
+        //    nummersList.Add(new Nummer("Song 3", "An Artist?", 125, 100, 1, 3, "N/A", 100, "2:05", "Easy"));
+
+        //    Mock<IDatabaseInterface> mock = new Mock<IDatabaseInterface>();
+
+        //    //Mocking UploadSongToDatabase
+        //    mock.Setup(mock => mock.UploadSongToDataBase());
+
+        //}
+        // Ik snap het echt niet, ik heb uren geprobeerd en het is gewoon niet mogelijk in de tijd die we hebben nu
+    }
 }

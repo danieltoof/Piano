@@ -106,7 +106,7 @@ namespace InEenNotendop.UI
                 int bpm = GetStartTempo(_filePath);
                 string filepath = @"..\..\..\Resources\Song\" + songArtist + " - " + songName + ".mid";
 
-                _sqlDataAccess.UploadsongToDataBase(songName, songArtist, songLength, bpm, diffecultyCheckbox, filepath);
+                _sqlDataAccess.UploadSongToDataBase(songName, songArtist, songLength, bpm, diffecultyCheckbox, filepath);
                 _midiDataAccess.UploadSongToServer(songName, songArtist, _filePath);
 
                 MessageBox.Show("Upload success!");
