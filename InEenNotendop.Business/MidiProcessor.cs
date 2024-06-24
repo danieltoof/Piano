@@ -6,7 +6,7 @@ namespace InEenNotendop.Business
     public class MidiProcessor
     {
         private readonly int _delayNoteFalling = 2200;
-        private readonly int _delayNotePlayback = 7900;
+        private readonly int _delayNotePlayback = 7845;
 
         public int Score;
 
@@ -59,7 +59,8 @@ namespace InEenNotendop.Business
                 _songPlayed.AddNote(new Note(noteOnEvent, Stopwatch.Elapsed));
                 OnMidiInMessageReceived(new NotePlayedEventArgs(noteOnEvent.NoteNumber, true));
             }
-            else if (e.MidiEvent is NoteEvent noteEvent) // een noteevent wat geen noteonevent is is in dit geval altijd een event die een noot eindigt.
+            // een noteevent wat geen noteonevent is is in dit geval altijd een event die een noot eindigt.
+            else if (e.MidiEvent is NoteEvent noteEvent) 
             {
                 MidiPlayer.StopNote(noteEvent.NoteNumber);
                 OnMidiInMessageReceived(new NotePlayedEventArgs(noteEvent.NoteNumber, false));
