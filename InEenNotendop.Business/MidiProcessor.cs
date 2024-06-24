@@ -5,6 +5,9 @@ namespace InEenNotendop.Business
 {
     public class MidiProcessor
     {
+        private readonly int _delayNoteFalling = 2200;
+        private readonly int _delayNotePlayback = 7900;
+
         public int Score;
 
         private NoteCollection _song;
@@ -42,8 +45,8 @@ namespace InEenNotendop.Business
             SongForNoteFalling = new NoteCollection(midiFile);
             SongForNotePlayback = new NoteCollection(midiFile);
 
-            SongForNoteFalling = NoteTimeManipulator.GenerateDelayedSong(SongForNoteFalling, 2200);
-            SongForNotePlayback = NoteTimeManipulator.GenerateDelayedSong(SongForNotePlayback, 7900);
+            SongForNoteFalling = NoteTimeManipulator.GenerateDelayedSong(SongForNoteFalling, _delayNoteFalling);
+            SongForNotePlayback = NoteTimeManipulator.GenerateDelayedSong(SongForNotePlayback, _delayNotePlayback);
 
         }
 

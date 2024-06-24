@@ -13,12 +13,8 @@ public static class ScoreCalculator
         if (song == null) {
             song = new NoteCollection();
         }
-        if (song.Notes.Count == 0)
-        {
-            song.Notes.Add(new Note(1, TimeSpan.FromDays(1)));
-        }
 
-        if (songPlayed != null)
+        if (songPlayed != null && song.Notes.Count > 0)
         {
             maxScorePerNote = maxScore / song.Notes.Count;
         } else
@@ -34,8 +30,6 @@ public static class ScoreCalculator
         {
             foreach (var SongNote in song.Notes)
             {
-                song.Notes.Add(new Note(1, TimeSpan.FromDays(1)));
-
                 foreach (var PlayedNote in songPlayed.Notes)
                 {
                     if (!SongNote.ScoreIsCalculated && SongNote.NoteNumber == PlayedNote.NoteNumber)
