@@ -24,19 +24,14 @@ namespace InEenNotendop.UI
         private int _currentScore;
 
         private MidiProcessor _midiProcessor;
-        private MidiFile _midiFileSong;
         private TimeSpan _endLastNote;
-
-
         private SqlDataAccess _sqlDataAccess = new();
         private int _nummerId;
 
-        private string? _desiredOutDevice { get; set; }
-        //Kleurtjes van keys
         private Brush _noteHitBrush = Brushes.IndianRed; // Wanneer key wordt aangeslagen
-        private Brush _whiteKeysBrush = Brushes.WhiteSmoke; // Witte toetsen
-        private Brush _blackKeyBrush = Brushes.Black; // Zwartse toetsen
-        private Brush _fallingBlockBrush = Brushes.Red;
+        private Brush _whiteKeysBrush = Brushes.WhiteSmoke;
+        private Brush _blackKeyBrush = Brushes.Black;
+        private Brush _fallingBlockBrush;
         private Dictionary<int, ButtonData> _midiNoteToButton = new(); // int = Midi notonumber, Button = button die wordt toegewezen aan die noot.
 
         private DateTime _startTime; // Deze hebben we nodog om de tijd te berekenen van wanneer de midi noot is gespeeld, 
@@ -44,19 +39,8 @@ namespace InEenNotendop.UI
         private DispatcherTimer _timer;
         private const double _noteHeightPerSecond = 200; // Eenheid voor hoogte blok per seconde
         private const double _fallingSpeed = 200.0; // Speed of falling blocks in units per second
-
-        private const double _timerInterval = 10; // in MS, hoe lager des te accurater de de code checkt wanneer een blok gegenereerd een een note gespeeld moet worden, maar kan meer performance kosten
-
+        private const double _timerInterval = 10; // in MS, hoe lager des te accurater de de code checkt wanneer een blok gegenereerd een een note gespeeld moet worden, maar kan meer performance beïnvloeden
         private double _fallingDuration;
-
-        private List<Note> _notesOfSongList = [];
-        private List<Note> _notesOfSongToBePlayed = [];
-
-        public class ButtonData(Button button, Brush brush)
-        {
-            public Button Button { get; set; } = button;
-            public System.Windows.Media.Brush ButtonColor { get; set; } = brush;
-        }
 
         public MidiPlayWindow(string filePath, object sender, bool playMidiFile, int nummerId, SongsWindow? songsWindow, int currentScore)
         {
@@ -76,16 +60,10 @@ namespace InEenNotendop.UI
                 MessageBox.Show(e.Message);
                 Close();
             }
-
-            if (playMidiFile)
-            {
-
-            }
-
             try
             {
                 _endLastNote = _midiProcessor.SongForNotePlayback.Notes[_midiProcessor.SongForNotePlayback.Notes.Count - 1].NoteStartTime + _midiProcessor.SongForNotePlayback.Notes[_midiProcessor.SongForNotePlayback.Notes.Count - 1].NoteDuration;
-                _endLastNote += TimeSpan.FromSeconds(3);
+                _endLastNote += TimeSpan.FromSeconds(1);
             }
             catch (Exception e)
             {
@@ -167,6 +145,12 @@ namespace InEenNotendop.UI
             _timer.Start();
         }
 
+        internal class ButtonData(Button button, Brush brush)
+        {
+            public Button Button { get; set; } = button;
+            public Brush ButtonColor { get; set; } = brush;
+        }
+
         private void MidiProcessor_MidiDeviceNotFound(object sender)
         {
             MessageBox.Show("Invalid MIDI device index or no devices found.");
@@ -227,7 +211,6 @@ namespace InEenNotendop.UI
             }
         }
 
-        // (Important) Dispose of the MidiIn object when the app closes
         private void ReturnToSongList()
         {
             if (_midiProcessor != null)
@@ -247,8 +230,8 @@ namespace InEenNotendop.UI
             {
                 try
                 {
+                    // als window afgesloten wordt moet midiin en midiout devic disposed worden anders kunnen ze bij herstarten niet geopend worden (already open exception)
                     _midiProcessor.Dispose();
-
                 }
                 catch (NullReferenceException ex)
                 {
