@@ -10,18 +10,18 @@ namespace InEenNotendop.UI
     /// </summary>
     public partial class SongsWindow : Window
     {
-        public SettingsWindow settingsWindow;
+        public SettingsWindow SettingsWindow;
         private SqlDataAccess _sqlDataAccess = new();
         private int _lightmodeImport;
         private int _difficulty = 0;
-        public bool songIsFInished { get; set; }
+        public bool SongIsFinished { get; set; }
 
         public SongsWindow(SettingsWindow settingsWindow)
         {
             InitializeComponent();
             
-            this.settingsWindow = settingsWindow;
-            this.settingsWindow.ChangeSettingsOwner(this);
+            this.SettingsWindow = settingsWindow;
+            this.SettingsWindow.ChangeSettingsOwner(this);
 
 
             FilterBox.Items.Add("No Filter");
@@ -42,9 +42,9 @@ namespace InEenNotendop.UI
         protected override void OnActivated(EventArgs e)
         {
             base.OnActivated(e);
-            if (songIsFInished)
+            if (SongIsFinished)
             {
-                songIsFInished = false;
+                SongIsFinished = false;
                 if (_difficulty != 0)
                 {
                     Nummer.ItemsSource = _sqlDataAccess.MakeFilteredList(_difficulty);
@@ -71,7 +71,7 @@ namespace InEenNotendop.UI
 
         private void SettingsButton_OnClick(object sender, RoutedEventArgs e)
         {
-            settingsWindow.OpenSettings();
+            SettingsWindow.OpenSettings();
         }
 
         // Creates pop-up window with detailed song information
@@ -103,20 +103,20 @@ namespace InEenNotendop.UI
         // Checks lightmode value and changes between dark- and lightmode
         private void CheckDarkOrLight() 
         {
-            if (settingsWindow.Lightmode == 1)
+            if (SettingsWindow.Lightmode == 1)
             {
-                settingsWindow.SetLightMode(this);
+                SettingsWindow.SetLightMode(this);
             }
-            else if (settingsWindow.Lightmode == 0)
+            else if (SettingsWindow.Lightmode == 0)
             {
-                settingsWindow.SetDarkMode(this);
+                SettingsWindow.SetDarkMode(this);
             }
         }
 
         // Opens window to import song and refreshes list
         private void ImportButton_OnClick(object sender, RoutedEventArgs e) 
         {
-            _lightmodeImport = settingsWindow.Lightmode;
+            _lightmodeImport = SettingsWindow.Lightmode;
             ImportWindow import = new ImportWindow(_lightmodeImport);
             import.ShowDialog();
             Nummer.ItemsSource = _sqlDataAccess.MakeDefaultList();
@@ -177,7 +177,7 @@ namespace InEenNotendop.UI
         // Goes back to main menu
         private void BackButton_OnClick(object sender, RoutedEventArgs e) 
         {
-            settingsWindow.MainMenu();
+            SettingsWindow.MainMenu();
         }
     }
 }
