@@ -174,17 +174,17 @@ namespace InEenNotendop.UI
 
         private void MidiProcessor_NotePlayed(object sender, NotePlayedEventArgs e)
         {
-            if (_midiNoteToButton.ContainsKey(e.noteNumber))
+            if (_midiNoteToButton.ContainsKey(e.NoteNumber))
             {
-                if (e.isOnMessage)
+                if (e.IsOnMessage)
                 {
                     // kleur toets veranderen naar gedefinieerde kleur voor wanneer note gespeeld wordt
-                    this.Dispatcher.Invoke(() => _midiNoteToButton[e.noteNumber].Button.Background = _noteHitBrush);
+                    this.Dispatcher.Invoke(() => _midiNoteToButton[e.NoteNumber].Button.Background = _noteHitBrush);
                 }
                 else
                 {
                     // als noot uit gaat dan terugveranderen naar originele kleur
-                    this.Dispatcher.Invoke(() => _midiNoteToButton[e.noteNumber].Button.Background = _midiNoteToButton[e.noteNumber].ButtonColor);
+                    this.Dispatcher.Invoke(() => _midiNoteToButton[e.NoteNumber].Button.Background = _midiNoteToButton[e.NoteNumber].ButtonColor);
                 }
             }
         }
@@ -237,7 +237,7 @@ namespace InEenNotendop.UI
             _timer.Stop();
             _sqlDataAccess.ChangeHighscore(_nummerId, (int)_midiProcessor.Score, _currentScore);
             MessageBox.Show($"Score : {_midiProcessor.Score}");
-            SongsWindow.songIsFInished = true;
+            SongsWindow.SongIsFinished = true;
             Close();
             SongsWindow.Show();
         }

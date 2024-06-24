@@ -2,8 +2,8 @@
 
 public static class ScoreCalculator
 {
-    private const float maxScore = 1000;
-    static float maxScorePerNote = 0;
+    private const float MaxScore = 1000;
+    static float _maxScorePerNote = 0;
 
     public static int CalculateScore(NoteCollection song, NoteCollection songPlayed)
     {
@@ -16,10 +16,10 @@ public static class ScoreCalculator
 
         if (songPlayed != null && song.Notes.Count > 0)
         {
-            maxScorePerNote = maxScore / song.Notes.Count;
+            _maxScorePerNote = MaxScore / song.Notes.Count;
         } else
         {
-            maxScorePerNote = 0;
+            _maxScorePerNote = 0;
         }
 
 
@@ -34,8 +34,8 @@ public static class ScoreCalculator
                 {
                     if (!SongNote.ScoreIsCalculated && SongNote.NoteNumber == PlayedNote.NoteNumber)
                     {
-                        float noteScore = maxScorePerNote *
-                                            getNoteScoreFactor(SongNote.NoteStartTime, PlayedNote.NoteStartTime);
+                        float noteScore = _maxScorePerNote *
+                                            GetNoteScoreFactor(SongNote.NoteStartTime, PlayedNote.NoteStartTime);
                         score += noteScore;
                         SongNote.ScoreIsCalculated = true;
                     }
@@ -51,7 +51,7 @@ public static class ScoreCalculator
         return (int)score;
     }
 
-    public static float getNoteScoreFactor(TimeSpan note1TimeSpan, TimeSpan note2TimeSpan)
+    public static float GetNoteScoreFactor(TimeSpan note1TimeSpan, TimeSpan note2TimeSpan)
     {
         // Berekenen hoe ver de 2 noten van elkaar af zitten
         int deltaTimeMilliseconds = note1TimeSpan.Milliseconds - note2TimeSpan.Milliseconds;
