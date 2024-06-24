@@ -152,4 +152,45 @@ namespace InEenNotendop.UI.Tests
         //}
         // Ik snap het echt niet, ik heb uren geprobeerd en het is gewoon niet mogelijk in de tijd die we hebben nu
     }
+
+    [TestClass]
+    public class MidiToListConverterTests
+    {
+        private NoteCollection _unitTestSong;
+
+        private TimeSpan _timeNote1Expected, _timeNote2Expected,
+           _timeNote3Expected, _timeNote4Expected = new();
+
+
+        [TestInitialize]
+        public void Setup()
+        {
+            // Creëren van NoteCollection die we gebruiken als vergelijkingsmateriaal
+            _unitTestSong = new(new MidiFile(
+                @"UnitTestMidi.mid"));
+
+            string format = @"hh\:mm\:ss\.fffffff";
+            TimeSpan.TryParseExact("00:00:00", format, null, out _timeNote1Expected);
+            TimeSpan.TryParseExact("00:00:00.2727269", format, null, out _timeNote2Expected);
+            TimeSpan.TryParseExact("00:00:00.6818175", format, null, out _timeNote3Expected);
+            TimeSpan.TryParseExact("00:00:01.2272714", format, null, out _timeNote4Expected);
+        }
+
+        [TestMethod]
+        public void MidiToListConverter_MidiFileImported_ListContainsData()
+        {
+            Assert.IsTrue(_unitTestSong.Notes[0] != null);
+        }
+
+        [TestMethod]
+        public void MidiToListConverter_MidiFileImported_MidiFileConvertedToListWithCorrectStartTimes()
+        {
+            Assert.AreEqual(_timeNote1Expected, _unitTestSong.Notes[0].NoteStartTime);
+            Assert.AreEqual(_timeNote2Expected, _unitTestSong.Notes[1].NoteStartTime);
+            Assert.AreEqual(_timeNote3Expected, _unitTestSong.Notes[2].NoteStartTime);
+            Assert.AreEqual(_timeNote4Expected, _unitTestSong.Notes[3].NoteStartTime);
+
+        }
+
+    }
 }
