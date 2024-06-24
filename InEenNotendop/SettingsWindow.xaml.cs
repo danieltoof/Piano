@@ -1,4 +1,4 @@
-﻿using InEenNotendop.Data;
+using InEenNotendop.Data;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Media;
@@ -15,6 +15,7 @@ namespace InEenNotendop.UI
         private MainWindow _mainWindow;
         private SongsWindow _songWindow;
         private HighscoreList _highscoreList;
+
         private MidiPlayWindow _midiPlayWindow;
         private int _isOkToClose = 0;
         SqlDataAccess _sqlDataAccess = new();
@@ -29,8 +30,8 @@ namespace InEenNotendop.UI
                     Owner = _mainWindow;
                     break;
                 case SongsWindow:
-                    _songWindow = (SongsWindow)sender;
-                    Owner = _songWindow;
+                    _songsWindow = (SongsWindow)sender;
+                    Owner = _songsWindow;
                     break;
                 case HighscoreList:
                     _highscoreList = (HighscoreList)sender;
@@ -96,8 +97,8 @@ namespace InEenNotendop.UI
                     Owner.Closing += Owner_Closing;
                     break;
                 case SongsWindow:
-                    _songWindow = (SongsWindow)sender;
-                    Owner = _songWindow;
+                    _songsWindow = (SongsWindow)sender;
+                    Owner = _songsWindow;
                     Owner.Closing += Owner_Closing;
                     break;
                 case MidiPlayWindow:
@@ -142,8 +143,8 @@ namespace InEenNotendop.UI
                     _mainWindow.MainGrid.Background = Brushes.White;
                     break;
                 case SongsWindow:
-                    _songWindow.SongsGrid.Background = Brushes.White;
-                    _songWindow.MenuPanelGrid.Background = Brushes.White;
+                    _songsWindow.SongsGrid.Background = Brushes.White;
+                    _songsWindow.MenuPanelGrid.Background = Brushes.White;
                     break;
                 case HighscoreList:
                     _highscoreList.SongsGrid.Background = Brushes.White;
@@ -166,8 +167,8 @@ namespace InEenNotendop.UI
                     _mainWindow.MainGrid.Background = new SolidColorBrush(Color.FromRgb(25, 44, 49));
                     break;
                 case SongsWindow:
-                    _songWindow.SongsGrid.Background = new SolidColorBrush(Color.FromRgb(25, 44, 49));
-                    _songWindow.MenuPanelGrid.Background = new SolidColorBrush(Color.FromRgb(25, 44, 49));
+                    _songsWindow.SongsGrid.Background = new SolidColorBrush(Color.FromRgb(25, 44, 49));
+                    _songsWindow.MenuPanelGrid.Background = new SolidColorBrush(Color.FromRgb(25, 44, 49));
                     break;
                 case HighscoreList:
                     _highscoreList.SongsGrid.Background = new SolidColorBrush(Color.FromRgb(25, 44, 49));

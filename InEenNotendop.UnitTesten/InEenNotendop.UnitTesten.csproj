@@ -19,6 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\InEenNotendop.Business\InEenNotendop.Business.csproj" />
+    <ProjectReference Include="..\InEenNotendop.Data\InEenNotendop.Data.csproj" />
     <ProjectReference Include="..\InEenNotendop\InEenNotendop.UI.csproj" />
   </ItemGroup>
 

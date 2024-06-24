@@ -1,4 +1,4 @@
-﻿using System.Windows;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using InEenNotendop.Data;
@@ -11,10 +11,10 @@ namespace InEenNotendop.UI
     public partial class SongsWindow : Window
     {
         public SettingsWindow SettingsWindow;
-        SqlDataAccess _sqlDataAccess = new();
+        private SqlDataAccess _sqlDataAccess = new();
         private int _lightmodeImport;
         private int _difficulty = 0;
-        public bool SongIsFinished;
+        public bool SongIsFinished { get; set; }
 
         public SongsWindow(SettingsWindow settingsWindow)
         {
@@ -36,6 +36,7 @@ namespace InEenNotendop.UI
 
             Nummer.ItemsSource = _sqlDataAccess.MaakLijst();
             SettingsWindow.CheckDarkOrLight(this);
+
         }
 
         // Updates the song list so the new score is shown, also keeps the selected filter
@@ -47,16 +48,16 @@ namespace InEenNotendop.UI
                 SongIsFinished = false;
                 if (_difficulty != 0)
                 {
-                    Nummer.ItemsSource = _sqlDataAccess.MaakFilteredLijst(_difficulty);
+                    Nummer.ItemsSource = _sqlDataAccess.MakeFilteredList(_difficulty);
                 }
                 else
                 {
-                    Nummer.ItemsSource = _sqlDataAccess.MaakLijst();
+                    Nummer.ItemsSource = _sqlDataAccess.MakeDefaultList();
                 }
             }
         }
 
-        private void MenuToggleButton_Click(object sender, RoutedEventArgs e)
+        private void MenuToggleButton_OnClick(object sender, RoutedEventArgs e)
         {
             // Toggle visibility of the MenuPanel
             if (MenuPanel.Visibility == Visibility.Visible)
@@ -107,11 +108,11 @@ namespace InEenNotendop.UI
             _lightmodeImport = SettingsWindow.Lightmode;
             ImportWindow import = new ImportWindow(_lightmodeImport);
             import.ShowDialog();
-            Nummer.ItemsSource = _sqlDataAccess.MaakLijst();
+            Nummer.ItemsSource = _sqlDataAccess.MakeDefaultList();
         }
 
         // Changes list to filtered list
-        private void FilterBox_SelectionChanged(object sender, SelectionChangedEventArgs e) 
+        private void FilterBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e) 
         {
             string filter = (sender as System.Windows.Controls.ComboBox).SelectedItem as string;
             switch (filter)
@@ -131,11 +132,11 @@ namespace InEenNotendop.UI
             }
             if (_difficulty != 0)
             {
-                Nummer.ItemsSource = _sqlDataAccess.MaakFilteredLijst(_difficulty);
+                Nummer.ItemsSource = _sqlDataAccess.MakeFilteredList(_difficulty);
             }
             else
             {
-                Nummer.ItemsSource = _sqlDataAccess.MaakLijst();
+                Nummer.ItemsSource = _sqlDataAccess.MakeDefaultList();
             }
         }
 
@@ -163,7 +164,7 @@ namespace InEenNotendop.UI
         }
 
         // Goes back to main menu
-        private void BackButton_Click(object sender, RoutedEventArgs e) 
+        private void BackButton_OnClick(object sender, RoutedEventArgs e) 
         {
             SettingsWindow.MainMenu();
         }

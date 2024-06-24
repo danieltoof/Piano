@@ -10,14 +10,14 @@ namespace InEenNotendop
     public partial class MainWindow : Window
     {
         
-        public SettingsWindow SettingsWindow;
+        public SettingsWindow settingsWindow;
         private SqlDataAccess _sshScript = new();
 
         // Default constructor
         public MainWindow() 
         {
             InitializeComponent();
-            SettingsWindow = new SettingsWindow(this);
+            settingsWindow = new SettingsWindow(this);
             _sshScript.StartSshTunnel();
             CheckLightMode();
             SettingsWindow.CheckDarkOrLight(this);
@@ -27,34 +27,35 @@ namespace InEenNotendop
         public MainWindow(SettingsWindow settingsWindow) 
         {
             InitializeComponent();
-            this.SettingsWindow = settingsWindow;
+            this.settingsWindow = settingsWindow;
             settingsWindow.ChangeSettingsOwner(this);
             SettingsWindow.CheckDarkOrLight(this);
             this.SettingsWindow.MainMenuButton.Visibility = Visibility.Hidden;
+
         }
 
         // Checks system setting for lightmode
         public int CheckLightMode() 
         {
-            return SettingsWindow.Lightmode = (int)Microsoft.Win32.Registry.GetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", "AppsUseLightTheme", 1);
+            return settingsWindow.Lightmode = (int)Microsoft.Win32.Registry.GetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", "AppsUseLightTheme", 1);
         }
 
-        private void StartButton_OnClick(object sender, RoutedEventArgs e)
+        private void Start_Button_OnClick(object sender, RoutedEventArgs e)
         {
-            SongsWindow songsWindow = new SongsWindow(SettingsWindow);
+            SongsWindow songsWindow = new SongsWindow(settingsWindow);
             songsWindow.Show();
             Close();
         }
 
-        private void ExitButton_OnClick(object sender, RoutedEventArgs e)
+        private void Exit_Button_OnClick(object sender, RoutedEventArgs e)
         {
             _sshScript.StopSshTunnel();
             Environment.Exit(0);
         }
 
-        private void SettingsButton_OnClick(object sender, RoutedEventArgs e)
+        private void Settings_Button_OnClick(object sender, RoutedEventArgs e)
         {
-            SettingsWindow.OpenSettings();
+            settingsWindow.OpenSettings();
         }
 
         private void HighscoreButton_OnClick(object sender, RoutedEventArgs e)
@@ -62,6 +63,7 @@ namespace InEenNotendop
             HighscoreList highscoreList = new HighscoreList(SettingsWindow);
             highscoreList.Show();
             Close();
+
         }
     }
 }
