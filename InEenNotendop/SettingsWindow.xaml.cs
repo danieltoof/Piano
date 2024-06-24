@@ -14,6 +14,7 @@ namespace InEenNotendop.UI
         public Window Owner { get; set; }
         private MainWindow _mainWindow;
         private SongsWindow _songWindow;
+        private HighscoreList _highscoreList;
         private MidiPlayWindow _midiPlayWindow;
         private int _isOkToClose = 0;
         SqlDataAccess _sqlDataAccess = new();
@@ -30,6 +31,10 @@ namespace InEenNotendop.UI
                 case SongsWindow:
                     _songWindow = (SongsWindow)sender;
                     Owner = _songWindow;
+                    break;
+                case HighscoreList:
+                    _highscoreList = (HighscoreList)sender;
+                    Owner = _highscoreList;
                     break;
                 case MidiPlayWindow:
                     _midiPlayWindow = (MidiPlayWindow)sender;
@@ -100,6 +105,11 @@ namespace InEenNotendop.UI
                     Owner = _midiPlayWindow;
                     Owner.Closing += Owner_Closing;
                     break;
+                case HighscoreList:
+                    _highscoreList = (HighscoreList)sender;
+                    Owner = _highscoreList;
+                    Owner.Closing += Owner_Closing;
+                    break;
             }
         }
 
@@ -110,13 +120,13 @@ namespace InEenNotendop.UI
         }
 
         // Checks lightmode value, and switches between dark- and lightmode
-        private void CheckDarkOrLight(object sender) 
+        public void CheckDarkOrLight(object sender) 
         {
-            if (Lightmode == 0)
+            if (Lightmode == 1)
             {
                 SetLightMode(sender);
             }
-            else if (Lightmode == 1)
+            else if (Lightmode == 0)
             {
                 SetDarkMode(sender);
             }
@@ -134,6 +144,9 @@ namespace InEenNotendop.UI
                 case SongsWindow:
                     _songWindow.SongsGrid.Background = Brushes.White;
                     _songWindow.MenuPanelGrid.Background = Brushes.White;
+                    break;
+                case HighscoreList:
+                    _highscoreList.SongsGrid.Background = Brushes.White;
                     break;
             }
 
@@ -155,6 +168,9 @@ namespace InEenNotendop.UI
                 case SongsWindow:
                     _songWindow.SongsGrid.Background = new SolidColorBrush(Color.FromRgb(25, 44, 49));
                     _songWindow.MenuPanelGrid.Background = new SolidColorBrush(Color.FromRgb(25, 44, 49));
+                    break;
+                case HighscoreList:
+                    _highscoreList.SongsGrid.Background = new SolidColorBrush(Color.FromRgb(25, 44, 49));
                     break;
             }
 

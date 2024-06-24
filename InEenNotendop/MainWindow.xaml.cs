@@ -20,7 +20,7 @@ namespace InEenNotendop
             SettingsWindow = new SettingsWindow(this);
             _sshScript.StartSshTunnel();
             CheckLightMode();
-            CheckDarkOrLight();
+            SettingsWindow.CheckDarkOrLight(this);
         }
 
         // Constructor used for main menu button
@@ -29,7 +29,7 @@ namespace InEenNotendop
             InitializeComponent();
             this.SettingsWindow = settingsWindow;
             settingsWindow.ChangeSettingsOwner(this);
-            CheckDarkOrLight();
+            SettingsWindow.CheckDarkOrLight(this);
             this.SettingsWindow.MainMenuButton.Visibility = Visibility.Hidden;
         }
 
@@ -57,17 +57,11 @@ namespace InEenNotendop
             SettingsWindow.OpenSettings();
         }
 
-        // Checks lightmode value and changes between dark- and lightmode
-        private void CheckDarkOrLight() 
+        private void HighscoreButton_OnClick(object sender, RoutedEventArgs e)
         {
-            if (SettingsWindow.Lightmode == 1)
-            {
-                SettingsWindow.SetLightMode(this);
-            }
-            else if (SettingsWindow.Lightmode == 0)
-            {
-                SettingsWindow.SetDarkMode(this);
-            }
+            HighscoreList highscoreList = new HighscoreList(SettingsWindow);
+            highscoreList.Show();
+            Close();
         }
     }
 }
