@@ -6,20 +6,30 @@ namespace InEenNotendop.Business;
 public class MidiPlayer 
 {
     private MidiOut _midiOut;
+    private object _owner;
 
-    public MidiPlayer(string desiredDevice)
+    public MidiPlayer(string desiredDevice, object owner)
     {
         Dispose();
         // Find and initialize the Microsoft GS Wavetable Synth
         int deviceIndex = FindMidiDevice("Microsoft GS Wavetable Synth");
         if (deviceIndex != -1)
         {
-            _midiOut = new MidiOut(deviceIndex);
+            try
+            {
+                _midiOut = new MidiOut(deviceIndex);
+            }
+            catch (Exception ex)
+            {
+            }
+
         }
         else
         {
             throw new Exception($"{desiredDevice} not found");
         }
+
+        _owner = owner;
     }
 
     public void PlayNote(int note)
