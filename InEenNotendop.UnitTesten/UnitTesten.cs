@@ -1,4 +1,5 @@
 ﻿using InEenNotendop.Data;
+using InEenNotendop.UI;
 using System.Windows;
 using InEenNotendop.Business;
 using NAudio.Midi;
@@ -157,7 +158,6 @@ namespace InEenNotendop.UI.Tests
     public class MidiToListConverterTests
     {
         private NoteCollection _unitTestSong;
-
         private TimeSpan _timeNote1Expected, _timeNote2Expected,
            _timeNote3Expected, _timeNote4Expected = new();
 
@@ -191,6 +191,56 @@ namespace InEenNotendop.UI.Tests
             Assert.AreEqual(_timeNote4Expected, _unitTestSong.Notes[3].NoteStartTime);
 
         }
+
+    }
+
+    [TestClass]
+    public class ScoreCalculatorTests
+    {
+        private NoteCollection _unitTestSong;
+        //private NoteCollection _compareSong;
+
+        [TestInitialize]
+        public void Setup()
+        {
+            _unitTestSong = new(new MidiFile(
+                @"UnitTestMidi.mid"));
+            //_compareSong = new();
+
+        }
+
+        [TestMethod]
+        public void ScoreCalculatorCalculateScore_CalculateScore0msOffset_ScoreShouldB1000()
+        {
+            Assert.AreEqual(1000, ScoreCalculator.CalculateScore(_unitTestSong, NoteTimeManipulator.GenerateDelayedNoteCollection(_unitTestSong, 0)));
+        }
+        [TestMethod]
+        public void ScoreCalculatorCalculateScore_CalculateScore30msOffset_ScoreShouldBe950()
+        {
+            Assert.AreEqual(950, ScoreCalculator.CalculateScore(_unitTestSong, NoteTimeManipulator.GenerateDelayedNoteCollection(_unitTestSong, 30)));
+        }
+        [TestMethod]
+        public void ScoreCalculatorCalculateScore_CalculateScore60msOffset_ScoreShouldBe800()
+        {
+            Assert.AreEqual(800, ScoreCalculator.CalculateScore(_unitTestSong, NoteTimeManipulator.GenerateDelayedNoteCollection(_unitTestSong, 60)));
+        }
+        [TestMethod]
+        public void ScoreCalculatorCalculateScore_CalculateScore90msOffset_ScoreShouldBe600()
+        {
+            Assert.AreEqual(600, ScoreCalculator.CalculateScore(_unitTestSong, NoteTimeManipulator.GenerateDelayedNoteCollection(_unitTestSong, 90)));
+        }
+        [TestMethod]
+        public void ScoreCalculatorCalculateScore_CalculateScore120msOffset_ScoreShouldBe300()
+        {
+            Assert.AreEqual(300, ScoreCalculator.CalculateScore(_unitTestSong, NoteTimeManipulator.GenerateDelayedNoteCollection(_unitTestSong, 120)));
+        }
+        [TestMethod]
+        public void ScoreCalculatorCalculateScore_CalculateScore90msOffset_ScoreShouldBe0()
+        {
+            Assert.AreEqual(0, ScoreCalculator.CalculateScore(_unitTestSong, NoteTimeManipulator.GenerateDelayedNoteCollection(_unitTestSong, 150)));
+        }
+
+
 
     }
 }

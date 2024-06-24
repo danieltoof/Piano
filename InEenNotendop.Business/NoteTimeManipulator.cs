@@ -2,7 +2,7 @@
 {
     public static class NoteTimeManipulator
     {
-        public static NoteCollection GenerateDelayedSong(NoteCollection song, int milliSecondsDelay)
+        public static NoteCollection GenerateDelayedNoteCollection(NoteCollection song, int milliSecondsDelay)
         {
             NoteCollection delayedSong = new();
             foreach (Note n in song.Notes)
@@ -18,7 +18,7 @@
             return delayedNote;
         }
 
-        public static NoteCollection RemoveDelayedSong(NoteCollection song, int milliSecondsDelay)
+        public static NoteCollection RemoveDelayNoteCollection(NoteCollection song, int milliSecondsDelay)
         {
             NoteCollection delayedSong = new();
             foreach (Note n in song.Notes)

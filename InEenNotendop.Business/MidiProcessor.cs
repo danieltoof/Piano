@@ -45,8 +45,8 @@ namespace InEenNotendop.Business
             SongForNoteFalling = new NoteCollection(midiFile);
             SongForNotePlayback = new NoteCollection(midiFile);
 
-            SongForNoteFalling = NoteTimeManipulator.GenerateDelayedSong(SongForNoteFalling, _delayNoteFalling);
-            SongForNotePlayback = NoteTimeManipulator.GenerateDelayedSong(SongForNotePlayback, _delayNotePlayback);
+            SongForNoteFalling = NoteTimeManipulator.GenerateDelayedNoteCollection(SongForNoteFalling, _delayNoteFalling);
+            SongForNotePlayback = NoteTimeManipulator.GenerateDelayedNoteCollection(SongForNotePlayback, _delayNotePlayback);
 
         }
 
