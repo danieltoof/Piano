@@ -157,7 +157,6 @@ namespace InEenNotendop.UI.Tests
     public class MidiToListConverterTests
     {
         private NoteCollection _unitTestSong;
-
         private TimeSpan _timeNote1Expected, _timeNote2Expected,
            _timeNote3Expected, _timeNote4Expected = new();
 
@@ -191,6 +190,26 @@ namespace InEenNotendop.UI.Tests
             Assert.AreEqual(_timeNote4Expected, _unitTestSong.Notes[3].NoteStartTime);
 
         }
+
+    }
+
+    [TestClass]
+    public class ScoreCalculatorTests
+    {
+        private NoteCollection _unitTestSong;
+        private NoteCollection _compareSong;
+
+        [TestInitialize]
+        public void Setup()
+        {
+            _unitTestSong = new(new MidiFile(
+                @"UnitTestMidi.mid"));
+            _compareSong = new(new MidiFile(
+                @"UnitTestMidi.mid"));
+
+        }
+
+
 
     }
 }
