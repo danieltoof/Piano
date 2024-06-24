@@ -14,7 +14,7 @@ namespace InEenNotendop.UI
         private SqlDataAccess _sqlDataAccess = new();
         private int _lightmodeImport;
         private int _difficulty = 0;
-        public bool songIsFInished { get; set; }
+        public bool songIsFinished { get; set; }
 
         public SongsWindow(SettingsWindow settingsWindow)
         {
@@ -42,9 +42,9 @@ namespace InEenNotendop.UI
         protected override void OnActivated(EventArgs e)
         {
             base.OnActivated(e);
-            if (songIsFInished)
+            if (songIsFinished)
             {
-                songIsFInished = false;
+                songIsFinished = false;
                 if (_difficulty != 0)
                 {
                     Nummer.ItemsSource = _sqlDataAccess.MakeFilteredList(_difficulty);
