@@ -69,22 +69,13 @@ namespace InEenNotendop.UI
             {
                 _midiProcessor = new MidiProcessor(this, new MidiFile(filePath));
                 _midiProcessor.NotePlayed += MidiProcessor_NotePlayed;
-
+                _midiProcessor.MidiDeviceNotFound += MidiProcessor_MidiDeviceNotFound;
             }
             catch (FileNotFoundException e)
             {
                 MessageBox.Show(e.Message);
                 Close();
             }
-
-            _midiProcessor.MidiDeviceNotFound += MidiProcessor_MidiDeviceNotFound;
-
-
-
-
-            //notesOfSongList = MidiToListConverter.MidiToList(midiFileSong);
-
-
 
             if (playMidiFile)
             {
