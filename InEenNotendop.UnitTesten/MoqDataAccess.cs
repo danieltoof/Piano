@@ -1,7 +1,7 @@
 ﻿using System.Data;
 using InEenNotendop.Data;
 
-namespace InEenNotendop.UI.Tests;
+namespace InEenNotendop.UnitTesten;
 
 public class MoqDataAccess : IDatabaseInterface
 {
