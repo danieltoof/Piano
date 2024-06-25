@@ -46,7 +46,7 @@ public class MoqDataAccess : IDatabaseInterface
         throw new NotImplementedException();
     }
 
-    public void ChangeHighscore(int id, int score, int currentScore)
+    public void ChangeHighscore(int id, int score, int currentScore, string Name)
     {
         throw new NotImplementedException();
     }
