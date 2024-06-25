@@ -9,6 +9,8 @@ using InEenNotendop.Business;
 using System.Windows.Media.Animation;
 using System.IO;
 using InEenNotendop.Data;
+using Microsoft.VisualBasic;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace InEenNotendop.UI
 {
@@ -218,7 +220,8 @@ namespace InEenNotendop.UI
                 _midiProcessor.OnSongFinished();
             }
             _timer.Stop();
-            _sqlDataAccess.ChangeHighscore(_nummerId, (int)_midiProcessor.Score, _currentScore);
+            _midiProcessor.Name = Interaction.InputBox("Please enter your name:", "Name Entry", "");
+            _sqlDataAccess.ChangeHighscore(_nummerId, (int)_midiProcessor.Score, _currentScore, _midiProcessor.Name);
             MessageBox.Show($"Score : {_midiProcessor.Score}");
             SongsWindow.SongIsFinished = true;
             Close();

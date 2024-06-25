@@ -8,7 +8,7 @@ public interface IDatabaseInterface
     string FindDirectory(string scriptFileName);
     void StartProcess(string sshTunnelFile);
     void UploadSongToDataBase(string name, string artiest, int length, int bpm, int diffeculty, string filepath);
-    void ChangeHighscore(int id, int score, int currentScore);
+    void ChangeHighscore(int id, int score, int currentScore, string Name);
     DataView GetDataForGrid(int nummerId);
     List<Nummer> ListFunction(string sqlcommand);
     List<Nummer> MakeDefaultList();
