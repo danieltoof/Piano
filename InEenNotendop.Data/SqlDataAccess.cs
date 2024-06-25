@@ -112,7 +112,7 @@ public class SqlDataAccess : IDatabaseInterface
         string cmdString = string.Empty;
         using (SqlConnection con = new SqlConnection(ConfigClass.s_ConnectionString))
         {
-            cmdString = $"SELECT TOP 5 Score, Naam FROM Scores WHERE NummerID = '{nummerId}' order by Score desc";
+            cmdString = $"SELECT TOP 5 Score, Naam FROM Scores WHERE NummerID = '{nummerId}' AND Naam <> '' order by Score desc";
             SqlCommand cmd = new SqlCommand(cmdString, con);
             SqlDataAdapter sda = new SqlDataAdapter(cmd);
             DataTable dt = new DataTable();
