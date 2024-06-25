@@ -61,8 +61,8 @@ namespace InEenNotendop.UI.Tests
                 int lightmode;
 
                 // Act
-                mainWindow.settingsWindow.SetLightMode(mainWindow);
-                lightmode = mainWindow.settingsWindow.GetLightMode();
+                mainWindow.SettingsWindow.SetLightMode(mainWindow);
+                lightmode = mainWindow.SettingsWindow.GetLightMode();
 
                 // Assert
                 Assert.IsTrue(lightmode == 1);
@@ -82,8 +82,8 @@ namespace InEenNotendop.UI.Tests
                 int lightmode;
 
                 // Act
-                mainWindow.settingsWindow.SetDarkMode(mainWindow);
-                lightmode = mainWindow.settingsWindow.GetLightMode();
+                mainWindow.SettingsWindow.SetDarkMode(mainWindow);
+                lightmode = mainWindow.SettingsWindow.GetLightMode();
 
                 // Assert
                 Assert.IsTrue(lightmode == 0);
@@ -100,15 +100,15 @@ namespace InEenNotendop.UI.Tests
             {
                 // Arrange
                 MainWindow mainWindow = new MainWindow();
-                SongsWindow songsWindow = new SongsWindow(mainWindow.settingsWindow);
+                SongsWindow songsWindow = new SongsWindow(mainWindow.SettingsWindow);
 
                 Window expectedNewOwnerWindow = mainWindow;
 
                 // Act
-                mainWindow.settingsWindow.MainMenu();
+                mainWindow.SettingsWindow.MainMenu();
 
                 // Assert
-                Assert.AreEqual(expectedNewOwnerWindow, mainWindow.settingsWindow.Owner);
+                Assert.AreEqual(expectedNewOwnerWindow, mainWindow.SettingsWindow.Owner);
             });
 
             newThread.SetApartmentState(ApartmentState.STA);
