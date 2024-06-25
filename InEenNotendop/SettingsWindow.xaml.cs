@@ -127,7 +127,7 @@ namespace InEenNotendop.UI
             {
                 SetLightMode(sender);
             }
-            else if (Lightmode == 0)
+            else 
             {
                 SetDarkMode(sender);
             }
