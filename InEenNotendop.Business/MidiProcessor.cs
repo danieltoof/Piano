@@ -124,24 +124,6 @@ namespace InEenNotendop.Business
             {
                 throw new Exception($"Device with desired device index {deviceIndex} not found");
             }
-            //if (desiredDeviceIndex < numDevices)
-            //{
-            //    try
-            //    {
-            //        _midiIn?.Dispose();
-            //        _midiIn = new MidiIn(desiredDeviceIndex);
-            //        _midiIn.MessageReceived += MidiInMessageReceived;
-            //        _midiIn.Start();
-            //    } catch (NAudio.MmException e)
-            //    {
-            //        Debug.WriteLine($"Error: {e.Message}");
-            //    }
-
-            //}
-            //else
-            //{
-            //    MidiDeviceNotFound?.Invoke(this);
-            //}
         }
     }
 }
