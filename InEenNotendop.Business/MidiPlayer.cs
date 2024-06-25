@@ -34,12 +34,12 @@ public class MidiPlayer
 
     public void PlayNote(int note)
     {
-        _midiOut.Send(MidiMessage.StartNote(note, 120, 1).RawData);
+            _midiOut?.Send(MidiMessage.StartNote(note, 120, 1).RawData);
     }
 
     public void StopNote(int note)
     {
-        _midiOut.Send(MidiMessage.StopNote(note, 127, 1).RawData);
+        _midiOut?.Send(MidiMessage.StopNote(note, 127, 1).RawData);        
     }
 
     public void Dispose()

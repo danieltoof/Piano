@@ -103,7 +103,7 @@ namespace InEenNotendop.Business
 
             var numDevices = MidiIn.NumberOfDevices;
             Debug.WriteLine($"numDevices: {numDevices}");
-            var desiredDeviceIndex = 0; // DEZE KAN VERANDEREN SOMS SPONTAAN
+            var desiredDeviceIndex = 1; // DEZE KAN VERANDEREN SOMS SPONTAAN
             if(numDevices < 0)
             {
                 numDevices = 0;
