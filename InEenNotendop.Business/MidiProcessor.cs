@@ -9,6 +9,7 @@ namespace InEenNotendop.Business
         private readonly int _delayNotePlayback = 7845;
 
         public int Score;
+        public string Name;
 
         private NoteCollection _song;
         private NoteCollection _songPlayed;

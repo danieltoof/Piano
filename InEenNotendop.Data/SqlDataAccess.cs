@@ -92,19 +92,16 @@ public class SqlDataAccess : IDatabaseInterface
     }
 
     // Code to change high-score after song completion
-    public void ChangeHighscore(int id, int score, int currentScore)
+    public void ChangeHighscore(int id, int score, int currentScore, string Name)
     {
-        if (score > currentScore)
+        using (SqlConnection connection = new SqlConnection(ConfigClass.s_ConnectionString))
         {
-            using (SqlConnection connection = new SqlConnection(ConfigClass.s_ConnectionString))
+            using (var command = connection.CreateCommand())
             {
-                using (var command = connection.CreateCommand())
-                {
-                    command.CommandText = $"UPDATE Scores SET Score = {score} WHERE NummerID = {id}";
-                    connection.Open();
-                    command.ExecuteNonQuery();
-                    connection.Close();
-                }
+                command.CommandText = $"INSERT INTO Scores (Score, NummerID, Naam) VALUES ({score}, {id}, '{Name}')";
+                connection.Open();
+                command.ExecuteNonQuery();
+                connection.Close();
             }
         }
     }
@@ -115,7 +112,7 @@ public class SqlDataAccess : IDatabaseInterface
         string cmdString = string.Empty;
         using (SqlConnection con = new SqlConnection(ConfigClass.s_ConnectionString))
         {
-            cmdString = $"SELECT Score, Naam FROM Scores WHERE NummerID = '{nummerId}' order by Score desc";
+            cmdString = $"SELECT TOP 5 Score, Naam FROM Scores WHERE NummerID = '{nummerId}' order by Score desc";
             SqlCommand cmd = new SqlCommand(cmdString, con);
             SqlDataAdapter sda = new SqlDataAdapter(cmd);
             DataTable dt = new DataTable();
