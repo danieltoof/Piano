@@ -1,46 +1,78 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <UseWPF>true</UseWPF>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UseWPF>true</UseWPF>
+		<EnableDefaultPageItems>false</EnableDefaultPageItems>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="Resources\icon.png" />
-    <None Remove="Resources\Images\PreviousIcon.png" />
-    <None Remove="Resources\LogoLarge.png" />
-    <None Remove="Resources\LogoPNG.png" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove="Resources\icon.png" />
+		<None Remove="Resources\Images\PreviousIcon.png" />
+		<None Remove="Resources\LogoLarge.png" />
+		<None Remove="Resources\LogoPNG.png" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Resource Include="Resources\Images\PreviousIcon.png" />
-  </ItemGroup>
+	<ItemGroup>
+		<Resource Include="Resources\Images\PreviousIcon.png" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="NAudio.Midi" Version="2.2.1" />
-    <PackageReference Include="SSH.NET" Version="2024.0.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="NAudio.Midi" Version="2.2.1" />
+		<PackageReference Include="SSH.NET" Version="2024.0.0" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\InEenNotendop.Business\InEenNotendop.Business.csproj" />
-    <ProjectReference Include="..\InEenNotendop.Data\InEenNotendop.Data.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\InEenNotendop.Business\InEenNotendop.Business.csproj" />
+		<ProjectReference Include="..\InEenNotendop.Data\InEenNotendop.Data.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Resource Include="Resources\icon.png" />
-    <Resource Include="Resources\LogoLarge.png" />
-  </ItemGroup>
+	<ItemGroup>
+		<Resource Include="Resources\icon.png" />
+		<Resource Include="Resources\LogoLarge.png" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Resources\Images\" />
-    <Folder Include="Resources\Song\" />
-  </ItemGroup>
+	<ItemGroup>
+		<Folder Include="Resources\Images\" />
+		<Folder Include="Resources\Song\" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Page Include="App.xaml" />
-  </ItemGroup>
+	<ItemGroup>
+		<Page Include="App.xaml">
+			<Generator>MSBuild:Compile</Generator>
+			<SubType>Designer</SubType>
+		</Page>
+		<Page Include="MainWindow.xaml">
+			<Generator>MSBuild:Compile</Generator>
+			<SubType>Designer</SubType>
+		</Page>
+		<Page Include="HighscoreList.xaml">
+			<Generator>MSBuild:Compile</Generator>
+			<SubType>Designer</SubType>
+		</Page>
+		<Page Include="ImportWindow.xaml">
+			<Generator>MSBuild:Compile</Generator>
+			<SubType>Designer</SubType>
+		</Page>
+		<Page Include="MidiPlayWindow.xaml">
+			<Generator>MSBuild:Compile</Generator>
+			<SubType>Designer</SubType>
+		</Page>
+		<Page Include="SelectingWindow.xaml">
+			<Generator>MSBuild:Compile</Generator>
+			<SubType>Designer</SubType>
+		</Page>
+		<Page Include="SettingsWindow.xaml">
+			<Generator>MSBuild:Compile</Generator>
+			<SubType>Designer</SubType>
+		</Page>
+		<Page Include="SongsWindow.xaml">
+			<Generator>MSBuild:Compile</Generator>
+			<SubType>Designer</SubType>
+		</Page>
+	</ItemGroup>
 
 </Project>
