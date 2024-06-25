@@ -12,7 +12,7 @@ public class MidiPlayer
     {
         Dispose();
         // Find and initialize the Microsoft GS Wavetable Synth
-        int deviceIndex = FindMidiDevice("Microsoft GS Wavetable Synth");
+        int deviceIndex = MidiUtilities.FindMidiDevice("Microsoft GS Wavetable Synth", InOrOut.OUT);
         if (deviceIndex != -1)
         {
             try
@@ -46,17 +46,5 @@ public class MidiPlayer
     {
         _midiOut?.Dispose();
         _midiOut = null;
-    }
-
-    private int FindMidiDevice(string deviceName)
-    {
-        for (int deviceId = 0; deviceId < MidiOut.NumberOfDevices; deviceId++)
-        {
-            if (MidiOut.DeviceInfo(deviceId).ProductName.Contains(deviceName))
-            {
-                return deviceId;
-            }
-        }
-        return -1;
     }
 }

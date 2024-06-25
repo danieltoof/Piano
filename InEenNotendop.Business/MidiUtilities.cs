@@ -64,5 +64,34 @@ namespace InEenNotendop.Business
             TimeSpan timeSpanMidiFile = GetTimeSpanFromMidiTicks((int)totalTime, midiFile.DeltaTicksPerQuarterNote, 60000000 / bpm);
             return timeSpanMidiFile;
         }
+        public static int FindMidiDevice(string deviceName, InOrOut inOrOut)
+        {
+            if (inOrOut == InOrOut.OUT)
+            {
+                for (int deviceId = 0; deviceId < MidiOut.NumberOfDevices; deviceId++)
+                {
+                    if (MidiOut.DeviceInfo(deviceId).ProductName.Contains(deviceName))
+                    {
+                        return deviceId;
+                    }
+                }
+            }
+            else if (inOrOut == InOrOut.IN)
+            {
+                for (int deviceId = 0; deviceId < MidiIn.NumberOfDevices; deviceId++)
+                {
+                    if (MidiIn.DeviceInfo(deviceId).ProductName.Contains(deviceName))
+                    {
+                        return deviceId;
+                    }
+                }
+            }
+            return -1;
+        }
+    }
+    public enum InOrOut
+    {
+        IN,
+        OUT
     }
 }
