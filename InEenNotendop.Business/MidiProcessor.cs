@@ -1,6 +1,7 @@
 ﻿using NAudio.Midi;
 using System.Diagnostics;
 using System.Runtime.Versioning;
+using System.Security.Cryptography;
 namespace InEenNotendop.Business
 {
     public class MidiProcessor
@@ -104,28 +105,25 @@ namespace InEenNotendop.Business
 
             var numDevices = MidiIn.NumberOfDevices;
             Debug.WriteLine($"numDevices: {numDevices}");
-            var desiredDeviceIndex = 1; // DEZE KAN VERANDEREN SOMS SPONTAAN
-            if(numDevices < 0)
-            {
-                numDevices = 0;
-            }
-            if (desiredDeviceIndex < numDevices)
+            var deviceIndex = MidiUtilities.FindMidiDevice("Impact GX49", InOrOut.IN);
+
+            if (deviceIndex != -1)
             {
                 try
                 {
-                    _midiIn?.Dispose();
-                    _midiIn = new MidiIn(desiredDeviceIndex);
+                    _midiIn = new MidiIn(deviceIndex);
                     _midiIn.MessageReceived += MidiInMessageReceived;
                     _midiIn.Start();
-                } catch (NAudio.MmException e)
+                }
+                catch (Exception ex)
                 {
-                    Debug.WriteLine($"Error: {e.Message}");
+                    Debug.WriteLine($"Error: {ex.Message}");
                 }
 
             }
             else
             {
-                MidiDeviceNotFound?.Invoke(this);
+                throw new Exception($"Device with desired device index {deviceIndex} not found");
             }
         }
     }
