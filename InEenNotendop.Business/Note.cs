@@ -3,7 +3,7 @@
 namespace InEenNotendop.Business
 {
 
-    public class Note
+    public struct Note
     {
         public int NoteNumber { get; set; }
         public TimeSpan NoteStartTime { get; set; }
