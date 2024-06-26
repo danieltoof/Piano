@@ -51,7 +51,7 @@ public class MoqDataAccess : IDatabaseInterface
         throw new NotImplementedException();
     }
 
-    public DataView GetDataForGrid(int nummerId)
+    public DataView GetDataForPreviewGrid(int nummerId)
     {
         throw new NotImplementedException();
     }

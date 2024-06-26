@@ -10,6 +10,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using InEenNotendop.Data;
+using System.Diagnostics;
 
 namespace InEenNotendop.UI
 {
@@ -20,10 +21,8 @@ namespace InEenNotendop.UI
     {
         public SettingsWindow SettingsWindow;
         SqlDataAccess _sqlDataAccess = new();
-        private int _lightmodeImport;
-        private int _difficulty = 0;
         public bool SongIsFinished;
-
+        
         public HighscoreList(SettingsWindow settingsWindow)
         {
             InitializeComponent();
@@ -31,12 +30,12 @@ namespace InEenNotendop.UI
             this.SettingsWindow = settingsWindow;
             this.SettingsWindow.ChangeSettingsOwner(this);
 
+            ListOfHighestScores.ItemsSource = _sqlDataAccess.MakeHighscoreList();
+
             SettingsWindow.CheckDarkOrLight(this);
         }
 
         // Creates pop-up window with detailed song information
-
-
         //AANPASSEN NAAR SCORE SCREEN
         private void OnNumberClicked(object sender, MouseButtonEventArgs e)
         {
@@ -56,7 +55,7 @@ namespace InEenNotendop.UI
                     int currentScore = nummer.Score;
                     string moeilijkheidText = moeilijkheidConverter.Convert(nummer.Moeilijkheid);
 
-                    SelectingWindow detailsWindow = new SelectingWindow(nummerId, moeilijkheidText, title, artiest, fullTime, bpm, filePath, convertedTime, this, currentScore);
+                    HighscoreDetails detailsWindow = new HighscoreDetails(nummerId, moeilijkheidText, title, artiest, fullTime, bpm, filePath, convertedTime, this, currentScore);
                     detailsWindow.Owner = this;
                     detailsWindow.ShowDialog();
                 }

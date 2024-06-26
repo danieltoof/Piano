@@ -220,9 +220,9 @@ namespace InEenNotendop.UI
                 _midiProcessor.OnSongFinished();
             }
             _timer.Stop();
+            MessageBox.Show($"Score : {_midiProcessor.Score}");
             _midiProcessor.Name = Interaction.InputBox("Please enter your name:", "Name Entry", "");
             _sqlDataAccess.ChangeHighscore(_nummerId, (int)_midiProcessor.Score, _currentScore, _midiProcessor.Name);
-            MessageBox.Show($"Score : {_midiProcessor.Score}");
             SongsWindow.SongIsFinished = true;
             Close();
             SongsWindow.Show();

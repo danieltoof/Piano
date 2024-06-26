@@ -82,7 +82,7 @@ namespace InEenNotendop.UI
 
         private void FillDataGrid(int nummerId)
         {
-            HighScoresGrid.ItemsSource = _sqlDataAccess.GetDataForGrid(nummerId);
+            HighScoresGrid.ItemsSource = _sqlDataAccess.GetDataForPreviewGrid(nummerId);
         }
     }
 }

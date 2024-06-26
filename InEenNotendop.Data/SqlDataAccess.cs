@@ -106,8 +106,24 @@ public class SqlDataAccess : IDatabaseInterface
         }
     }
 
+    // gets all scores and names for nummer with ID
+    public DataView GetDataForDataGrid(int nummerId)
+    {
+        string cmdString = string.Empty;
+        using (SqlConnection con = new SqlConnection(ConfigClass.s_ConnectionString))
+        {
+            cmdString = $"SELECT Score, Naam FROM Scores WHERE NummerID = '{nummerId}' order by Score desc";
+            SqlCommand cmd = new SqlCommand(cmdString, con);
+            SqlDataAdapter sda = new SqlDataAdapter(cmd);
+            DataTable dt = new DataTable();
+            sda.Fill(dt);
+
+            return dt.DefaultView;
+        }
+    }
+
     // Gets the score of the selected song in SelectingWindow
-    public DataView GetDataForGrid(int nummerId)
+    public DataView GetDataForPreviewGrid(int nummerId)
     {
         string cmdString = string.Empty;
         using (SqlConnection con = new SqlConnection(ConfigClass.s_ConnectionString))
@@ -158,7 +174,52 @@ public class SqlDataAccess : IDatabaseInterface
                         int score = reader.GetInt32(reader.GetOrdinal("Score"));
 
                         string convertedTime = _timeConverter.ToMinutesSeconds(lengte);
-                        Nummer nummer = new Nummer(title, artiest, lengte, bpm, moeilijkheid, id, filepath, score, convertedTime, convertedMoeilijkheid);
+                        Nummer nummer = new Nummer(title, artiest, lengte, bpm, moeilijkheid, id, filepath, score, convertedTime, convertedMoeilijkheid,"");
+                        nummers.Add(nummer);
+                    }
+                    connection.Close();
+                }
+            }
+        }
+        return nummers;
+    }
+    public List<Nummer> HighscoreListFunction(string sqlcommand)
+    {
+        List<Nummer> nummers = new List<Nummer>();
+
+        using (SqlConnection connection = new SqlConnection(ConfigClass.s_ConnectionString))
+        {
+            using (var command = connection.CreateCommand())
+            {
+                command.CommandText = sqlcommand;
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        string title = reader.GetString(reader.GetOrdinal("Title"));
+                        string artiest = reader.GetString(reader.GetOrdinal("Artiest"));
+                        int lengte = reader.GetInt32(reader.GetOrdinal("Lengte"));
+                        int bpm = reader.GetInt32(reader.GetOrdinal("Bpm"));
+                        int moeilijkheid = reader.GetInt32(reader.GetOrdinal("Moeilijkheid"));
+                        MoeilijkheidConverter converter = new MoeilijkheidConverter();
+                        string convertedMoeilijkheid = converter.Convert(moeilijkheid);
+                        int id = reader.GetInt32(reader.GetOrdinal("Id"));
+                        string filepath;
+                        int filepathOrdinal = reader.GetOrdinal("Filepath");
+                        if (!reader.IsDBNull(filepathOrdinal))
+                        {
+                            filepath = reader.GetString(filepathOrdinal);
+                        }
+                        else
+                        {
+                            filepath = null;
+                        }
+                        int score = reader.GetInt32(reader.GetOrdinal("Score"));
+                        string naam = reader.GetString(reader.GetOrdinal("Naam"));
+
+                        string convertedTime = _timeConverter.ToMinutesSeconds(lengte);
+                        Nummer nummer = new Nummer(title, artiest, lengte, bpm, moeilijkheid, id, filepath, score, convertedTime, convertedMoeilijkheid, naam);
                         nummers.Add(nummer);
                     }
                     connection.Close();
@@ -171,7 +232,8 @@ public class SqlDataAccess : IDatabaseInterface
     // Default list method used on startup
     public List<Nummer> MakeDefaultList()
     {
-        return ListFunction("SELECT N.Title, N.Artiest, N.Lengte, N.Bpm, N.Moeilijkheid, N.ID, N.Filepath, Score FROM Nummers N INNER JOIN (SELECT NummerID, MAX(Score) AS Score FROM Scores GROUP BY NummerID) S ON N.ID = S.NummerID");
+        return ListFunction("SELECT N.Title, N.Artiest, N.Lengte, N.Bpm, N.Moeilijkheid, N.ID, N.Filepath, Score FROM Nummers N " +
+            "INNER JOIN (SELECT NummerID, MAX(Score) AS Score FROM Scores GROUP BY NummerID) S ON N.ID = S.NummerID");
     }
 
     // Gets sorted list from database
@@ -179,17 +241,31 @@ public class SqlDataAccess : IDatabaseInterface
     {
         if (difficulty != 0)
         {
-            return ListFunction($"SELECT N.Title, N.Artiest, N.Lengte, N.Bpm, N.Moeilijkheid, N.ID, N.Filepath, Score FROM Nummers N INNER JOIN (SELECT NummerID, MAX(Score) as Score from Scores group by NummerID) as S on N.ID = S.NummerID WHERE Moeilijkheid = {difficulty} order by {sort};");
+            return ListFunction($"SELECT N.Title, N.Artiest, N.Lengte, N.Bpm, N.Moeilijkheid, N.ID, N.Filepath, Score FROM Nummers N " +
+                $"INNER JOIN (SELECT NummerID, MAX(Score) as Score from Scores group by NummerID) as S on N.ID = S.NummerID WHERE Moeilijkheid = {difficulty} order by {sort};");
         }
         else
         {
-            return ListFunction($"SELECT N.Title, N.Artiest, N.Lengte, N.Bpm, N.Moeilijkheid, N.ID, N.Filepath, Score FROM Nummers N INNER JOIN (SELECT NummerID, MAX(Score) as Score from Scores group by NummerID) as S on N.ID = S.NummerID order by {sort};");
+            return ListFunction($"SELECT N.Title, N.Artiest, N.Lengte, N.Bpm, N.Moeilijkheid, N.ID, N.Filepath, Score FROM Nummers N " +
+                $"INNER JOIN (SELECT NummerID, MAX(Score) as Score from Scores group by NummerID) as S on N.ID = S.NummerID order by {sort};");
         }
     }
 
     // Gets filtered list from database
     public List<Nummer> MakeFilteredList(int difficulty)
     {
-        return ListFunction($"SELECT N.Title, N.Artiest, N.Lengte, N.Bpm, N.Moeilijkheid, N.ID, N.Filepath, Score FROM Nummers N INNER JOIN (SELECT NummerID, MAX(Score) as Score from Scores group by NummerID) as S on N.ID = S.NummerID WHERE Moeilijkheid = {difficulty}");
+        return ListFunction($"SELECT N.Title, N.Artiest, N.Lengte, N.Bpm, N.Moeilijkheid, N.ID, N.Filepath, Score FROM Nummers N " +
+            $"INNER JOIN (SELECT NummerID, MAX(Score) as Score from Scores group by NummerID) as S on N.ID = S.NummerID WHERE Moeilijkheid = {difficulty}");
     }
+     
+    public List<Nummer> MakeHighscoreList()
+    {
+        return HighscoreListFunction("WITH RankedScores AS (SELECT N.Title, N.Artiest, N.Lengte, N.Bpm, N.Moeilijkheid, N.ID, N.Filepath, S.Score, S.Naam, " +
+            "ROW_NUMBER() OVER(PARTITION BY N.ID " +
+            "ORDER BY S.Score DESC, S.Naam ASC) AS RowNum FROM Nummers N " +
+            "INNER JOIN Scores S ON N.ID = S.NummerID) " +
+            "SELECT Title, Artiest, Lengte, Bpm, Moeilijkheid, ID, Filepath, Score, Naam " +
+            "FROM RankedScores WHERE RowNum = 1;");
+    }
+
 }
