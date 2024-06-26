@@ -35,9 +35,16 @@ namespace InEenNotendop
         }
 
         // Checks system setting for lightmode
-        public int CheckLightMode() 
+        public bool CheckLightMode() 
         {
-            return SettingsWindow.Lightmode = (int)Microsoft.Win32.Registry.GetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", "AppsUseLightTheme", 1);
+            if ((int)Microsoft.Win32.Registry.GetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", "AppsUseLightTheme", 1) == 1)
+            {
+                return SettingsWindow.Lightmode = true;
+            }
+            else
+            {
+                return SettingsWindow.Lightmode = false;
+            }
         }
 
         private void Start_Button_OnClick(object sender, RoutedEventArgs e)

@@ -59,14 +59,14 @@ namespace InEenNotendop.UI.Tests
             {
                 // Arrange
                 MainWindow mainWindow = new MainWindow();
-                int lightmode;
+                bool lightmode;
 
                 // Act
                 mainWindow.SettingsWindow.SetLightMode(mainWindow);
                 lightmode = mainWindow.SettingsWindow.GetLightMode();
 
                 // Assert
-                Assert.IsTrue(lightmode == 1);
+                Assert.IsTrue(lightmode);
             });
 
             newThread.SetApartmentState(ApartmentState.STA);
@@ -80,14 +80,14 @@ namespace InEenNotendop.UI.Tests
             {
                 // Arrange
                 MainWindow mainWindow = new MainWindow();
-                int lightmode;
+                bool lightmode;
 
                 // Act
                 mainWindow.SettingsWindow.SetDarkMode(mainWindow);
                 lightmode = mainWindow.SettingsWindow.GetLightMode();
 
                 // Assert
-                Assert.IsTrue(lightmode == 0);
+                Assert.IsFalse(lightmode);
             });
 
             newThread.SetApartmentState(ApartmentState.STA);

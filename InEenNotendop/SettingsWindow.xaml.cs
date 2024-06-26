@@ -10,7 +10,7 @@ namespace InEenNotendop.UI
     /// </summary>
     public partial class SettingsWindow : Window
     {
-        internal int Lightmode;
+        internal bool Lightmode;
         public Window Owner { get; set; }
         private MainWindow _mainWindow;
         private SongsWindow _songsWindow;
@@ -115,15 +115,16 @@ namespace InEenNotendop.UI
         }
 
         // Gets the lightmode value of its current owner
-        private void DarkOrLightMode_OnClick(object sender, RoutedEventArgs e) 
+        private void DarkOrLightMode_OnClick(object sender, RoutedEventArgs e)
         {
+            Lightmode = !Lightmode;
             CheckDarkOrLight(Owner);
         }
 
         // Checks lightmode value, and switches between dark- and lightmode
         public void CheckDarkOrLight(object sender) 
         {
-            if (Lightmode == 1)
+            if (Lightmode)
             {
                 SetLightMode(sender);
             }
@@ -154,8 +155,6 @@ namespace InEenNotendop.UI
             DarkOrLightMode.Content = "Light mode";
             SettingsGrid.Background = Brushes.White;
             SettingsText.Foreground = Brushes.Black;
-
-            Lightmode = 1;
         }
 
         public void SetDarkMode(object sender)
@@ -178,10 +177,8 @@ namespace InEenNotendop.UI
             DarkOrLightMode.Content = "Dark mode";
             SettingsGrid.Background = new SolidColorBrush(Color.FromRgb(25, 44, 49));
             SettingsText.Foreground = Brushes.White;
-
-            Lightmode = 0;
         }
-        public int GetLightMode()
+        public bool GetLightMode()
         {
             return Lightmode;
         }

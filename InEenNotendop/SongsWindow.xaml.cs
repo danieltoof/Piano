@@ -12,7 +12,7 @@ namespace InEenNotendop.UI
     {
         public SettingsWindow SettingsWindow;
         private SqlDataAccess _sqlDataAccess = new();
-        private int _lightmodeImport;
+        private bool _lightmodeImport;
         private int _difficulty = 0;
         public bool SongIsFinished { get; set; }
 
