@@ -74,19 +74,29 @@ namespace InEenNotendop.Business
 
         public void Dispose()
         {
-            try {
+            try
+            {
+                MidiDeviceNotFound = null;
+
                 MidiPlayer?.Dispose();
                 Stopwatch?.Stop();
                 Stopwatch?.Reset();
-            } catch (Exception e) 
+
+                if (_midiIn != null)
+                {
+                    _midiIn.Stop();
+                    _midiIn.Dispose();
+                    _midiIn = null;
+                }
+            }
+            catch (Exception e)
             {
                 Debug.WriteLine($"Error during disposal: {e.Message}");
             }
-            
         }
 
-        //Voor event wanneer nummer klaar is
-        public void OnSongFinished()
+            //Voor event wanneer nummer klaar is
+            public void OnSongFinished()
         {
             Score = ScoreCalculator.CalculateScore(SongForNotePlayback, _songPlayed);
             this.Dispose();
