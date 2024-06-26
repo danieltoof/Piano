@@ -50,7 +50,7 @@
                                     <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0">
                                         <Run Text="{Binding Title}" FontSize="32" FontWeight="Bold"/>
                                         <LineBreak />
-                                        <Run Text="{Binding Artiest}" />
+                                        <Run Text="{Binding Artist}" />
                                     </TextBlock>
                                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0">
                                         <Run Text="{Binding Score, StringFormat='Highscore: {0}'}"/>
@@ -59,7 +59,7 @@
                                         <Run Text="{Binding ConvertedTime}"/>
                                     </TextBlock>
                                     <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,15,0" >
-                                       <Run Text="{Binding ConvertedMoeilijkheid, StringFormat='Difficulty: {0}'}"/>
+                                       <Run Text="{Binding ConvertedDifficulty, StringFormat='Difficulty: {0}'}"/>
                                     </TextBlock>
                                 </Grid>
                             </Grid>

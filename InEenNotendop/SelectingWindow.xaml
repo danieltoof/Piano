@@ -28,14 +28,14 @@
             Grid.Column="1"
             Margin="10,12,50,0"
             HorizontalAlignment="Right"
-            Text="{Binding MoeilijkheidText}" />
+            Text="{Binding DifficultyText}" />
 
 
         <!--  Artiest  -->
         <TextBlock
             Grid.Column="1"
             Margin="13,35,321,252"
-            Text="{Binding Artiest}" />
+            Text="{Binding Artist}" />
 
         <StackPanel
             x:Name="HighScores_StackPanel"
@@ -72,7 +72,7 @@
             Margin="0,30,50,252"
             HorizontalAlignment="Right"
             Orientation="Horizontal">
-            <TextBlock Text="Lengte: " />
+            <TextBlock Text="Length: " />
             <TextBlock Text="{Binding ConvertedTime}" />
         </StackPanel>
 

@@ -41,7 +41,7 @@ public class MoqDataAccess : IDatabaseInterface
         throw new NotImplementedException();
     }
 
-    public void UploadSongToDataBase(string name, string artiest, int length, int bpm, int diffeculty, string filepath)
+    public void UploadSongToDataBase(string name, string artist, int length, int bpm, int difficulty, string filepath)
     {
         throw new NotImplementedException();
     }
@@ -56,22 +56,22 @@ public class MoqDataAccess : IDatabaseInterface
         throw new NotImplementedException();
     }
 
-    public List<Nummer> ListFunction(string sqlcommand)
+    public List<Song> ListFunction(string sqlcommand)
     {
         throw new NotImplementedException();
     }
 
-    public List<Nummer> MakeDefaultList()
+    public List<Song> MakeDefaultList()
     {
         throw new NotImplementedException();
     }
 
-    public List<Nummer> MakeSortedList(int difficulty, string sort)
+    public List<Song> MakeSortedList(int difficulty, string sort)
     {
         throw new NotImplementedException();
     }
 
-    public List<Nummer> MakeFilteredList(int difficulty)
+    public List<Song> MakeFilteredList(int difficulty)
     {
         throw new NotImplementedException();
     }

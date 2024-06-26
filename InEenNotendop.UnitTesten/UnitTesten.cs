@@ -5,6 +5,7 @@ using InEenNotendop.Business;
 using NAudio.Midi;
 using Moq;
 using System.Windows.Controls;
+using InEenNotendop.UnitTesten;
 
 
 namespace InEenNotendop.UI.Tests
@@ -13,13 +14,13 @@ namespace InEenNotendop.UI.Tests
     [TestClass]
     public class MoeilijkheidTests
     {
-        private MoeilijkheidConverter _moeilijkheidConverter;
+        private DifficultyConverter _difficultyConverter;
 
         [TestInitialize]
         public void Setup()
         {
             // Arrange: Initialize the MoeilijkheidConverter instance
-            _moeilijkheidConverter = new MoeilijkheidConverter();
+            _difficultyConverter = new DifficultyConverter();
         }
 
         [TestMethod]
@@ -40,7 +41,7 @@ namespace InEenNotendop.UI.Tests
             foreach (var (input, expectedOutput) in expectedResults)
             {
                 // Act
-                string result = _moeilijkheidConverter.Convert(input);
+                string result = _difficultyConverter.Convert(input);
 
                 // Assert
                 Assert.AreEqual(expectedOutput, result, $"Failed for input {input}");

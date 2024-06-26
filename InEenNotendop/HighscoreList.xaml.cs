@@ -42,21 +42,21 @@ namespace InEenNotendop.UI
         {
             if (sender is FrameworkElement clickedElement)
             {
-                var nummer = clickedElement.DataContext as Nummer;
-                if (nummer != null)
+                var song = clickedElement.DataContext as Song;
+                if (song != null)
                 {
-                    int nummerId = nummer.Id;
-                    String title = nummer.Title;
-                    String artiest = nummer.Artiest;
-                    int fullTime = nummer.FullTime;
-                    int bpm = nummer.Bpm;
-                    String filePath = nummer.Filepath;
-                    string convertedTime = nummer.ConvertedTime;
-                    MoeilijkheidConverter moeilijkheidConverter = new MoeilijkheidConverter();
-                    int currentScore = nummer.Score;
-                    string moeilijkheidText = moeilijkheidConverter.Convert(nummer.Moeilijkheid);
+                    int nummerId = song.Id;
+                    String title = song.Title;
+                    String artist = song.Artist;
+                    int fullTime = song.FullTime;
+                    int bpm = song.Bpm;
+                    String filePath = song.Filepath;
+                    string convertedTime = song.ConvertedTime;
+                    DifficultyConverter difficultyConverter = new DifficultyConverter();
+                    int currentScore = song.Score;
+                    string difficultyText = difficultyConverter.Convert(song.Difficulty);
 
-                    SelectingWindow detailsWindow = new SelectingWindow(nummerId, moeilijkheidText, title, artiest, fullTime, bpm, filePath, convertedTime, this, currentScore);
+                    SelectingWindow detailsWindow = new SelectingWindow(nummerId, difficultyText, title, artist, fullTime, bpm, filePath, convertedTime, this, currentScore);
                     detailsWindow.Owner = this;
                     detailsWindow.ShowDialog();
                 }
