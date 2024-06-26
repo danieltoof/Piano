@@ -1,11 +1,11 @@
 ﻿namespace InEenNotendop.Data
 {
-    public class MoeilijkheidConverter
+    public class DifficultyConverter
     {
-        public string Convert(int moeilijkheid)
+        public string Convert(int difficulty)
         {
             // Directly convert the moeilijkheid value to readable text
-            switch (moeilijkheid)
+            switch (difficulty)
             {
                 case 1:
                     return "Easy";

@@ -1,31 +1,31 @@
 ﻿namespace InEenNotendop.Data
 {
     // Custom class for songs
-    public class Nummer 
+    public class Song 
     {
         public string Title { get; set; }
-        public string Artiest { get; set; }
+        public string Artist { get; set; }
         public int FullTime { get; set; }
         public int Bpm { get; set; }
-        public int Moeilijkheid { get; set; }
+        public int Difficulty { get; set; }
         public int Id { get; set; }
         public string Filepath { get; set; }
         public int Score { get; set; }
         public string ConvertedTime { get; set; }
-        public string ConvertedMoeilijkheid { get; set; }
+        public string ConvertedDifficulty { get; set; }
 
-        public Nummer(string title, string artiest, int fulltime, int bpm, int moeilijkheid, int id, string filepath, int score, string convertedTime, string convertedMoeilijkheid)
+        public Song(string title, string artist, int fulltime, int bpm, int difficulty, int id, string filepath, int score, string convertedTime, string convertedDifficulty)
         {
             Title = title;
-            Artiest = artiest;
+            Artist = artist;
             FullTime = fulltime;
             Bpm = bpm;
-            Moeilijkheid = moeilijkheid;
+            Difficulty = difficulty;
             Id = id;
             Filepath = filepath;
             Score = score;
             ConvertedTime = convertedTime;
-            ConvertedMoeilijkheid = convertedMoeilijkheid;
+            ConvertedDifficulty = convertedDifficulty;
         }
     }
 }

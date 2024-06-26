@@ -48,7 +48,7 @@ namespace InEenNotendop.UI
         // Code to process save button
         private async void SaveButton_Click(object sender, RoutedEventArgs e) 
         {
-            int diffecultyCheckbox = 1;
+            int difficultyCheckbox = 1;
             string myText = ImportName.Text;
             var checkedValue = "Easy";
             string songName = "";
@@ -62,13 +62,13 @@ namespace InEenNotendop.UI
                 switch (checkedValue)
                 {
                     case string x when x.StartsWith("Easy"):
-                        diffecultyCheckbox = 1;
+                        difficultyCheckbox = 1;
                         break;
                     case string x when x.StartsWith("Medium"):
-                        diffecultyCheckbox = 2;
+                        difficultyCheckbox = 2;
                         break;
                     case string x when x.StartsWith("Hard"):
-                        diffecultyCheckbox = 3;
+                        difficultyCheckbox = 3;
                         break;
                 }
             }
@@ -106,7 +106,7 @@ namespace InEenNotendop.UI
                 int bpm = GetStartTempo(_filePath);
                 string filepath = @"..\..\..\Resources\Song\" + songArtist + " - " + songName + ".mid";
 
-                _sqlDataAccess.UploadSongToDataBase(songName, songArtist, songLength, bpm, diffecultyCheckbox, filepath);
+                _sqlDataAccess.UploadSongToDataBase(songName, songArtist, songLength, bpm, difficultyCheckbox, filepath);
                 _midiDataAccess.UploadSongToServer(songName, songArtist, _filePath);
 
                 MessageBox.Show("Upload success!");

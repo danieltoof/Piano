@@ -13,17 +13,17 @@ namespace InEenNotendop.UI
         private SqlDataAccess _sqlDataAccess = new();
         private MidiDataAccess _midiDataAccess = new();
         private string _filePath;
-        private int _nummerId;
+        private int _songId;
         private int _currentScore;
-        public SelectingWindow(int nummerId, string moeilijkheidText, string title, string artiest, int lengte, int bpm, string filePath, string convertedTime, object sender, int currentScore)
+        public SelectingWindow(int songId, string difficultyText, string title, string artist, int length, int bpm, string filePath, string convertedTime, object sender, int currentScore)
         {
             InitializeComponent();
             _songsWindow = (SongsWindow)sender;
             Owner = _songsWindow;
             this._filePath = filePath;
-            DataContext = new NummerDetailsViewModel(nummerId, moeilijkheidText, title, artiest, lengte, bpm, convertedTime, currentScore);
-            FillDataGrid(nummerId);
-            this._nummerId = nummerId;
+            DataContext = new NummerDetailsViewModel(songId, difficultyText, title, artist, length, bpm, convertedTime, currentScore);
+            FillDataGrid(songId);
+            this._songId = songId;
             this._currentScore = currentScore;
         }
 
@@ -31,21 +31,21 @@ namespace InEenNotendop.UI
         public class NummerDetailsViewModel 
         {
             public string NummerIdText { get; }
-            public string MoeilijkheidText { get; }
+            public string DifficultyText { get; }
             public string Title { get; }
-            public string Artiest { get; }
-            public int Lengte { get; }
+            public string Artist { get; }
+            public int Length { get; }
             public int Bpm { get; }
             public string ConvertedTime { get; }
             public int CurrentScore {get; }
 
-            public NummerDetailsViewModel(int nummerId, string moeilijkheidText, string title, string artiest, int lengte, int bpm, string convertedTime, int currentScore)
+            public NummerDetailsViewModel(int nummerId, string difficultyText, string title, string artist, int length, int bpm, string convertedTime, int currentScore)
             {
                 NummerIdText = $"Clicked on Nummer with ID: {nummerId}";
-                MoeilijkheidText = $"Difficulty: {moeilijkheidText}";
+                DifficultyText = $"Difficulty: {difficultyText}";
                 Title = title;
-                Artiest = artiest;
-                Lengte = lengte;
+                Artist = artist;
+                Length = length;
                 Bpm = bpm;
                 ConvertedTime = convertedTime;
                 CurrentScore = currentScore;
@@ -55,7 +55,7 @@ namespace InEenNotendop.UI
         private void PLAY_Button_OnClick(object sender, RoutedEventArgs e)
         {
 
-            MidiPlayWindow midiPlayWindow = new MidiPlayWindow(_filePath, this, false, _nummerId, _songsWindow, _currentScore);
+            MidiPlayWindow midiPlayWindow = new MidiPlayWindow(_filePath, this, false, _songId, _songsWindow, _currentScore);
             Owner.Hide();
 
             midiPlayWindow.Show();
@@ -64,7 +64,7 @@ namespace InEenNotendop.UI
         private void AUTOPLAY_Button_OnClick(object sender, RoutedEventArgs e)
         {
 
-            MidiPlayWindow midiPlayWindow = new MidiPlayWindow(_filePath, this, true, _nummerId, _songsWindow, _currentScore);
+            MidiPlayWindow midiPlayWindow = new MidiPlayWindow(_filePath, this, true, _songId, _songsWindow, _currentScore);
 
             //SongsWindow songsWindow = SongsWindow();
             Owner.Hide();
@@ -77,7 +77,7 @@ namespace InEenNotendop.UI
         {
             var viewModel = DataContext as NummerDetailsViewModel;
 
-            _midiDataAccess.DownloadSong(viewModel.Artiest,viewModel.Title);  
+            _midiDataAccess.DownloadSong(viewModel.Artist,viewModel.Title);  
         }
 
         private void FillDataGrid(int nummerId)

@@ -44,9 +44,9 @@ namespace InEenNotendop.UI
         private const double _timerInterval = 10; // in MS, hoe lager des te accurater de de code checkt wanneer een blok gegenereerd een een note gespeeld moet worden, maar kan meer performance beïnvloeden
         private double _fallingDuration;
 
-        public MidiPlayWindow(string filePath, object sender, bool playMidiFile, int nummerId, SongsWindow? songsWindow, int currentScore)
+        public MidiPlayWindow(string filePath, object sender, bool playMidiFile, int songId, SongsWindow? songsWindow, int currentScore)
         {
-            _nummerId = nummerId;
+            _nummerId = songId;
             SongsWindow = songsWindow;
             _playMidiFile = playMidiFile;
             _currentScore = currentScore;
