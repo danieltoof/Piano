@@ -16,6 +16,7 @@
 
 
     <DockPanel Margin="0,0,0,0">
+
         <Grid x:Name="NotesGrid" DockPanel.Dock="Top" Height="1194" MaxHeight="1200" ShowGridLines="True" Margin="0,-600,0,0">
 
             <Grid.ColumnDefinitions>
@@ -118,7 +119,32 @@
                 <ColumnDefinition Width="18*" />
                 <!-- C5 -->
             </Grid.ColumnDefinitions>
-            <Canvas Name="AnimationCanvas" Grid.ColumnSpan="49" Background="Transparent" />
+            <Canvas Name="AnimationCanvas" Grid.ColumnSpan="49" Background="Transparent">
+                <TextBlock x:Name="NoMidiInText"
+               Canvas.Top="700"
+                           Canvas.Left="200"
+                           VerticalAlignment="Bottom"
+                HorizontalAlignment="Center"
+               Text="No or incorrect midi device detected. Please ensure Nektar Impact GX49 is connected" 
+               FontSize="24" 
+               FontWeight="Bold" 
+               Foreground="Red" 
+               Visibility="Hidden"
+               Panel.ZIndex="100">
+                    <TextBlock.Triggers>
+                        <EventTrigger RoutedEvent="TextBlock.Loaded">
+                            <BeginStoryboard x:Name="BlinkingStoryboard">
+                                <Storyboard RepeatBehavior="Forever">
+                                    <ColorAnimation 
+                    Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)"
+                    From="Red" To="Transparent" Duration="0:0:1"
+                    AutoReverse="True"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </TextBlock.Triggers>
+                </TextBlock>
+            </Canvas>
         </Grid>
         <Grid x:Name="PianoGrid" DockPanel.Dock="Bottom" MaxHeight="140"  Background="Black" Panel.ZIndex="1">
 
@@ -804,5 +830,6 @@
 
 
         </Grid>
+
     </DockPanel>
 </Window>

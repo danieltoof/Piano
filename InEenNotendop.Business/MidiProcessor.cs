@@ -31,13 +31,11 @@ namespace InEenNotendop.Business
         public delegate void SongFinishedEventHandler(object sender);
         public event SongFinishedEventHandler SongFinished;
 
-        public delegate void MidiDeviceNotFoundHandler(object sender);
-        public event MidiDeviceNotFoundHandler MidiDeviceNotFound;
+        public event Action MidiDeviceNotFound;
 
         //Constructor
         public MidiProcessor(object Owner, MidiFile midiFile)
         {
-            InitializeMidi("Microsoft GS Wavetable Synth");
             Stopwatch = new Stopwatch();
             Stopwatch.Start();
             _startTime = DateTime.Now;
@@ -99,7 +97,7 @@ namespace InEenNotendop.Business
             SongFinished?.Invoke(this);
         }
 
-        private void InitializeMidi(string desiredOutDevice)
+        public void InitializeMidi(string desiredOutDevice)
         {
             MidiPlayer = new MidiPlayer(desiredOutDevice, this);
 
@@ -117,14 +115,21 @@ namespace InEenNotendop.Business
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine($"Error: {ex.Message}");
+                    Debug.WriteLine($"Error initializing MIDI device: {ex.Message}");
+                    OnMidiDeviceNotFound();
                 }
-
             }
             else
             {
-                throw new Exception($"Device with desired device index {deviceIndex} not found");
+                Debug.WriteLine("MIDI device not found");
+                OnMidiDeviceNotFound();
             }
+        }
+
+        protected virtual void OnMidiDeviceNotFound()
+        {
+            Debug.WriteLine("Raising MidiDeviceNotFound event");
+            MidiDeviceNotFound?.Invoke();
         }
     }
 }
