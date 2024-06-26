@@ -16,10 +16,10 @@ namespace InEenNotendop.UI
     {
         private string _filePath;
         private string _fileName;
-        private int _lightmode;
+        private bool _lightmode;
         private SqlDataAccess _sqlDataAccess = new();
         private MidiDataAccess _midiDataAccess = new();
-        public ImportWindow(int lightmodeImport)
+        public ImportWindow(bool lightmodeImport)
         {
             InitializeComponent();
             _lightmode = lightmodeImport;
@@ -188,11 +188,11 @@ namespace InEenNotendop.UI
 
         private void CheckDarkOrLight() // Checks lightmode value and changes between dark- and lightmode
         {
-            if (_lightmode == 1)
+            if (_lightmode)
             {
                 SetLightMode();
             }
-            else if (_lightmode == 0)
+            else
             {
                 SetDarkMode();
             }
