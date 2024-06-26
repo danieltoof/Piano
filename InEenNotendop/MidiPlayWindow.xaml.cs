@@ -41,7 +41,9 @@ namespace InEenNotendop.UI
         private DispatcherTimer _timer;
         private const double _noteHeightPerSecond = 200; // Eenheid voor hoogte blok per seconde
         private const double _fallingSpeed = 200.0; // Speed of falling blocks in units per second
-        private const double _timerInterval = 10; // in MS, hoe lager des te accurater de de code checkt wanneer een blok gegenereerd een een note gespeeld moet worden, maar kan meer performance beïnvloeden
+        private const double _timerInterval = 16; // in ms, hoe lager des te accurater de de code checkt wanneer een
+                                                  // blok gegenereerd een een note gespeeld moet worden, maar kan meer performance beïnvloeden
+                                                  //16ms komt ongeveer overeen met 60fps
         private double _fallingDuration;
 
         public MidiPlayWindow(string filePath, object sender, bool playMidiFile, int nummerId, SongsWindow? songsWindow, int currentScore)
@@ -54,8 +56,8 @@ namespace InEenNotendop.UI
             try
             {
                 _midiProcessor = new MidiProcessor(this, new MidiFile(filePath));
-                _midiProcessor.NotePlayed += MidiProcessor_NotePlayed;
                 _midiProcessor.MidiDeviceNotFound += MidiProcessor_MidiDeviceNotFound;
+                _midiProcessor.NotePlayed += MidiProcessor_NotePlayed;
             }
             catch (FileNotFoundException e)
             {
@@ -75,6 +77,7 @@ namespace InEenNotendop.UI
 
 
             InitializeComponent();
+            _midiProcessor?.InitializeMidi("Microsoft GS Wavetable Synth");
 
 
             #region mapping midi notes to the buttons
@@ -153,9 +156,14 @@ namespace InEenNotendop.UI
             public Brush ButtonColor { get; set; } = brush;
         }
 
-        private void MidiProcessor_MidiDeviceNotFound(object sender)
+        private void MidiProcessor_MidiDeviceNotFound()
         {
-            MessageBox.Show("Invalid MIDI device index or no devices found.");
+            Debug.WriteLine("MidiDeviceNotFound event received in MidiPlayWindow");
+            Dispatcher.Invoke(() =>
+            {
+                NoMidiInText.Visibility = Visibility.Visible;
+                Debug.WriteLine("NoMidiInText visibility set to Visible");
+            });
         }
 
         private void MidiProcessor_NotePlayed(object sender, NotePlayedEventArgs e)
