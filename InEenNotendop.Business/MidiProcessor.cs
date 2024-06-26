@@ -95,8 +95,8 @@ namespace InEenNotendop.Business
             }
         }
 
-            //Voor event wanneer nummer klaar is
-            public void OnSongFinished()
+        //Voor event wanneer nummer klaar is
+        public void OnSongFinished()
         {
             Score = ScoreCalculator.CalculateScore(SongForNotePlayback, _songPlayed);
             this.Dispose();
