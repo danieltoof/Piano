@@ -245,7 +245,7 @@ namespace InEenNotendop.UI
                 try
                 {
                     // als window afgesloten wordt moet midiin en midiout devic disposed worden anders kunnen ze bij herstarten niet geopend worden (already open exception)
-                    _midiProcessor.Dispose();
+                    _midiProcessor?.Dispose();
                 }
                 catch (NullReferenceException ex)
                 {
