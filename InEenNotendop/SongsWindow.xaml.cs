@@ -39,7 +39,7 @@ namespace InEenNotendop.UI
 
         }
 
-        // Updates the song list so the new score is shown, also keeps the selected filter
+        // Updates the song list so the new score is shown, also keeps the selected filter.
         protected override void OnActivated(EventArgs e)
         {
             base.OnActivated(e);
@@ -59,7 +59,7 @@ namespace InEenNotendop.UI
 
         private void MenuToggleButton_OnClick(object sender, RoutedEventArgs e)
         {
-            // Toggle visibility of the MenuPanel
+            // Toggle visibility of the MenuPanel.
             if (MenuPanel.Visibility == Visibility.Visible)
             {
                 MenuPanel.Visibility = Visibility.Collapsed;
@@ -75,7 +75,7 @@ namespace InEenNotendop.UI
             SettingsWindow.OpenSettings();
         }
 
-        // Creates pop-up window with detailed song information
+        // Creates pop-up window with detailed song information.
         private void OnNumberClicked(object sender, MouseButtonEventArgs e) 
         {
             if (sender is FrameworkElement clickedElement)
@@ -102,7 +102,7 @@ namespace InEenNotendop.UI
         }
 
 
-        // Opens window to import song and refreshes list
+        // Opens window to import song and refreshes list.
         private void ImportButton_OnClick(object sender, RoutedEventArgs e) 
         {
             _lightmodeImport = SettingsWindow.Lightmode;
@@ -111,7 +111,7 @@ namespace InEenNotendop.UI
             Song.ItemsSource = _sqlDataAccess.MakeDefaultList();
         }
 
-        // Changes list to filtered list
+        // Changes list to filtered list.
         private void FilterBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e) 
         {
             string filter = (sender as System.Windows.Controls.ComboBox).SelectedItem as string;
@@ -140,7 +140,7 @@ namespace InEenNotendop.UI
             }
         }
 
-        // Changes list to be sorted by chosen sorting method
+        // Changes list to be sorted by chosen sorting method.
         private void SortBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e) 
         {
             string sort = (sender as System.Windows.Controls.ComboBox).SelectedItem as string;
@@ -163,7 +163,7 @@ namespace InEenNotendop.UI
             Song.ItemsSource = _sqlDataAccess.MakeSortedList(_difficulty, completeSort);
         }
 
-        // Goes back to main menu
+        // Goes back to main menu.
         private void BackButton_OnClick(object sender, RoutedEventArgs e) 
         {
             SettingsWindow.MainMenu();

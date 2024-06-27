@@ -54,6 +54,7 @@ namespace InEenNotendop
             Close();
         }
 
+        // Exits program and closes the ssh tunnel
         private void ExitButton_OnClick(object sender, RoutedEventArgs e)
         {
             _sshScript.StopSshTunnel();
