@@ -30,7 +30,7 @@ namespace InEenNotendop.UI
         // Class and constructor for detailed song screen
         public class NummerDetailsViewModel 
         {
-            public string NummerIdText { get; }
+            public string SongIdText { get; }
             public string DifficultyText { get; }
             public string Title { get; }
             public string Artist { get; }
@@ -39,9 +39,9 @@ namespace InEenNotendop.UI
             public string ConvertedTime { get; }
             public int CurrentScore {get; }
 
-            public NummerDetailsViewModel(int nummerId, string difficultyText, string title, string artist, int length, int bpm, string convertedTime, int currentScore)
+            public NummerDetailsViewModel(int songId, string difficultyText, string title, string artist, int length, int bpm, string convertedTime, int currentScore)
             {
-                NummerIdText = $"Clicked on Nummer with ID: {nummerId}";
+                SongIdText = $"Clicked on Nummer with ID: {songId}";
                 DifficultyText = $"Difficulty: {difficultyText}";
                 Title = title;
                 Artist = artist;
@@ -80,9 +80,9 @@ namespace InEenNotendop.UI
             _midiDataAccess.DownloadSong(viewModel.Artist,viewModel.Title);  
         }
 
-        private void FillDataGrid(int nummerId)
+        private void FillDataGrid(int songId)
         {
-            HighScoresGrid.ItemsSource = _sqlDataAccess.GetDataForGrid(nummerId);
+            HighScoresGrid.ItemsSource = _sqlDataAccess.GetDataForGrid(songId);
         }
     }
 }

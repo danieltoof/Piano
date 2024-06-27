@@ -28,7 +28,7 @@ namespace InEenNotendop.UI
         private MidiProcessor _midiProcessor;
         private TimeSpan _endLastNote;
         private SqlDataAccess _sqlDataAccess = new();
-        private int _nummerId;
+        private int _songId;
 
         private Brush _noteHitBrush = Brushes.IndianRed; // Wanneer key wordt aangeslagen
         private Brush _whiteKeysBrush = Brushes.WhiteSmoke;
@@ -48,7 +48,7 @@ namespace InEenNotendop.UI
 
         public MidiPlayWindow(string filePath, object sender, bool playMidiFile, int songId, SongsWindow? songsWindow, int currentScore)
         {
-            _nummerId = songId;
+            _songId = songId;
             SongsWindow = songsWindow;
             _playMidiFile = playMidiFile;
             _currentScore = currentScore;
@@ -231,7 +231,7 @@ namespace InEenNotendop.UI
             _midiProcessor.Name = Interaction.InputBox("Please enter your name:\nLeave empty or cancel to discard score", "Enter Name ",  "").Trim();
             if (_midiProcessor.Name.Length > 0)
             {
-                _sqlDataAccess.ChangeHighscore(_nummerId, (int)_midiProcessor.Score, _currentScore, _midiProcessor.Name);
+                _sqlDataAccess.ChangeHighscore(_songId, (int)_midiProcessor.Score, _currentScore, _midiProcessor.Name);
             }
             MessageBox.Show($"Score : {_midiProcessor.Score}");
             SongsWindow.SongIsFinished = true;

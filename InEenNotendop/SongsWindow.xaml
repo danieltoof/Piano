@@ -37,7 +37,7 @@
         <Grid Margin="49,150,250,125" Grid.Column="2" Grid.RowSpan="3">
 
             <ScrollViewer VerticalScrollBarVisibility="Hidden">
-                <ItemsControl Name="Nummer">
+                <ItemsControl Name="Song">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Grid Margin="0,0,0,10" >
