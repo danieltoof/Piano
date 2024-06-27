@@ -47,7 +47,7 @@ namespace InEenNotendop.UI
                 var song = clickedElement.DataContext as Song;
                 if (song != null)
                 {
-                    int nummerId = song.Id;
+                    int songId = song.Id;
                     String title = song.Title;
                     String artist = song.Artist;
                     int fullTime = song.FullTime;
@@ -60,6 +60,7 @@ namespace InEenNotendop.UI
                     string name = song.Name;
 
                     HighscoreDetail detailsWindow = new HighscoreDetail(nummerId, difficultyText, title, artist,  convertedTime, this, name);
+
                     detailsWindow.Owner = this;
                     detailsWindow.ShowDialog();
                 }

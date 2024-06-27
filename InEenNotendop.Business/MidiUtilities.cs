@@ -6,50 +6,50 @@ namespace InEenNotendop.Business
     {
         public static TimeSpan GetTimeSpanFromMidiTicks(int ticks, int ticksPerQuarterNote, int microsecondsPerQuarterNote)
         {
-            // Microseconden naar milliseconden
+            // Microseconds to milliseconds
             double millisecondsPerQuarterNote = microsecondsPerQuarterNote / 1000.0;
-            // Milliseconden per tick berekenen
+            // Calculate milliseconds per tick
             double millisecondsPerTick = millisecondsPerQuarterNote / ticksPerQuarterNote;
-            // Ticks naar Milliseconden
+            // Ticks to Milliseconds
             double totalMilliseconds = ticks * millisecondsPerTick;
-            // Milliseconden naar TimeSpan
+            // Milliseconds to TimeSpan
             return TimeSpan.FromMilliseconds(totalMilliseconds);
         }
 
         public static int GetMidiBpm(MidiFile midiFile)
         {
-            double tempo = 120; // dit is standaard tempo als er geen tempoEvent is gevonden
+            double tempo = 120; // this is the default tempo if there is no tempoEvent
             foreach (var track in midiFile.Events)
             {
                 foreach (var midiEvent in track)
                 {
                     if (midiEvent.CommandCode == MidiCommandCode.MetaEvent)
                     {
-                        //zoeken naar tempoevent waar BPM in zit
+                        //look for temepoevent that has BPM
                         var metaEvent = midiEvent as MetaEvent;
                         if (metaEvent.MetaEventType == MetaEventType.SetTempo)
                         {
                             var tempoEvent = (TempoEvent)metaEvent;
-                            tempo = tempoEvent.Tempo; // Zodra een tempo event gevonden is waarde returnen
+                            tempo = tempoEvent.Tempo; // Return value when tempo event is found
                             return (int)Math.Round(tempo);
                         }
                     }
                 }
             }
-            // Als geen waarde is gevonden standaard BPM (120 returnen)
+            // If no value is found return default BPM (return 120)
             return (int)Math.Round(tempo);
         }
 
         public static TimeSpan GetSongLength(MidiFile midiFile)
         {
-            // eerst BPM ophalen
+            // first get BPM
             int bpm = GetMidiBpm(midiFile);
 
             // init waarde = 0
             long totalTime = 0;
 
-            // Daarna gaan we van elke midi event kijken wanneer deze plaats vindt. 
-            // de laatst voorkomende tijd wordt gebruikt om lengte te berekenen
+            // Then we look at every midi event when they take place.
+            // the last occuring time gets used to calculate length
             foreach (var track in midiFile.Events)
             {
                 foreach (var midiEvent in track)
@@ -60,7 +60,7 @@ namespace InEenNotendop.Business
                     }
                 }
             }
-            // nu gaan we eerder gedefinieerde functie gebruiken om een timespan te maken
+            // now we use the predefined function to make a timespan
             TimeSpan timeSpanMidiFile = GetTimeSpanFromMidiTicks((int)totalTime, midiFile.DeltaTicksPerQuarterNote, 60000000 / bpm);
             return timeSpanMidiFile;
         }
