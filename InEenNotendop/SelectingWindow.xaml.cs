@@ -21,14 +21,14 @@ namespace InEenNotendop.UI
             _songsWindow = (SongsWindow)sender;
             Owner = _songsWindow;
             this._filePath = filePath;
-            DataContext = new SongDetailsViewModel(songId, difficultyText, title, artist, length, bpm, convertedTime, currentScore);
+            DataContext = new NummerDetailsViewModel(songId, difficultyText, title, artist, length, bpm, convertedTime, currentScore);
             FillDataGrid(songId);
             this._songId = songId;
             this._currentScore = currentScore;
         }
 
         // Class and constructor for detailed song screen
-        public class SongDetailsViewModel 
+        public class NummerDetailsViewModel 
         {
             public string SongIdText { get; }
             public string DifficultyText { get; }
@@ -38,7 +38,6 @@ namespace InEenNotendop.UI
             public int Bpm { get; }
             public string ConvertedTime { get; }
             public int CurrentScore {get; }
-
 
             public NummerDetailsViewModel(int songId, string difficultyText, string title, string artist, int length, int bpm, string convertedTime, int currentScore)
             {
@@ -75,16 +74,14 @@ namespace InEenNotendop.UI
 
         private void Download_Button_OnClick(object sender, RoutedEventArgs e)
         {
-            var viewModel = DataContext as SongDetailsViewModel;
+            var viewModel = DataContext as NummerDetailsViewModel;
 
             _midiDataAccess.DownloadSong(viewModel.Artist,viewModel.Title);  
         }
 
         private void FillDataGrid(int songId)
         {
-            HighScoresGrid.ItemsSource = _sqlDataAccess.GetDataForGrid(nummerId, 5);
-
+            HighScoresGrid.ItemsSource = _sqlDataAccess.GetDataForGrid(songId);
         }
-
     }
 }
