@@ -113,7 +113,7 @@ namespace InEenNotendop.UI
                 await Task.Delay(1000);
                 Close();
             }
-            else
+            else // Pop-up with missing inputs
             {
                 string msg = messageName + Environment.NewLine + messageArtist + Environment.NewLine + messageFile;
                 MessageBox.Show(msg);
@@ -122,16 +122,16 @@ namespace InEenNotendop.UI
 
         static int GetLength(string midiFileName)
         {
-            // check of bestandsnaam opgegeven is
+            // Checks if a filename has been given
             if (!midiFileName.EndsWith(".mid"))
             {
-                //voeg bestandsnaam toe aan string
+                //Adds file extention to name
                 midiFileName = midiFileName + ".mid";
             }
            
             try
             {
-                // inladen midi
+                // Load the midi
                 MidiFile midiFile = new MidiFile(midiFileName);
                
                 return (int)MidiUtilities.GetSongLength(midiFile).TotalSeconds;
@@ -144,6 +144,7 @@ namespace InEenNotendop.UI
             return 0;
         }
 
+        // Gets and returns songs bpm
         static int GetStartTempo(string midiFileName)
         {
             try
@@ -163,7 +164,9 @@ namespace InEenNotendop.UI
                 return 0;
             }
         }
-        private static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject // Code to process the finding of the value from the radio button
+
+        // Code to process the finding of the value from the radio button
+        private static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject 
         {
             if (depObj != null)
             {
@@ -186,7 +189,8 @@ namespace InEenNotendop.UI
             }
         }
 
-        private void CheckDarkOrLight() // Checks lightmode value and changes between dark- and lightmode
+        // Checks lightmode value and changes between dark- and lightmode
+        private void CheckDarkOrLight() 
         {
             if (_lightmode)
             {

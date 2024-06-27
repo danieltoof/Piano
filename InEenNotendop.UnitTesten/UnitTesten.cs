@@ -15,7 +15,7 @@ namespace InEenNotendop.UnitTesten
         [TestInitialize]
         public void Setup()
         {
-            // Arrange: Initialize the MoeilijkheidConverter instance
+            // Arrange: Initialize the DifficultyConverter instance
             _difficultyConverter = new DifficultyConverter();
         }
 

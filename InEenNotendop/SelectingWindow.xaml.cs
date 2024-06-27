@@ -66,7 +66,6 @@ namespace InEenNotendop.UI
 
             MidiPlayWindow midiPlayWindow = new MidiPlayWindow(_filePath, this, true, _songId, _songsWindow, _currentScore);
 
-            //SongsWindow songsWindow = SongsWindow();
             Owner.Hide();
             midiPlayWindow.Show();
             Close();

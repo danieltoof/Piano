@@ -46,7 +46,7 @@ namespace InEenNotendop.UI
             Owner.Closing += Owner_Closing;
         }
 
-        // Makes sure settings window is closed when application is closed
+        // Makes sure settings window is closed when application is closed.
         private void Owner_Closing(object? sender, CancelEventArgs e) 
         {
             if (sender.Equals(Owner))
@@ -56,7 +56,7 @@ namespace InEenNotendop.UI
             }
         }
 
-        // Makes sure settings window is not closed when not needed
+        // Makes sure settings window is not closed when not needed.
         protected override void OnClosing(CancelEventArgs e) 
         {
             if (_isOkToClose != 1)
@@ -71,10 +71,10 @@ namespace InEenNotendop.UI
             }
         }
 
-        // Opens settings window
+        // Opens settings window.
         public void OpenSettings() 
         {
-            // Makes sure main menu button is not visible when on main menu
+            // Makes sure main menu button is not visible when on main menu.
             if (Owner is MainWindow) 
             {
                 MainMenuButton.Visibility = Visibility.Hidden;
@@ -85,7 +85,7 @@ namespace InEenNotendop.UI
             ShowDialog();
         }
 
-        // Changes owner of settings window when switching between main menu and songs window
+        // Changes owner of settings window when switching between main menu and songs window.
         public void ChangeSettingsOwner(object sender) 
         {
             Owner.Closing -= Owner_Closing;
@@ -114,14 +114,14 @@ namespace InEenNotendop.UI
             }
         }
 
-        // Gets the lightmode value of its current owner
+        // Gets the lightmode value of its current owner.
         private void DarkOrLightMode_OnClick(object sender, RoutedEventArgs e)
         {
             Lightmode = !Lightmode;
             CheckDarkOrLight(Owner);
         }
 
-        // Checks lightmode value, and switches between dark- and lightmode
+        // Checks lightmode value, and switches between dark- and lightmode.
         public void CheckDarkOrLight(object sender) 
         {
             if (Lightmode)
@@ -134,10 +134,10 @@ namespace InEenNotendop.UI
             }
         }
 
-        // Code to change application to light mode
+        // Code to change application to light mode.
         public void SetLightMode(object sender) 
         {
-            // Makes sure the correct background is changed
+            // Makes sure the correct background is changed.
             switch (sender) 
             {
                 case MainWindow:
@@ -159,7 +159,7 @@ namespace InEenNotendop.UI
 
         public void SetDarkMode(object sender)
         {
-            // Makes sure the correct background is changed
+            // Makes sure the correct background is changed.
             switch (sender) 
             {
                 case MainWindow:
@@ -183,19 +183,19 @@ namespace InEenNotendop.UI
             return Lightmode;
         }
 
-        // Closes entire application when exit button is pressed
+        // Closes entire application when exit button is pressed.
         private void ExitButton_OnClick(object sender, RoutedEventArgs e) 
         {
             Environment.Exit(0);
         }
 
-        // Calls method to go back to main menu
+        // Calls method to go back to main menu.
         private void MainMenuButton_OnClick(object sender, RoutedEventArgs e) 
         {
             MainMenu();
         }
 
-        // Logic to go back to main menu
+        // Logic to go back to main menu.
         public void MainMenu() 
         {
             Window previousOwner = Owner;
