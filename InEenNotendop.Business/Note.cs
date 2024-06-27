@@ -12,7 +12,7 @@ namespace InEenNotendop.Business
         public bool IsBlockGenerated { get; set; } = false;
         public bool ScoreIsCalculated = false;
 
-        public Note(NoteOnEvent noteOnEvent, TimeSpan startTime) // voor midi input
+        public Note(NoteOnEvent noteOnEvent, TimeSpan startTime) // for midi input
         {
             NoteNumber = noteOnEvent.NoteNumber;
             NoteStartTime = startTime;
@@ -20,7 +20,7 @@ namespace InEenNotendop.Business
 
         }
 
-        public Note(int noteNumber, TimeSpan noteStartTime) // voor noot aanmaken zonder midi event
+        public Note(int noteNumber, TimeSpan noteStartTime) // for making note without midi event
         {
             NoteNumber = noteNumber;
             NoteStartTime = noteStartTime;

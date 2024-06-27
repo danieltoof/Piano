@@ -23,8 +23,8 @@ public static class ScoreCalculator
         }
 
 
-        // Per noot die in het nummer voorkomt gaan we de score berekenen van alle instance
-        // 
+        // We're gonna calculate the score of all instances for every note that occurs in the song 
+        //
 
         try
         {
@@ -53,15 +53,15 @@ public static class ScoreCalculator
 
     public static float GetNoteScoreFactor(TimeSpan note1TimeSpan, TimeSpan note2TimeSpan)
     {
-        // Berekenen hoe ver de 2 noten van elkaar af zitten
+        // Calculate how far apart the 2 notes are
         int deltaTimeMilliseconds = note1TimeSpan.Milliseconds - note2TimeSpan.Milliseconds;
-        // Als negatieve waarde is omzetten naar positieve waarde
+        // If negative value convert to positive value
         if (deltaTimeMilliseconds < 0) 
         {
             deltaTimeMilliseconds *= -1;
         }
 
-        // Dit zijn de marges
+        // These are the margins
         switch (deltaTimeMilliseconds)
         {
             case <= 20:
