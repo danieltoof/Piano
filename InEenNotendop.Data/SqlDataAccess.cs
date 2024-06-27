@@ -125,7 +125,7 @@ public class SqlDataAccess : IDatabaseInterface
     // Generic function used to prevent double code with filtering and sorting
     public List<Song> ListFunction(string sqlcommand)
     {
-        List<Song> nummers = new List<Song>();
+        List<Song> songs = new List<Song>();
 
         using (SqlConnection connection = new SqlConnection(ConfigClass.s_ConnectionString))
         {
@@ -158,14 +158,14 @@ public class SqlDataAccess : IDatabaseInterface
                         int score = reader.GetInt32(reader.GetOrdinal("Score"));
 
                         string convertedTime = _timeConverter.ToMinutesSeconds(length);
-                        Song nummer = new Song(title, artist, length, bpm, difficulty, id, filepath, score, convertedTime, convertedDifficulty);
-                        nummers.Add(nummer);
+                        Song song = new Song(title, artist, length, bpm, difficulty, id, filepath, score, convertedTime, convertedDifficulty);
+                        songs.Add(song);
                     }
                     connection.Close();
                 }
             }
         }
-        return nummers;
+        return songs;
     }
 
     // Default list method used on startup
