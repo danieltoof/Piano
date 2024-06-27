@@ -8,7 +8,7 @@ namespace InEenNotendop.UnitTesten
 {
     //testen van de moeilijkheidsgraad
     [TestClass]
-    public class MoeilijkheidTests
+    public class DifficultyTests
     {
         private DifficultyConverter _difficultyConverter;
 
