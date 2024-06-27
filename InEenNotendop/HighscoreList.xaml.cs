@@ -59,7 +59,7 @@ namespace InEenNotendop.UI
                     string difficultyText = difficultyConverter.Convert(song.Difficulty);
                     string name = song.Name;
 
-                    HighscoreDetail detailsWindow = new HighscoreDetail(nummerId, difficultyText, title, artist,  convertedTime, this, name);
+                    HighscoreDetail detailsWindow = new HighscoreDetail(songId, difficultyText, title, artist,  convertedTime, this, name);
 
                     detailsWindow.Owner = this;
                     detailsWindow.ShowDialog();

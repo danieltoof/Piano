@@ -225,6 +225,6 @@ namespace InEenNotendop.UI
             EasyButton.Foreground = Brushes.White;
             MediumButton.Foreground = Brushes.White;
             HardButton.Foreground = Brushes.White;
-        }*/
+        }
     }
 }

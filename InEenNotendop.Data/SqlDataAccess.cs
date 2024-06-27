@@ -173,7 +173,7 @@ public class SqlDataAccess : IDatabaseInterface
 
                         string convertedTime = _timeConverter.ToMinutesSeconds(length);
 
-                        Song song = new Song(title, artist, length, bpm, difficulty, id, filepath, score, convertedTime, convertedDifficulty);
+                        Song song = new Song(title, artist, length, bpm, difficulty, id, filepath, score, convertedTime, convertedDifficulty,"");
                         songs.Add(song);
                     }
                     connection.Close();
