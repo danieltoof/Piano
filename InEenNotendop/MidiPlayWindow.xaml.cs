@@ -249,13 +249,8 @@ namespace InEenNotendop.UI
             {
                 try
                 {
-<<<<<<< Updated upstream
-                    // als window afgesloten wordt moet midiin en midiout devic disposed worden anders kunnen ze bij herstarten niet geopend worden (already open exception)
-                    _midiProcessor?.Dispose();
-=======
                     // Dispose of midi processor or it wont open correctly when player starts another song
-                    _midiProcessor.Dispose();
->>>>>>> Stashed changes
+                    _midiProcessor?.Dispose();
                 }
                 catch (NullReferenceException ex)
                 {
