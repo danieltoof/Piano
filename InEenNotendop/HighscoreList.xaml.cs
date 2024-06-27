@@ -45,7 +45,7 @@ namespace InEenNotendop.UI
                 var song = clickedElement.DataContext as Song;
                 if (song != null)
                 {
-                    int nummerId = song.Id;
+                    int songId = song.Id;
                     String title = song.Title;
                     String artist = song.Artist;
                     int fullTime = song.FullTime;
@@ -56,7 +56,7 @@ namespace InEenNotendop.UI
                     int currentScore = song.Score;
                     string difficultyText = difficultyConverter.Convert(song.Difficulty);
 
-                    SelectingWindow detailsWindow = new SelectingWindow(nummerId, difficultyText, title, artist, fullTime, bpm, filePath, convertedTime, this, currentScore);
+                    SelectingWindow detailsWindow = new SelectingWindow(songId, difficultyText, title, artist, fullTime, bpm, filePath, convertedTime, this, currentScore);
                     detailsWindow.Owner = this;
                     detailsWindow.ShowDialog();
                 }

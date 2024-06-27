@@ -34,7 +34,7 @@ namespace InEenNotendop.UI
             SortBox.Items.Add("Diff. ascending");
             SortBox.Items.Add("Diff. descending");
 
-            Nummer.ItemsSource = _sqlDataAccess.MakeDefaultList();
+            Song.ItemsSource = _sqlDataAccess.MakeDefaultList();
             SettingsWindow.CheckDarkOrLight(this);
 
         }
@@ -48,11 +48,11 @@ namespace InEenNotendop.UI
                 SongIsFinished = false;
                 if (_difficulty != 0)
                 {
-                    Nummer.ItemsSource = _sqlDataAccess.MakeFilteredList(_difficulty);
+                    Song.ItemsSource = _sqlDataAccess.MakeFilteredList(_difficulty);
                 }
                 else
                 {
-                    Nummer.ItemsSource = _sqlDataAccess.MakeDefaultList();
+                    Song.ItemsSource = _sqlDataAccess.MakeDefaultList();
                 }
             }
         }
@@ -108,7 +108,7 @@ namespace InEenNotendop.UI
             _lightmodeImport = SettingsWindow.Lightmode;
             ImportWindow import = new ImportWindow(_lightmodeImport);
             import.ShowDialog();
-            Nummer.ItemsSource = _sqlDataAccess.MakeDefaultList();
+            Song.ItemsSource = _sqlDataAccess.MakeDefaultList();
         }
 
         // Changes list to filtered list
@@ -132,11 +132,11 @@ namespace InEenNotendop.UI
             }
             if (_difficulty != 0)
             {
-                Nummer.ItemsSource = _sqlDataAccess.MakeFilteredList(_difficulty);
+                Song.ItemsSource = _sqlDataAccess.MakeFilteredList(_difficulty);
             }
             else
             {
-                Nummer.ItemsSource = _sqlDataAccess.MakeDefaultList();
+                Song.ItemsSource = _sqlDataAccess.MakeDefaultList();
             }
         }
 
@@ -160,7 +160,7 @@ namespace InEenNotendop.UI
                     completeSort = "Moeilijkheid DESC";
                     break;
             }
-            Nummer.ItemsSource = _sqlDataAccess.MakeSortedList(_difficulty, completeSort);
+            Song.ItemsSource = _sqlDataAccess.MakeSortedList(_difficulty, completeSort);
         }
 
         // Goes back to main menu
