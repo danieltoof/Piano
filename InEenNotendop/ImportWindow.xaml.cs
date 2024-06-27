@@ -23,7 +23,6 @@ namespace InEenNotendop.UI
         {
             InitializeComponent();
             _lightmode = lightmodeImport;
-            CheckDarkOrLight();
         }
 
         // Code to process selecting file
@@ -189,6 +188,7 @@ namespace InEenNotendop.UI
             }
         }
 
+
         // Checks lightmode value and changes between dark- and lightmode
         private void CheckDarkOrLight() 
         {
@@ -225,6 +225,6 @@ namespace InEenNotendop.UI
             EasyButton.Foreground = Brushes.White;
             MediumButton.Foreground = Brushes.White;
             HardButton.Foreground = Brushes.White;
-        }
+        }*/
     }
 }
