@@ -7,7 +7,7 @@ namespace InEenNotendop.Business
         public List<Note> Notes { get; set; }
         public int MillisecondsDelayAdded { get; set; }
         
-        //Constructor voor object die input van user opslaat
+        //Constructor for object that saves input from user
         public NoteCollection()
         {
             Notes = [];
@@ -18,7 +18,7 @@ namespace InEenNotendop.Business
             Notes = notes;
         }
 
-        //Constructor voor object aangemaakt met een midi-bestand
+        //Constructor for object made with a midi-file
         public NoteCollection(MidiFile midiFile) 
         {
             Notes = MidiToListConverter.MidiToList(midiFile);

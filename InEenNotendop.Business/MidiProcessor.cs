@@ -20,11 +20,11 @@ namespace InEenNotendop.Business
 
         public MidiPlayer MidiPlayer;
         private MidiIn _midiIn;
-        public Stopwatch Stopwatch { get; set; } // Acurater dan DateTime.Now
+        public Stopwatch Stopwatch { get; set; } // More accurate than DateTime.Now
         private DateTime _startTime;
 
 
-        //Event voor wanneer noot gespeeld wordt
+        //Event for when a note gets played
         public delegate void NotePlayedEventHandler(object sender, NotePlayedEventArgs e);
         public event NotePlayedEventHandler NotePlayed;
 
@@ -50,7 +50,7 @@ namespace InEenNotendop.Business
 
         }
 
-        //Voor event wanneer midi input gedetecteerd wordt
+        //For event when midi input has to be detected
         private void MidiInMessageReceived(object? sender, MidiInMessageEventArgs e)
         {
             if (e.MidiEvent is NoteOnEvent noteOnEvent)
@@ -59,7 +59,7 @@ namespace InEenNotendop.Business
                 _songPlayed.AddNote(new Note(noteOnEvent, Stopwatch.Elapsed));
                 OnMidiInMessageReceived(new NotePlayedEventArgs(noteOnEvent.NoteNumber, true));
             }
-            // een noteevent wat geen noteonevent is is in dit geval altijd een event die een noot eindigt.
+            // a notevent that is not a noteonevent is in this case always an event that ends the note.
             else if (e.MidiEvent is NoteEvent noteEvent) 
             {
                 MidiPlayer.StopNote(noteEvent.NoteNumber);
@@ -95,7 +95,7 @@ namespace InEenNotendop.Business
             }
         }
 
-        //Voor event wanneer nummer klaar is
+        //For event when song is done
         public void OnSongFinished()
         {
             Score = ScoreCalculator.CalculateScore(SongForNotePlayback, _songPlayed);

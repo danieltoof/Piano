@@ -4,7 +4,7 @@
     {
         public string Convert(int difficulty)
         {
-            // Directly convert the moeilijkheid value to readable text
+            // Directly convert the difficulty value to readable text
             switch (difficulty)
             {
                 case 1:
