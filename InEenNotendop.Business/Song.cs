@@ -13,9 +13,8 @@
         public int Score { get; set; }
         public string ConvertedTime { get; set; }
         public string ConvertedDifficulty { get; set; }
-        public string Name { get; set; }
 
-        public Song(string title, string artist, int fulltime, int bpm, int difficulty, int id, string filepath, int score, string convertedTime, string convertedDifficulty, string name)
+        public Song(string title, string artist, int fulltime, int bpm, int difficulty, int id, string filepath, int score, string convertedTime, string convertedDifficulty)
         {
             Title = title;
             Artist = artist;
@@ -27,7 +26,6 @@
             Score = score;
             ConvertedTime = convertedTime;
             ConvertedDifficulty = convertedDifficulty;
-            Name = name;
         }
     }
 }
