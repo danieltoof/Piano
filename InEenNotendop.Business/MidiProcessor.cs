@@ -25,8 +25,8 @@ namespace InEenNotendop.Business
 
 
         //Event for when a note gets played
-        public delegate void NotePlayedEventHandler(object sender, NotePlayedEventArgs e);
-        public event NotePlayedEventHandler NotePlayed;
+        public delegate void NoteEventHandler(object sender, NotePlayedEventArgs e);
+        public event NoteEventHandler NoteEvent;
 
         public delegate void SongFinishedEventHandler(object sender);
         public event SongFinishedEventHandler SongFinished;
@@ -69,7 +69,7 @@ namespace InEenNotendop.Business
 
         protected virtual void OnMidiInMessageReceived(NotePlayedEventArgs e)
         {
-            NotePlayed?.Invoke(this, e);
+            NoteEvent?.Invoke(this, e);
         }
 
         public void Dispose()
