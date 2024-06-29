@@ -36,7 +36,7 @@ namespace InEenNotendop.UI
             SortBox.Items.Add("Diff. ascending");
             SortBox.Items.Add("Diff. descending");
 
-            Song.ItemsSource = _pianoHeroService.MakeDefaultList();
+            Song.ItemsSource = _pianoHeroService.DefaultSongsList();
             SettingsWindow.CheckDarkOrLight(this);
 
         }
@@ -50,11 +50,11 @@ namespace InEenNotendop.UI
                 SongIsFinished = false;
                 if (_difficulty != 0)
                 {
-                    Song.ItemsSource = _pianoHeroService.MakeFilteredList(_difficulty);
+                    Song.ItemsSource = _pianoHeroService.FilterSongsList(_difficulty);
                 }
                 else
                 {
-                    Song.ItemsSource = _pianoHeroService.MakeDefaultList();
+                    Song.ItemsSource = _pianoHeroService.DefaultSongsList();
                 }
             }
         }
@@ -110,7 +110,7 @@ namespace InEenNotendop.UI
             _lightmodeImport = SettingsWindow.Lightmode;
             ImportWindow import = new ImportWindow(_lightmodeImport);
             import.ShowDialog();
-            Song.ItemsSource = _pianoHeroService.MakeDefaultList();
+            Song.ItemsSource = _pianoHeroService.DefaultSongsList();
         }
 
         // Changes list to filtered list.
@@ -134,11 +134,11 @@ namespace InEenNotendop.UI
             }
             if (_difficulty != 0)
             {
-                Song.ItemsSource = _pianoHeroService.MakeFilteredList(_difficulty);
+                Song.ItemsSource = _pianoHeroService.FilterSongsList(_difficulty);
             }
             else
             {
-                Song.ItemsSource = _pianoHeroService.MakeDefaultList();
+                Song.ItemsSource = _pianoHeroService.DefaultSongsList();
             }
         }
 
@@ -162,7 +162,7 @@ namespace InEenNotendop.UI
                     completeSort = "Moeilijkheid DESC";
                     break;
             }
-            Song.ItemsSource = _pianoHeroService.MakeSortedList(_difficulty, completeSort);
+            Song.ItemsSource = _pianoHeroService.SortSongsList(_difficulty, completeSort);
         }
 
         // Goes back to main menu.

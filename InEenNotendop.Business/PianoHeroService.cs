@@ -31,17 +31,17 @@ public class PianoHeroService
         return _database.GetTopScores(nummerId, amount);
     }
 
-    public List<Song> MakeDefaultList()
+    public List<Song> DefaultSongsList()
     {
         return _database.MakeDefaultList();
     }
 
-    public List<Song> MakeSortedList(int difficulty, string sort)
+    public List<Song> SortSongsList(int difficulty, string sort)
     {
         return _database.MakeSortedList(difficulty, sort);
     }
 
-    public List<Song> MakeFilteredList(int difficulty)
+    public List<Song> FilterSongsList(int difficulty)
     {
         return _database.MakeFilteredList(difficulty);
     }
