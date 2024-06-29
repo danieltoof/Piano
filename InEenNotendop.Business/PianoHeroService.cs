@@ -31,7 +31,7 @@ public class PianoHeroService
         return _database.GetTopScores(nummerId, amount);
     }
 
-    public List<Song> DefaultSongsList()
+    public List<Song> CreateSongsList()
     {
         return _database.MakeDefaultList();
     }

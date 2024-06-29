@@ -36,7 +36,7 @@ namespace InEenNotendop.UI
             SortBox.Items.Add("Diff. ascending");
             SortBox.Items.Add("Diff. descending");
 
-            Song.ItemsSource = _pianoHeroService.DefaultSongsList();
+            Song.ItemsSource = _pianoHeroService.CreateSongsList();
             SettingsWindow.CheckDarkOrLight(this);
 
         }
@@ -54,7 +54,7 @@ namespace InEenNotendop.UI
                 }
                 else
                 {
-                    Song.ItemsSource = _pianoHeroService.DefaultSongsList();
+                    Song.ItemsSource = _pianoHeroService.CreateSongsList();
                 }
             }
         }
@@ -110,7 +110,7 @@ namespace InEenNotendop.UI
             _lightmodeImport = SettingsWindow.Lightmode;
             ImportWindow import = new ImportWindow(_lightmodeImport);
             import.ShowDialog();
-            Song.ItemsSource = _pianoHeroService.DefaultSongsList();
+            Song.ItemsSource = _pianoHeroService.CreateSongsList();
         }
 
         // Changes list to filtered list.
@@ -138,7 +138,7 @@ namespace InEenNotendop.UI
             }
             else
             {
-                Song.ItemsSource = _pianoHeroService.DefaultSongsList();
+                Song.ItemsSource = _pianoHeroService.CreateSongsList();
             }
         }
 
