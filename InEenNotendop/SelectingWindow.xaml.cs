@@ -21,14 +21,14 @@ namespace InEenNotendop.UI
             _songsWindow = (SongsWindow)sender;
             Owner = _songsWindow;
             this._filePath = filePath;
-            DataContext = new NummerDetailsViewModel(songId, difficultyText, title, artist, length, bpm, convertedTime, currentScore);
+            DataContext = new SongDetailsViewModel(songId, difficultyText, title, artist, length, bpm, convertedTime, currentScore);
             FillDataGrid(songId);
             this._songId = songId;
             this._currentScore = currentScore;
         }
 
         // Class and constructor for detailed song screen
-        public class NummerDetailsViewModel 
+        public class SongDetailsViewModel 
         {
             public string SongIdText { get; }
             public string DifficultyText { get; }
@@ -39,7 +39,8 @@ namespace InEenNotendop.UI
             public string ConvertedTime { get; }
             public int CurrentScore {get; }
 
-            public NummerDetailsViewModel(int songId, string difficultyText, string title, string artist, int length, int bpm, string convertedTime, int currentScore)
+
+            public SongDetailsViewModel(int songId, string difficultyText, string title, string artist, int length, int bpm, string convertedTime, int currentScore)
             {
                 SongIdText = $"Clicked on Nummer with ID: {songId}";
                 DifficultyText = $"Difficulty: {difficultyText}";
@@ -74,14 +75,15 @@ namespace InEenNotendop.UI
 
         private void Download_Button_OnClick(object sender, RoutedEventArgs e)
         {
-            var viewModel = DataContext as NummerDetailsViewModel;
+            var viewModel = DataContext as SongDetailsViewModel;
 
             _midiDataAccess.DownloadSong(viewModel.Artist,viewModel.Title);  
         }
 
         private void FillDataGrid(int songId)
         {
-            HighScoresGrid.ItemsSource = _sqlDataAccess.GetDataForGrid(songId);
+            HighScoresGrid.ItemsSource = _sqlDataAccess.GetDataForGrid(songId, 5);
+
         }
     }
 }

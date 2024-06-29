@@ -15,7 +15,7 @@ public class SqlDataAccess : IDatabaseInterface
     {
         if (!_sshTunnelStarted)
         {
-            StartProcess(FindDirectory("sshtunnel.ps1"));
+            ExecutePowershellScript(FindPowershellScript("sshtunnel.ps1"));
             _sshTunnelStarted = true;
         }
     }
@@ -23,12 +23,12 @@ public class SqlDataAccess : IDatabaseInterface
     // Stops the powershell script after program has shut down
     public void StopSshTunnel()
     {
-        StartProcess(FindDirectory("StopSshTunnel.ps1"));
+        ExecutePowershellScript(FindPowershellScript("StopSshTunnel.ps1"));
         _sshTunnelStarted = false;
     }
 
     // Method to find the powershell script
-    public string FindDirectory(string scriptFileName)
+    public string FindPowershellScript(string scriptFileName)
     {
         string currentDirectory = Directory.GetCurrentDirectory();
         string targetDirectory = "InEenNotendop";
@@ -46,7 +46,7 @@ public class SqlDataAccess : IDatabaseInterface
     }
 
     // Starts the powershell script to start/stop the ssh tunnel
-    public void StartProcess(string sshTunnelFile)
+    public void ExecutePowershellScript(string sshTunnelFile)
     {
         ProcessStartInfo psi = new ProcessStartInfo
         {
@@ -62,7 +62,7 @@ public class SqlDataAccess : IDatabaseInterface
     }
 
     // Method to upload information about the song to the database
-    public void UploadSongToDataBase(string name, string artist, int length, int bpm, int difficulty, string filepath)
+    public void SaveSongInfo(string name, string artist, int length, int bpm, int difficulty, string filepath)
     {
         using (SqlConnection connection = new SqlConnection(ConfigClass.s_ConnectionString))
         {
@@ -92,7 +92,7 @@ public class SqlDataAccess : IDatabaseInterface
     }
 
     // Code to change high-score after song completion
-    public void ChangeHighscore(int id, int score, int currentScore, string Name)
+    public void SaveHighscore(int id, int score, int currentScore, string Name)
     {
         using (SqlConnection connection = new SqlConnection(ConfigClass.s_ConnectionString))
         {
@@ -107,12 +107,26 @@ public class SqlDataAccess : IDatabaseInterface
     }
 
     // Gets the score of the selected song in SelectingWindow
-    public DataView GetDataForGrid(int nummerId)
+    public DataView GetAllDataForGrid(int nummerId)
     {
         string cmdString = string.Empty;
         using (SqlConnection con = new SqlConnection(ConfigClass.s_ConnectionString))
         {
-            cmdString = $"SELECT TOP 5 Score, Naam FROM Scores WHERE NummerID = '{nummerId}' AND Naam <> '' order by Score desc";
+            cmdString = $"SELECT Score, Naam FROM Scores WHERE NummerID = '{nummerId}' AND Naam <> '' order by Score desc";
+            SqlCommand cmd = new SqlCommand(cmdString, con);
+            SqlDataAdapter sda = new SqlDataAdapter(cmd);
+            DataTable dt = new DataTable();
+            sda.Fill(dt);
+
+            return dt.DefaultView;
+        }
+    }
+    public DataView GetDataForGrid(int nummerId, int amount)
+    {
+        string cmdString = string.Empty;
+        using (SqlConnection con = new SqlConnection(ConfigClass.s_ConnectionString))
+        {
+            cmdString = $"SELECT TOP {amount} Score, Naam FROM Scores WHERE NummerID = '{nummerId}' AND Naam <> '' order by Score desc";
             SqlCommand cmd = new SqlCommand(cmdString, con);
             SqlDataAdapter sda = new SqlDataAdapter(cmd);
             DataTable dt = new DataTable();
@@ -158,7 +172,8 @@ public class SqlDataAccess : IDatabaseInterface
                         int score = reader.GetInt32(reader.GetOrdinal("Score"));
 
                         string convertedTime = _timeConverter.ToMinutesSeconds(length);
-                        Song song = new Song(title, artist, length, bpm, difficulty, id, filepath, score, convertedTime, convertedDifficulty);
+
+                        Song song = new Song(title, artist, length, bpm, difficulty, id, filepath, score, convertedTime, convertedDifficulty,"");
                         songs.Add(song);
                     }
                     connection.Close();
@@ -168,6 +183,52 @@ public class SqlDataAccess : IDatabaseInterface
         return songs;
     }
 
+    // Gets all highscores in a List
+    public List<Song> HighscoreListFunction(string sqlcommand)
+    {
+        List<Song> nummers = new List<Song>();
+
+        using (SqlConnection connection = new SqlConnection(ConfigClass.s_ConnectionString))
+        {
+            using (var command = connection.CreateCommand())
+            {
+                command.CommandText = sqlcommand;
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        string title = reader.GetString(reader.GetOrdinal("Title"));
+                        string artiest = reader.GetString(reader.GetOrdinal("Artiest"));
+                        int lengte = reader.GetInt32(reader.GetOrdinal("Lengte"));
+                        int bpm = reader.GetInt32(reader.GetOrdinal("Bpm"));
+                        int difficulty = reader.GetInt32(reader.GetOrdinal("Moeilijkheid"));
+                        DifficultyConverter converter = new DifficultyConverter();
+                        string converteddifficulty = converter.Convert(difficulty);
+                        int id = reader.GetInt32(reader.GetOrdinal("Id"));
+                        string filepath;
+                        int filepathOrdinal = reader.GetOrdinal("Filepath");
+                        if (!reader.IsDBNull(filepathOrdinal))
+                        {
+                            filepath = reader.GetString(filepathOrdinal);
+                        }
+                        else
+                        {
+                            filepath = null;
+                        }
+                        int score = reader.GetInt32(reader.GetOrdinal("Score"));
+                        string name = reader.GetString(reader.GetOrdinal("Naam"));
+
+                        string convertedTime = _timeConverter.ToMinutesSeconds(lengte);
+                        Song song = new Song(title, artiest, lengte, bpm, difficulty, id, filepath, score, convertedTime, converteddifficulty, name);
+                        nummers.Add(song);
+                    }
+                    connection.Close();
+                }
+            }
+        }
+        return nummers;
+    }
     // Default list method used on startup
     public List<Song> MakeDefaultList()
     {
@@ -191,5 +252,14 @@ public class SqlDataAccess : IDatabaseInterface
     public List<Song> MakeFilteredList(int difficulty)
     {
         return ListFunction($"SELECT N.Title, N.Artiest, N.Lengte, N.Bpm, N.Moeilijkheid, N.ID, N.Filepath, Score FROM Nummers N INNER JOIN (SELECT NummerID, MAX(Score) as Score from Scores group by NummerID) as S on N.ID = S.NummerID WHERE Moeilijkheid = {difficulty}");
+    }
+    public List<Song> MakeHighscoreList()
+    {
+        return HighscoreListFunction("WITH RankedScores AS (SELECT N.Title, N.Artiest, N.Lengte, N.Bpm, N.Moeilijkheid, N.ID, N.Filepath, S.Score, S.Naam, " +
+            "ROW_NUMBER() OVER(PARTITION BY N.ID " +
+            "ORDER BY S.Score DESC, S.Naam ASC) AS RowNum FROM Nummers N " +
+            "INNER JOIN Scores S ON N.ID = S.NummerID) " +
+            "SELECT Title, Artiest, Lengte, Bpm, Moeilijkheid, ID, Filepath, Score, Naam " +
+            "FROM RankedScores WHERE RowNum = 1;");
     }
 }

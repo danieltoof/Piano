@@ -234,7 +234,7 @@ namespace InEenNotendop.UI
             _midiProcessor.Name = Interaction.InputBox("Please enter your name:\nLeave empty or cancel to discard score", "Enter Name ",  "").Trim();
             if (_midiProcessor.Name.Length > 0)
             {
-                _sqlDataAccess.ChangeHighscore(_songId, (int)_midiProcessor.Score, _currentScore, _midiProcessor.Name);
+                _sqlDataAccess.SaveHighscore(_songId, (int)_midiProcessor.Score, _currentScore, _midiProcessor.Name);
             }
             MessageBox.Show($"Score : {_midiProcessor.Score}");
             SongsWindow.SongIsFinished = true;
