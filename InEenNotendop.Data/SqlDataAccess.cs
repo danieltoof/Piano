@@ -182,13 +182,13 @@ public class SqlDataAccess : IDatabaseInterface
         return nummers;
     }
     // Default list method used on startup
-    public List<Song> MakeDefaultList()
+    public List<Song> CreateSongsList()
     {
         return ListFunction("SELECT N.Title, N.Artiest, N.Lengte, N.Bpm, N.Moeilijkheid, N.ID, N.Filepath, Score FROM Nummers N INNER JOIN (SELECT NummerID, MAX(Score) AS Score FROM Scores GROUP BY NummerID) S ON N.ID = S.NummerID");
     }
 
     // Gets sorted list from database
-    public List<Song> MakeSortedList(int difficulty, string sort)
+    public List<Song> SortSongsList(int difficulty, string sort)
     {
         if (difficulty != 0)
         {
@@ -201,7 +201,7 @@ public class SqlDataAccess : IDatabaseInterface
     }
 
     // Gets filtered list from database
-    public List<Song> MakeFilteredList(int difficulty)
+    public List<Song> FilterSongsList(int difficulty)
     {
         return ListFunction($"SELECT N.Title, N.Artiest, N.Lengte, N.Bpm, N.Moeilijkheid, N.ID, N.Filepath, Score FROM Nummers N INNER JOIN (SELECT NummerID, MAX(Score) as Score from Scores group by NummerID) as S on N.ID = S.NummerID WHERE Moeilijkheid = {difficulty}");
     }
