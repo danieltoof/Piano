@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InEenNotendop.UI"
         mc:Ignorable="d"
-        Title="PianoHero"
+        Title="HighscoreList"
         Width="{x:Static SystemParameters.PrimaryScreenWidth}"  
         Height="{x:Static SystemParameters.PrimaryScreenHeight}" 
         Icon="Resources/icon.png"
@@ -35,7 +35,7 @@
         <Grid Margin="49,150,250,125" Grid.Column="2" Grid.RowSpan="3">
 
             <ScrollViewer VerticalScrollBarVisibility="Hidden">
-                <ItemsControl Name="ListOfHighestScores">
+                <ItemsControl Name="Nummer">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Grid Margin="0,0,0,10" >
@@ -47,16 +47,19 @@
                                     <Border BorderThickness="2" CornerRadius="25,25,25,25" BorderBrush="Black" Background="LightGray">
                                         <Rectangle Width="1500" Height="75" />
                                     </Border>
-                                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,0,0">
+                                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0">
                                         <Run Text="{Binding Title}" FontSize="32" FontWeight="Bold"/>
                                         <LineBreak />
                                         <Run Text="{Binding Artist}" />
                                     </TextBlock>
                                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0">
-                                        <Run Text="{Binding Score, StringFormat='Highscore: {0}'}" FontSize="24"/>
+                                        <Run Text="{Binding Score, StringFormat='Highscore: {0}'}"/>
                                     </TextBlock>
                                     <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,175,0">
-                                        <Run Text="{Binding Name}" FontSize="15"/>
+                                        <Run Text="{Binding ConvertedTime}"/>
+                                    </TextBlock>
+                                    <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,15,0" >
+                                       <Run Text="{Binding ConvertedDifficulty, StringFormat='Difficulty: {0}'}"/>
                                     </TextBlock>
                                 </Grid>
                             </Grid>

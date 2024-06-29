@@ -10,7 +10,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Remove="HighscoreDeatail.xaml" />
 		<None Remove="Resources\icon.png" />
 		<None Remove="Resources\Images\PreviousIcon.png" />
 		<None Remove="Resources\LogoLarge.png" />
@@ -45,9 +44,6 @@
 		<Page Include="App.xaml">
 			<Generator>MSBuild:Compile</Generator>
 			<SubType>Designer</SubType>
-		</Page>
-		<Page Include="HighscoreDeatail.xaml">
-		  <Generator>MSBuild:Compile</Generator>
 		</Page>
 		<Page Include="MainWindow.xaml">
 			<Generator>MSBuild:Compile</Generator>
