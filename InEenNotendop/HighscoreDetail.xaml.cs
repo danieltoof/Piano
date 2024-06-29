@@ -45,7 +45,7 @@ namespace InEenNotendop.UI
 
         private void GetAllScores(int id)
         {
-            AllScores.ItemsSource = _dataAccess.GetAllDataForGrid(id);
+            AllScores.ItemsSource = _dataAccess.GetAllScores(id);
         }
     }
 }

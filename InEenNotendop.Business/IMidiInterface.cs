@@ -1,4 +1,4 @@
-﻿namespace InEenNotendop.Data;
+﻿namespace InEenNotendop.Business;
 
 public interface IMidiInterface
 {

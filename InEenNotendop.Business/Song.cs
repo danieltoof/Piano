@@ -1,4 +1,4 @@
-﻿namespace InEenNotendop.Data
+﻿namespace InEenNotendop.Business
 {
     // Custom class for songs
     public class Song 

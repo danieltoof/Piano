@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using System.Data;
 using System.Diagnostics;
+using InEenNotendop.Business;
 
 namespace InEenNotendop.Data;
 
@@ -107,7 +108,7 @@ public class SqlDataAccess : IDatabaseInterface
     }
 
     // Gets the score of the selected song in SelectingWindow
-    public DataView GetAllDataForGrid(int nummerId)
+    public DataView GetAllScores(int nummerId)
     {
         string cmdString = string.Empty;
         using (SqlConnection con = new SqlConnection(ConfigClass.s_ConnectionString))
@@ -121,7 +122,7 @@ public class SqlDataAccess : IDatabaseInterface
             return dt.DefaultView;
         }
     }
-    public DataView GetDataForGrid(int nummerId, int amount)
+    public DataView GetTopScores(int nummerId, int amount)
     {
         string cmdString = string.Empty;
         using (SqlConnection con = new SqlConnection(ConfigClass.s_ConnectionString))
