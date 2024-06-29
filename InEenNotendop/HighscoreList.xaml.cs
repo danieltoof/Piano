@@ -20,7 +20,7 @@ namespace InEenNotendop.UI
     public partial class HighscoreList : Window
     {
         public SettingsWindow SettingsWindow;
-        SqlDataAccess _sqlDataAccess = new();
+        private static SqlDataAccess _sqlDataAccess = new();
         private int _lightmodeImport;
         private int _difficulty = 0;
         public bool SongIsFinished;
@@ -73,7 +73,6 @@ namespace InEenNotendop.UI
         {
             SettingsWindow.MainMenu();
             Close();
-
         }
     }
 }

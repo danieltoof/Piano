@@ -17,7 +17,8 @@ namespace InEenNotendop.UI
         private string _filePath;
         private string _fileName;
         private bool _lightmode;
-        private SqlDataAccess _sqlDataAccess = new();
+        private static SqlDataAccess _sqlDataAccess = new();
+        private PianoHeroService _pianoHeroService = new PianoHeroService(_sqlDataAccess);
         private MidiDataAccess _midiDataAccess = new();
         public ImportWindow(bool lightmodeImport)
         {
@@ -106,7 +107,7 @@ namespace InEenNotendop.UI
                 int bpm = GetStartTempo(_filePath);
                 string filepath = @"..\..\..\Resources\Song\" + songArtist + " - " + songName + ".mid";
 
-                _sqlDataAccess.SaveSongInfo(songName, songArtist, songLength, bpm, difficultyCheckbox, filepath);
+                _pianoHeroService.SaveSongInfo(songName, songArtist, songLength, bpm, difficultyCheckbox, filepath);
                 _midiDataAccess.UploadSongToServer(songName, songArtist, _filePath);
 
                 MessageBox.Show("Upload success!");
