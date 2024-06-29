@@ -58,7 +58,7 @@ namespace InEenNotendop.UI
             {
                 _midiProcessor = new MidiProcessor(this, new MidiFile(filePath));
                 _midiProcessor.MidiDeviceNotFound += MidiProcessor_MidiDeviceNotFound;
-                _midiProcessor.NoteEvent += MidiProcessor_NotePlayed;
+                _midiProcessor.NoteEvent += MidiProcessor_NoteEvent;
             }
             catch (FileNotFoundException e)
             {
@@ -168,7 +168,7 @@ namespace InEenNotendop.UI
             });
         }
 
-        private void MidiProcessor_NotePlayed(object sender, NotePlayedEventArgs e)
+        private void MidiProcessor_NoteEvent(object sender, NotePlayedEventArgs e)
         {
             if (_midiNoteToButton.ContainsKey(e.NoteNumber))
             {
