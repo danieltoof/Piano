@@ -34,12 +34,12 @@ namespace InEenNotendop.UI
             SortBox.Items.Add("Diff. ascending");
             SortBox.Items.Add("Diff. descending");
 
-            Song.ItemsSource = _sqlDataAccess.MakeDefaultList();
+            Song.ItemsSource = _sqlDataAccess.MakeListOfAllSongs();
             SettingsWindow.CheckDarkOrLight(this);
 
         }
 
-        // Updates the song list so the new score is shown, also keeps the selected filter.
+        // Updates the song list so the new score is shown, also keeps the selected filter
         protected override void OnActivated(EventArgs e)
         {
             base.OnActivated(e);
@@ -48,18 +48,18 @@ namespace InEenNotendop.UI
                 SongIsFinished = false;
                 if (_difficulty != 0)
                 {
-                    Song.ItemsSource = _sqlDataAccess.MakeFilteredList(_difficulty);
+                    Song.ItemsSource = _sqlDataAccess.MakeListOfSongsWithDifficulty(_difficulty);
                 }
                 else
                 {
-                    Song.ItemsSource = _sqlDataAccess.MakeDefaultList();
+                    Song.ItemsSource = _sqlDataAccess.MakeListOfAllSongs();
                 }
             }
         }
 
         private void MenuToggleButton_OnClick(object sender, RoutedEventArgs e)
         {
-            // Toggle visibility of the MenuPanel.
+            // Toggle visibility of the MenuPanel
             if (MenuPanel.Visibility == Visibility.Visible)
             {
                 MenuPanel.Visibility = Visibility.Collapsed;
@@ -75,7 +75,7 @@ namespace InEenNotendop.UI
             SettingsWindow.OpenSettings();
         }
 
-        // Creates pop-up window with detailed song information.
+        // Creates pop-up window with detailed song information
         private void OnNumberClicked(object sender, MouseButtonEventArgs e) 
         {
             if (sender is FrameworkElement clickedElement)
@@ -92,7 +92,7 @@ namespace InEenNotendop.UI
                     string convertedTime = song.ConvertedTime;
                     DifficultyConverter difficultyConverter = new DifficultyConverter();
                     int currentScore = song.Score;
-                    string difficultyText = difficultyConverter.Convert(song.Difficulty);
+                    string difficultyText = difficultyConverter.ConvertDifficulty_intToString(song.Difficulty);
 
                     SelectingWindow detailsWindow = new SelectingWindow(nummerId, difficultyText, title, artist, fullTime, bpm, filePath, convertedTime, this, currentScore);
                     detailsWindow.Owner = this;
@@ -102,16 +102,16 @@ namespace InEenNotendop.UI
         }
 
 
-        // Opens window to import song and refreshes list.
+        // Opens window to import song and refreshes list
         private void ImportButton_OnClick(object sender, RoutedEventArgs e) 
         {
             _lightmodeImport = SettingsWindow.Lightmode;
             ImportWindow import = new ImportWindow(_lightmodeImport);
             import.ShowDialog();
-            Song.ItemsSource = _sqlDataAccess.MakeDefaultList();
+            Song.ItemsSource = _sqlDataAccess.MakeListOfAllSongs();
         }
 
-        // Changes list to filtered list.
+        // Changes list to filtered list
         private void FilterBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e) 
         {
             string filter = (sender as System.Windows.Controls.ComboBox).SelectedItem as string;
@@ -132,15 +132,15 @@ namespace InEenNotendop.UI
             }
             if (_difficulty != 0)
             {
-                Song.ItemsSource = _sqlDataAccess.MakeFilteredList(_difficulty);
+                Song.ItemsSource = _sqlDataAccess.MakeListOfSongsWithDifficulty(_difficulty);
             }
             else
             {
-                Song.ItemsSource = _sqlDataAccess.MakeDefaultList();
-            }
+                Song.ItemsSource = _sqlDataAccess.MakeListOfAllSongs();
+            }   
         }
 
-        // Changes list to be sorted by chosen sorting method.
+        // Changes list to be sorted by chosen sorting method
         private void SortBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e) 
         {
             string sort = (sender as System.Windows.Controls.ComboBox).SelectedItem as string;
@@ -160,10 +160,10 @@ namespace InEenNotendop.UI
                     completeSort = "Moeilijkheid DESC";
                     break;
             }
-            Song.ItemsSource = _sqlDataAccess.MakeSortedList(_difficulty, completeSort);
+            Song.ItemsSource = _sqlDataAccess.MakeListForDifficultyAndSort(_difficulty, completeSort);
         }
 
-        // Goes back to main menu.
+        // Goes back to main menu
         private void BackButton_OnClick(object sender, RoutedEventArgs e) 
         {
             SettingsWindow.MainMenu();

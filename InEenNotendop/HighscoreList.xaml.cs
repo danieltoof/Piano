@@ -31,7 +31,7 @@ namespace InEenNotendop.UI
             this.SettingsWindow = settingsWindow;
             this.SettingsWindow.ChangeSettingsOwner(this);
 
-            ListOfHighestScores.ItemsSource = _sqlDataAccess.MakeHighscoreList();
+            ListOfHighestScores.ItemsSource = _sqlDataAccess.MakeListOfHighscores();
 
             SettingsWindow.CheckDarkOrLight(this);
         }
@@ -56,7 +56,7 @@ namespace InEenNotendop.UI
                     string convertedTime = song.ConvertedTime;
                     DifficultyConverter difficultyConverter = new DifficultyConverter();
                     int currentScore = song.Score;
-                    string difficultyText = difficultyConverter.Convert(song.Difficulty);
+                    string difficultyText = difficultyConverter.ConvertDifficulty_intToString(song.Difficulty);
                     string name = song.Name;
 
                     HighscoreDetail detailsWindow = new HighscoreDetail(songId, difficultyText, title, artist,  convertedTime, this, name);

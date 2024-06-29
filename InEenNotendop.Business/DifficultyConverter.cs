@@ -2,7 +2,7 @@
 {
     public class DifficultyConverter
     {
-        public string Convert(int difficulty)
+        public string ConvertDifficulty_intToString(int difficulty)
         {
             // Directly convert the difficulty value to readable text
             switch (difficulty)

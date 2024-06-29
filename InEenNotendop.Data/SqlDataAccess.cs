@@ -15,7 +15,7 @@ public class SqlDataAccess : IDatabaseInterface
     {
         if (!_sshTunnelStarted)
         {
-            StartProcess(FindDirectory("sshtunnel.ps1"));
+            ExecutePowershellScript(FindPowershellScript("sshtunnel.ps1"));
             _sshTunnelStarted = true;
         }
     }
@@ -23,12 +23,14 @@ public class SqlDataAccess : IDatabaseInterface
     // Stops the powershell script after program has shut down
     public void StopSshTunnel()
     {
-        StartProcess(FindDirectory("StopSshTunnel.ps1"));
+        ExecutePowershellScript(FindPowershellScript("StopSshTunnel.ps1"));
         _sshTunnelStarted = false;
     }
 
     // Method to find the powershell script
-    public string FindDirectory(string scriptFileName)
+    // (FindDirectory)
+
+    public string FindPowershellScript(string scriptFileName)
     {
         string currentDirectory = Directory.GetCurrentDirectory();
         string targetDirectory = "InEenNotendop";
@@ -46,7 +48,8 @@ public class SqlDataAccess : IDatabaseInterface
     }
 
     // Starts the powershell script to start/stop the ssh tunnel
-    public void StartProcess(string sshTunnelFile)
+    // (StartProcess)
+    public void ExecutePowershellScript(string sshTunnelFile)
     {
         ProcessStartInfo psi = new ProcessStartInfo
         {
@@ -62,7 +65,8 @@ public class SqlDataAccess : IDatabaseInterface
     }
 
     // Method to upload information about the song to the database
-    public void UploadSongToDataBase(string name, string artist, int length, int bpm, int difficulty, string filepath)
+    // (UploadSongToDataBase)
+    public void UploadSongInfo(string name, string artist, int length, int bpm, int difficulty, string filepath)
     {
         using (SqlConnection connection = new SqlConnection(ConfigClass.s_ConnectionString))
         {
@@ -92,7 +96,8 @@ public class SqlDataAccess : IDatabaseInterface
     }
 
     // Code to change high-score after song completion
-    public void ChangeHighscore(int id, int score, int currentScore, string Name)
+    // ChangeHighscore)
+    public void SaveHighscore(int id, int score, int currentScore, string Name)
     {
         using (SqlConnection connection = new SqlConnection(ConfigClass.s_ConnectionString))
         {
@@ -107,7 +112,8 @@ public class SqlDataAccess : IDatabaseInterface
     }
 
     // Gets the score of the selected song in SelectingWindow
-    public DataView GetAllDataForGrid(int nummerId)
+    // (GetAllDataForGrid)
+    public DataView GetAllSongsForID(int nummerId)
     {
         string cmdString = string.Empty;
         using (SqlConnection con = new SqlConnection(ConfigClass.s_ConnectionString))
@@ -121,7 +127,7 @@ public class SqlDataAccess : IDatabaseInterface
             return dt.DefaultView;
         }
     }
-    public DataView GetDataForGrid(int nummerId, int amount)
+    public DataView GetAmountSongsForID(int nummerId, int amount)
     {
         string cmdString = string.Empty;
         using (SqlConnection con = new SqlConnection(ConfigClass.s_ConnectionString))
@@ -137,7 +143,8 @@ public class SqlDataAccess : IDatabaseInterface
     }
 
     // Generic function used to prevent double code with filtering and sorting
-    public List<Song> ListFunction(string sqlcommand)
+    // (ListFunction)
+    public List<Song> MakeSongList(string sqlcommand)
     {
         List<Song> songs = new List<Song>();
 
@@ -157,7 +164,7 @@ public class SqlDataAccess : IDatabaseInterface
                         int bpm = reader.GetInt32(reader.GetOrdinal("Bpm"));
                         int difficulty = reader.GetInt32(reader.GetOrdinal("Moeilijkheid"));
                         DifficultyConverter converter = new DifficultyConverter();
-                        string convertedDifficulty = converter.Convert(difficulty);
+                        string convertedDifficulty = converter.ConvertDifficulty_intToString(difficulty);
                         int id = reader.GetInt32(reader.GetOrdinal("Id"));
                         string filepath;
                         int filepathOrdinal = reader.GetOrdinal("Filepath");
@@ -182,7 +189,9 @@ public class SqlDataAccess : IDatabaseInterface
         }
         return songs;
     }
-    public List<Song> HighscoreListFunction(string sqlcommand)
+    // Makes list of all the highscores
+    // (HighscoreListFunction)
+    public List<Song> MakeHighscoreList(string sqlcommand)
     {
         List<Song> nummers = new List<Song>();
 
@@ -202,7 +211,7 @@ public class SqlDataAccess : IDatabaseInterface
                         int bpm = reader.GetInt32(reader.GetOrdinal("Bpm"));
                         int difficulty = reader.GetInt32(reader.GetOrdinal("Moeilijkheid"));
                         DifficultyConverter converter = new DifficultyConverter();
-                        string converteddifficulty = converter.Convert(difficulty);
+                        string converteddifficulty = converter.ConvertDifficulty_intToString(difficulty);
                         int id = reader.GetInt32(reader.GetOrdinal("Id"));
                         string filepath;
                         int filepathOrdinal = reader.GetOrdinal("Filepath");
@@ -229,32 +238,32 @@ public class SqlDataAccess : IDatabaseInterface
     }
 
     // Default list method used on startup
-    public List<Song> MakeDefaultList()
+    public List<Song> MakeListOfAllSongs()
     {
-        return ListFunction("SELECT N.Title, N.Artiest, N.Lengte, N.Bpm, N.Moeilijkheid, N.ID, N.Filepath, Score FROM Nummers N INNER JOIN (SELECT NummerID, MAX(Score) AS Score FROM Scores GROUP BY NummerID) S ON N.ID = S.NummerID");
+        return MakeSongList("SELECT N.Title, N.Artiest, N.Lengte, N.Bpm, N.Moeilijkheid, N.ID, N.Filepath, Score FROM Nummers N INNER JOIN (SELECT NummerID, MAX(Score) AS Score FROM Scores GROUP BY NummerID) S ON N.ID = S.NummerID");
     }
 
     // Gets sorted list from database
-    public List<Song> MakeSortedList(int difficulty, string sort)
+    public List<Song> MakeListForDifficultyAndSort(int difficulty, string sort)
     {
         if (difficulty != 0)
         {
-            return ListFunction($"SELECT N.Title, N.Artiest, N.Lengte, N.Bpm, N.Moeilijkheid, N.ID, N.Filepath, Score FROM Nummers N INNER JOIN (SELECT NummerID, MAX(Score) as Score from Scores group by NummerID) as S on N.ID = S.NummerID WHERE Moeilijkheid = {difficulty} order by {sort};");
+            return MakeSongList($"SELECT N.Title, N.Artiest, N.Lengte, N.Bpm, N.Moeilijkheid, N.ID, N.Filepath, Score FROM Nummers N INNER JOIN (SELECT NummerID, MAX(Score) as Score from Scores group by NummerID) as S on N.ID = S.NummerID WHERE Moeilijkheid = {difficulty} order by {sort};");
         }
         else
         {
-            return ListFunction($"SELECT N.Title, N.Artiest, N.Lengte, N.Bpm, N.Moeilijkheid, N.ID, N.Filepath, Score FROM Nummers N INNER JOIN (SELECT NummerID, MAX(Score) as Score from Scores group by NummerID) as S on N.ID = S.NummerID order by {sort};");
+            return MakeSongList($"SELECT N.Title, N.Artiest, N.Lengte, N.Bpm, N.Moeilijkheid, N.ID, N.Filepath, Score FROM Nummers N INNER JOIN (SELECT NummerID, MAX(Score) as Score from Scores group by NummerID) as S on N.ID = S.NummerID order by {sort};");
         }
     }
 
     // Gets filtered list from database
-    public List<Song> MakeFilteredList(int difficulty)
+    public List<Song> MakeListOfSongsWithDifficulty(int difficulty)
     {
-        return ListFunction($"SELECT N.Title, N.Artiest, N.Lengte, N.Bpm, N.Moeilijkheid, N.ID, N.Filepath, Score FROM Nummers N INNER JOIN (SELECT NummerID, MAX(Score) as Score from Scores group by NummerID) as S on N.ID = S.NummerID WHERE Moeilijkheid = {difficulty}");
+        return MakeSongList($"SELECT N.Title, N.Artiest, N.Lengte, N.Bpm, N.Moeilijkheid, N.ID, N.Filepath, Score FROM Nummers N INNER JOIN (SELECT NummerID, MAX(Score) as Score from Scores group by NummerID) as S on N.ID = S.NummerID WHERE Moeilijkheid = {difficulty}");
     }
-    public List<Song> MakeHighscoreList()
+    public List<Song> MakeListOfHighscores()
     {
-        return HighscoreListFunction("WITH RankedScores AS (SELECT N.Title, N.Artiest, N.Lengte, N.Bpm, N.Moeilijkheid, N.ID, N.Filepath, S.Score, S.Naam, " +
+        return MakeHighscoreList("WITH RankedScores AS (SELECT N.Title, N.Artiest, N.Lengte, N.Bpm, N.Moeilijkheid, N.ID, N.Filepath, S.Score, S.Naam, " +
             "ROW_NUMBER() OVER(PARTITION BY N.ID " +
             "ORDER BY S.Score DESC, S.Naam ASC) AS RowNum FROM Nummers N " +
             "INNER JOIN Scores S ON N.ID = S.NummerID) " +

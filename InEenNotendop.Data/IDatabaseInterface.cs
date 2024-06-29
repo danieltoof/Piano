@@ -5,14 +5,14 @@ public interface IDatabaseInterface
 {
     void StartSshTunnel();
     void StopSshTunnel();
-    string FindDirectory(string scriptFileName);
-    void StartProcess(string sshTunnelFile);
-    void UploadSongToDataBase(string name, string artist, int length, int bpm, int difficulty, string filepath);
-    void ChangeHighscore(int id, int score, int currentScore, string Name);
-    DataView GetDataForGrid(int nummerId, int amount);
-    DataView GetAllDataForGrid(int nummerId);
-    List<Song> ListFunction(string sqlcommand);
-    List<Song> MakeDefaultList();
-    List<Song> MakeSortedList(int difficulty, string sort);
-    List<Song> MakeFilteredList(int difficulty);
+    string FindPowershellScript(string scriptFileName);
+    void ExecutePowershellScript(string sshTunnelFile);
+    void UploadSongInfo(string name, string artist, int length, int bpm, int difficulty, string filepath);
+    void SaveHighscore(int id, int score, int currentScore, string Name);
+    DataView GetAmountSongsForID(int nummerId, int amount);
+    DataView GetAllSongsForID(int nummerId);
+    List<Song> MakeSongList(string sqlcommand);
+    List<Song> MakeListOfAllSongs();
+    List<Song> MakeListForDifficultyAndSort(int difficulty, string sort);
+    List<Song> MakeListOfSongsWithDifficulty(int difficulty);
 }

@@ -82,7 +82,7 @@ namespace InEenNotendop.UI
 
         private void FillDataGrid(int songId)
         {
-            HighScoresGrid.ItemsSource = _sqlDataAccess.GetDataForGrid(songId, 5);
+            HighScoresGrid.ItemsSource = _sqlDataAccess.GetAmountSongsForID(songId, 5);
 
         }
 
