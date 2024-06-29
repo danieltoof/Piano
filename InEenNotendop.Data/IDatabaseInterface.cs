@@ -15,4 +15,5 @@ public interface IDatabaseInterface
     List<Song> MakeListOfAllSongs();
     List<Song> MakeListForDifficultyAndSort(int difficulty, string sort);
     List<Song> MakeListOfSongsWithDifficulty(int difficulty);
+
 }
