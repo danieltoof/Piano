@@ -1,4 +1,5 @@
-﻿using InEenNotendop.Data;
+﻿using InEenNotendop.Business;
+using InEenNotendop.Data;
 using System.Windows;
 
 namespace InEenNotendop.UI
@@ -10,7 +11,8 @@ namespace InEenNotendop.UI
     {
         public Window Owner { get; set; }
         private SongsWindow _songsWindow;
-        private SqlDataAccess _sqlDataAccess = new();
+        private static SqlDataAccess _sqlDataAccess = new();
+        private PianoHeroService _pianoHeroService = new PianoHeroService(_sqlDataAccess);
         private MidiDataAccess _midiDataAccess = new();
         private string _filePath;
         private int _songId;
@@ -82,7 +84,7 @@ namespace InEenNotendop.UI
 
         private void FillDataGrid(int songId)
         {
-            HighScoresGrid.ItemsSource = _sqlDataAccess.GetTopScores(songId, 5);
+            HighScoresGrid.ItemsSource = _pianoHeroService.GetTopScores(songId, 5);
         }
     }
 }

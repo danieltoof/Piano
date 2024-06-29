@@ -12,7 +12,8 @@ namespace InEenNotendop.UI
     public partial class SongsWindow : Window
     {
         public SettingsWindow SettingsWindow;
-        private SqlDataAccess _sqlDataAccess = new();
+        private static SqlDataAccess _sqlDataAccess = new();
+        private PianoHeroService _pianoHeroService = new PianoHeroService(_sqlDataAccess);
         private bool _lightmodeImport;
         private int _difficulty = 0;
         public bool SongIsFinished { get; set; }
@@ -35,7 +36,7 @@ namespace InEenNotendop.UI
             SortBox.Items.Add("Diff. ascending");
             SortBox.Items.Add("Diff. descending");
 
-            Song.ItemsSource = _sqlDataAccess.MakeDefaultList();
+            Song.ItemsSource = _pianoHeroService.CreateSongsList();
             SettingsWindow.CheckDarkOrLight(this);
 
         }
@@ -49,11 +50,11 @@ namespace InEenNotendop.UI
                 SongIsFinished = false;
                 if (_difficulty != 0)
                 {
-                    Song.ItemsSource = _sqlDataAccess.MakeFilteredList(_difficulty);
+                    Song.ItemsSource = _pianoHeroService.FilterSongsList(_difficulty);
                 }
                 else
                 {
-                    Song.ItemsSource = _sqlDataAccess.MakeDefaultList();
+                    Song.ItemsSource = _pianoHeroService.CreateSongsList();
                 }
             }
         }
@@ -109,7 +110,7 @@ namespace InEenNotendop.UI
             _lightmodeImport = SettingsWindow.Lightmode;
             ImportWindow import = new ImportWindow(_lightmodeImport);
             import.ShowDialog();
-            Song.ItemsSource = _sqlDataAccess.MakeDefaultList();
+            Song.ItemsSource = _pianoHeroService.CreateSongsList();
         }
 
         // Changes list to filtered list.
@@ -133,11 +134,11 @@ namespace InEenNotendop.UI
             }
             if (_difficulty != 0)
             {
-                Song.ItemsSource = _sqlDataAccess.MakeFilteredList(_difficulty);
+                Song.ItemsSource = _pianoHeroService.FilterSongsList(_difficulty);
             }
             else
             {
-                Song.ItemsSource = _sqlDataAccess.MakeDefaultList();
+                Song.ItemsSource = _pianoHeroService.CreateSongsList();
             }
         }
 
@@ -161,7 +162,7 @@ namespace InEenNotendop.UI
                     completeSort = "Moeilijkheid DESC";
                     break;
             }
-            Song.ItemsSource = _sqlDataAccess.MakeSortedList(_difficulty, completeSort);
+            Song.ItemsSource = _pianoHeroService.SortSongsList(_difficulty, completeSort);
         }
 
         // Goes back to main menu.

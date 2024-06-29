@@ -27,7 +27,8 @@ namespace InEenNotendop.UI
 
         private MidiProcessor _midiProcessor;
         private TimeSpan _endLastNote;
-        private SqlDataAccess _sqlDataAccess = new();
+        private static SqlDataAccess _sqlDataAccess = new();
+        private PianoHeroService _pianoHeroService = new PianoHeroService(_sqlDataAccess);
         private int _songId;
 
         private Brush _noteHitBrush = Brushes.IndianRed; // Colour when key is pressed
@@ -234,7 +235,7 @@ namespace InEenNotendop.UI
             _midiProcessor.Name = Interaction.InputBox("Please enter your name:\nLeave empty or cancel to discard score", "Enter Name ",  "").Trim();
             if (_midiProcessor.Name.Length > 0)
             {
-                _sqlDataAccess.SaveHighscore(_songId, (int)_midiProcessor.Score, _currentScore, _midiProcessor.Name);
+                _pianoHeroService.SaveHighscore(_songId, (int)_midiProcessor.Score, _currentScore, _midiProcessor.Name);
             }
             MessageBox.Show($"Score : {_midiProcessor.Score}");
             SongsWindow.SongIsFinished = true;

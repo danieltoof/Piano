@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using InEenNotendop.Business;
 
 namespace InEenNotendop.UI
 {
@@ -27,7 +28,7 @@ namespace InEenNotendop.UI
         private string _lenght;
         private string _name;
 
-        private SqlDataAccess _dataAccess = new();
+        private PianoHeroService _pianoHeroService = new PianoHeroService(new SqlDataAccess());
         public HighscoreDetail(int nummerId, string difficultyText, string title, string artist, string convertedTime, HighscoreList highscoreList, string name)
         {
             InitializeComponent();
@@ -45,7 +46,7 @@ namespace InEenNotendop.UI
 
         private void GetAllScores(int id)
         {
-            AllScores.ItemsSource = _dataAccess.GetAllScores(id);
+            AllScores.ItemsSource = _pianoHeroService.GetAllScores(id);
         }
     }
 }
