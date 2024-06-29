@@ -118,7 +118,7 @@ public class SqlDataAccess : IDatabaseInterface
         string cmdString = string.Empty;
         using (SqlConnection con = new SqlConnection(ConfigClass.s_ConnectionString))
         {
-            cmdString = $"SELECT Score, Naam FROM Scores WHERE NummerID = '{nummerId}' AND Naam <> '' order by Score desc";
+            cmdString = $"SELECT TOP 5 Score, Naam FROM Scores WHERE NummerID = '{nummerId}' AND Naam <> '' order by Score desc";
             SqlCommand cmd = new SqlCommand(cmdString, con);
             SqlDataAdapter sda = new SqlDataAdapter(cmd);
             DataTable dt = new DataTable();
@@ -137,10 +137,6 @@ public class SqlDataAccess : IDatabaseInterface
             SqlDataAdapter sda = new SqlDataAdapter(cmd);
             DataTable dt = new DataTable();
             sda.Fill(dt);
-
-            return dt.DefaultView;
-        }
-    }
 
     // Generic function used to prevent double code with filtering and sorting
     // (ListFunction)
@@ -181,6 +177,7 @@ public class SqlDataAccess : IDatabaseInterface
                         string convertedTime = _timeConverter.ToMinutesSeconds(length);
 
                         Song song = new Song(title, artist, length, bpm, difficulty, id, filepath, score, convertedTime, convertedDifficulty,"");
+
                         songs.Add(song);
                     }
                     connection.Close();
@@ -225,17 +222,6 @@ public class SqlDataAccess : IDatabaseInterface
                         }
                         int score = reader.GetInt32(reader.GetOrdinal("Score"));
                         string name = reader.GetString(reader.GetOrdinal("Naam"));
-
-                        string convertedTime = _timeConverter.ToMinutesSeconds(lengte);
-                        Song song = new Song(title, artiest, lengte, bpm, difficulty, id, filepath, score, convertedTime, converteddifficulty, name);
-                        nummers.Add(song);
-                    }
-                    connection.Close();
-                }
-            }
-        }
-        return nummers;
-    }
 
     // Default list method used on startup
     public List<Song> MakeListOfAllSongs()
