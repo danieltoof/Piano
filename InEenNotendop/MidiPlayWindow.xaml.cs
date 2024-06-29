@@ -168,7 +168,7 @@ namespace InEenNotendop.UI
             });
         }
 
-        private void MidiProcessor_NoteEvent(object sender, NotePlayedEventArgs e)
+        private void MidiProcessor_NoteEvent(object sender, NoteEventArgs e)
         {
             if (_midiNoteToButton.ContainsKey(e.NoteNumber))
             {

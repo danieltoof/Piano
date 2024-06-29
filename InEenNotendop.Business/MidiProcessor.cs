@@ -25,7 +25,7 @@ namespace InEenNotendop.Business
 
 
         //Event for when a note gets played
-        public delegate void NoteEventHandler(object sender, NotePlayedEventArgs e);
+        public delegate void NoteEventHandler(object sender, NoteEventArgs e);
         public event NoteEventHandler NoteEvent;
 
         public delegate void SongFinishedEventHandler(object sender);
@@ -57,17 +57,17 @@ namespace InEenNotendop.Business
             {
                 MidiPlayer.PlayNote(noteOnEvent.NoteNumber);
                 _songPlayed.AddNote(new Note(noteOnEvent, Stopwatch.Elapsed));
-                OnMidiInMessageReceived(new NotePlayedEventArgs(noteOnEvent.NoteNumber, true));
+                OnMidiInMessageReceived(new NoteEventArgs(noteOnEvent.NoteNumber, true));
             }
             // a notevent that is not a noteonevent is in this case always an event that ends the note.
             else if (e.MidiEvent is NoteEvent noteEvent) 
             {
                 MidiPlayer.StopNote(noteEvent.NoteNumber);
-                OnMidiInMessageReceived(new NotePlayedEventArgs(noteEvent.NoteNumber, false));
+                OnMidiInMessageReceived(new NoteEventArgs(noteEvent.NoteNumber, false));
             }
         }
 
-        protected virtual void OnMidiInMessageReceived(NotePlayedEventArgs e)
+        protected virtual void OnMidiInMessageReceived(NoteEventArgs e)
         {
             NoteEvent?.Invoke(this, e);
         }
