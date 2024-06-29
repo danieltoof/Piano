@@ -39,7 +39,8 @@ namespace InEenNotendop.UI
             public string ConvertedTime { get; }
             public int CurrentScore {get; }
 
-            public NummerDetailsViewModel(int songId, string difficultyText, string title, string artist, int length, int bpm, string convertedTime, int currentScore)
+
+            public SongDetailsViewModel(int songId, string difficultyText, string title, string artist, int length, int bpm, string convertedTime, int currentScore)
             {
                 SongIdText = $"Clicked on Nummer with ID: {songId}";
                 DifficultyText = $"Difficulty: {difficultyText}";
@@ -81,7 +82,8 @@ namespace InEenNotendop.UI
 
         private void FillDataGrid(int songId)
         {
-            HighScoresGrid.ItemsSource = _sqlDataAccess.GetDataForGrid(songId);
+            HighScoresGrid.ItemsSource = _sqlDataAccess.GetDataForGrid(songId, 5);
+
         }
     }
 }

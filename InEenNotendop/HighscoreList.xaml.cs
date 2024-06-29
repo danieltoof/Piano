@@ -56,7 +56,8 @@ namespace InEenNotendop.UI
                     int currentScore = song.Score;
                     string difficultyText = difficultyConverter.Convert(song.Difficulty);
 
-                    SelectingWindow detailsWindow = new SelectingWindow(songId, difficultyText, title, artist, fullTime, bpm, filePath, convertedTime, this, currentScore);
+                    HighscoreDetail detailsWindow = new HighscoreDetail(songId, difficultyText, title, artist,  convertedTime, this, name);
+
                     detailsWindow.Owner = this;
                     detailsWindow.ShowDialog();
                 }
