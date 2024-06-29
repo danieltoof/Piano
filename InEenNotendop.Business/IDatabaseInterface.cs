@@ -8,7 +8,7 @@ public interface IDatabaseInterface
     void SaveHighscore(int id, int score, int currentScore, string Name);
     DataView GetAllScores(int nummerId);
     DataView GetTopScores(int nummerId, int amount);
-    List<Song> MakeDefaultList();
-    List<Song> MakeSortedList(int difficulty, string sort);
-    List<Song> MakeFilteredList(int difficulty);
+    List<Song> CreateSongsList();
+    List<Song> SortSongsList(int difficulty, string sort);
+    List<Song> FilterSongsList(int difficulty);
 }

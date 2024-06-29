@@ -33,16 +33,16 @@ public class PianoHeroService
 
     public List<Song> CreateSongsList()
     {
-        return _database.MakeDefaultList();
+        return _database.CreateSongsList();
     }
 
     public List<Song> SortSongsList(int difficulty, string sort)
     {
-        return _database.MakeSortedList(difficulty, sort);
+        return _database.SortSongsList(difficulty, sort);
     }
 
     public List<Song> FilterSongsList(int difficulty)
     {
-        return _database.MakeFilteredList(difficulty);
+        return _database.FilterSongsList(difficulty);
     }
 }
