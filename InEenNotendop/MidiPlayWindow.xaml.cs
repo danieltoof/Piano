@@ -1,16 +1,15 @@
-﻿using System.Diagnostics;
+﻿using InEenNotendop.Business;
+using InEenNotendop.Data;
+using Microsoft.VisualBasic;
 using NAudio.Midi;
+using System.Diagnostics;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
-using InEenNotendop.Business;
-using System.Windows.Media.Animation;
-using System.IO;
-using InEenNotendop.Data;
-using Microsoft.VisualBasic;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace InEenNotendop.UI
 {

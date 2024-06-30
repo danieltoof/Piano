@@ -1,7 +1,5 @@
 ﻿using NAudio.Midi;
 using System.Diagnostics;
-using System.Runtime.Versioning;
-using System.Security.Cryptography;
 namespace InEenNotendop.Business
 {
     public class MidiProcessor
