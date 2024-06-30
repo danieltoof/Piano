@@ -2,7 +2,6 @@
 
 namespace InEenNotendop.Business;
 
-// Code for handling the Midi device input
 public class MidiPlayer 
 {
     private MidiOut _midiOut;
